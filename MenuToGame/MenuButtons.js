@@ -1,4 +1,5 @@
-class Button {
+import { SwapScene } from "../SceneManager.js";
+export class Button {
     constructor(width, height, text) {
         this.width = width;
         this.height = height;
@@ -9,7 +10,7 @@ class Button {
         console.log("Button clicked:", this.text);
     }
 }
-class NewGame extends Button {
+export class NewGame extends Button {
     constructor(x, y, width, height, text) {
         super(width, height, text);
         this.x = x;
@@ -25,5 +26,10 @@ class NewGame extends Button {
         document.addEventListener("click", () => {
         document.documentElement.requestFullscreen().catch(() => {});
         })
+        SwapScene("Game"); // Byta till gameLoop
+    }
+
+    upDate() {
+        this.onClick();
     }
 }
