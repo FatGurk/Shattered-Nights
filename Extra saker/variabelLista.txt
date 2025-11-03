@@ -1,0 +1,9 @@
+canvas namn : game
+
+draw.Xscene()
+GameScene
+CutScene1
+CutScene2
+CutScene3
+
+player
