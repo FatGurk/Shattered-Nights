@@ -1,5 +1,12 @@
+// Menu Buttons
+import { NewGame } from "./MenuToGame/MenuButtons.js";
+
 import {Player} from "./Characters/Player.js";
 import {Npc} from "./Characters/Npc.js";
+
+export const MenuButtonsList = [
+    new NewGame(150, 200, 200, 50, "New Game")
+]
 
 export const CharacterList = [
     new Player(50, 50, 50, 50, "Pöjk", "../.Pictures/Pojk.png"),

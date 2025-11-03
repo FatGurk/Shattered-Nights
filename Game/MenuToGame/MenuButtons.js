@@ -1,4 +1,4 @@
-import { SwapScene } from "../SceneManager.js";
+export let Scene = "Menu";
 export class Button {
     constructor(width, height, text) {
         this.width = width;
@@ -24,9 +24,9 @@ export class NewGame extends Button {
 
     onClick() {
         document.addEventListener("click", () => {
-        document.documentElement.requestFullscreen().catch(() => {});
+            document.documentElement.requestFullscreen().catch(() => {});
         })
-        SwapScene("Game"); // Byta till gameLoop
+        Scene = "Game";
     }
 
     upDate() {

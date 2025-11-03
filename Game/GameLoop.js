@@ -1,8 +1,20 @@
-import { Scene } from "../SceneManager.js";
+// Scene
+import { Scene } from "./MenuToGame/MenuButtons.js";
+// Menu Buttons
+import { MenuButtonsList } from "./ObjectLists.js";
+// Characters
 import { CharacterList } from "./ObjectLists.js";
+
 export const canvas = document.getElementById("GameCanvas");
 export const ctx = canvas.getContext("2d");
 
+function DrawMenuScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    MenuButtonsList.forEach(e => {
+        e.draw(ctx);
+        e.upDate();
+    });
+}
 function DrawGameScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     CharacterList.forEach(e => {
@@ -11,11 +23,13 @@ function DrawGameScene() {
 }
 
 function gameLoop() {
-    if (Scene.Current !== "Game") return;
-
-    DrawGameScene();
+    if (Scene === "Menu") {
+        DrawMenuScene();
+    } else if (Scene === "Game") {
+        DrawGameScene();
+    }
+    
     requestAnimationFrame(gameLoop);
 }
-if (Scene.Current === "Game") {
-    gameLoop();
-};
+    
+gameLoop();
