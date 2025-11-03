@@ -1,10 +1,39 @@
 Kim:
-Gjort Huvud klass för karaktärer
+Måndag v.45: Gjort Huvud klass för karaktärer och lagt till object lista + drawscene + majoriteten av filerna
+Tisdag v.45:
+Onsdag v.45:
+Torsdag v.45:
+Fredag v.45:
+Måndag v.46:
+Tisdag v.46:
+Onsdag v.46:
 
 Gustav:
-
+Måndag v.45:
+Tisdag v.45:
+Onsdag v.45:
+Torsdag v.45:
+Fredag v.45:
+Måndag v.46:
+Tisdag v.46:
+Onsdag v.46:
 
 Kevin:
-
+Måndag v.45:
+Tisdag v.45:
+Onsdag v.45:
+Torsdag v.45:
+Fredag v.45:
+Måndag v.46:
+Tisdag v.46:
+Onsdag v.46:
 
 Jesper:
+Måndag v.45:
+Tisdag v.45:
+Onsdag v.45:
+Torsdag v.45:
+Fredag v.45:
+Måndag v.46:
+Tisdag v.46:
+Onsdag v.46:
