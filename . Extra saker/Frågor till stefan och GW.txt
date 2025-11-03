@@ -1,2 +1,3 @@
 Fråga: Ska vi ha const "ctx = canvas.getContext("2d");" eller ska vi importa det från Gameloop?
 Svar: export eller import beror på säkerhet
+fråga: Hur svårt är det att andra keybinds?

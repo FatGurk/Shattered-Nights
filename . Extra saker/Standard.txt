@@ -1,3 +1,4 @@
 . i början på alla filer som inte ska ha kod
 Storbokstav i början på alla javascript filer
 Skriv alla varibler i variabel listan
+Stor bokstav i början av klasser
