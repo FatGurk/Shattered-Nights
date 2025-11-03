@@ -1,0 +1,1 @@
+Ska vi ha const "ctx = canvas.getContext("2d");" eller ska vi importa det från Gameloop?
