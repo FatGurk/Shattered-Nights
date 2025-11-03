@@ -9,7 +9,7 @@ Tisdag v.46:
 Onsdag v.46:
 
 Gustav:
-Måndag v.45:
+Måndag v.45: Planerat majoritet för att underlätta framöver, börjat skapa klasser, speciellt i meny medans kim sitter med spel klasserna. Mycket prat om desing idag.
 Tisdag v.45:
 Onsdag v.45:
 Torsdag v.45:
@@ -19,7 +19,7 @@ Tisdag v.46:
 Onsdag v.46:
 
 Kevin:
-Måndag v.45:
+Måndag v.45: har undersökt hur man gör en knapp som får sidan i helt skärm, har även udnersökt hur vi ska göra med UI. har också börjat tänka hur MVP ska se ut och hur vi ska göra med settings menun.
 Tisdag v.45:
 Onsdag v.45:
 Torsdag v.45:
@@ -29,7 +29,7 @@ Tisdag v.46:
 Onsdag v.46:
 
 Jesper:
-Måndag v.45:
+Måndag v.45: Grundgjorde kartans grafik, utav vilket sand, klippsidor, olika material/sprites ingår. Även grunden för karaktären samt kart-storleken
 Tisdag v.45:
 Onsdag v.45:
 Torsdag v.45:
