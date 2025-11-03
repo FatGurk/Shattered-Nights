@@ -1,5 +1,5 @@
 const ctx = canvas.getContext("2d");
-class character {
+export class Character {
     constructor(x, y, width, height, name) {
         this.x = x;
         this.y = y;
@@ -9,6 +9,6 @@ class character {
     }
 
     draw() {
-        
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 }
