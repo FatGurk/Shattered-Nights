@@ -6,14 +6,14 @@ import {Npc} from "./Characters/Npc.js";
 
 import { Camera } from "./Camera.js";
 
-export let CameraMan = new Camera(0, 0, 800, 600);
+export const CameraMan = new Camera(0, 0, 800, 600);
 
 export const MenuButtonsList = [
     new NewGame(150, 200, 200, 50, "New Game")
 ]
 
 export const CharacterList = [
-    new Player(50, 50, "Pöjk", "../.Pictures/Pojk.png"),
+    new Player(5000, 5000, "Pöjk", "../.Pictures/Pojk.png"),
     new Npc(100,100, "Mad scientist GW", "../.Pictures/GW.png")
     /*
     new Npc(200, 200, 50, 50, "Stefan", StefanImage),

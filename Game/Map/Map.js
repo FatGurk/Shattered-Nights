@@ -23,12 +23,12 @@ const Map1 = [];
 for (let row = 0; row < MAP_WIDTH; row++) {
     Map1[row] = [];
     for (let col = 0; col < MAP_HEIGHT; col++) {
-        Map1[row][col] = new Tile("Dottgrass", 0, 0);
+        Map1[row][col] = new Tile("Dottgras", 0, 0);
     }
 }
 
 function drawMap(ctx, camera) {
-    if (!tileset.complete) return; // tileset not loaded yet
+    if (!tileset.complete) return;
 
     // Vad kameran visar aka vilka tiles som ska ritas
     const startCol = Math.floor(camera.x / TILE_SIZE);
