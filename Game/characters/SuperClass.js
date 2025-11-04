@@ -14,4 +14,5 @@ export class Character {
     draw() {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
+
 }
