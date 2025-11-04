@@ -1,5 +1,9 @@
 // Scene
 import { Scene } from "./MenuToGame/MenuButtons.js";
+
+// World
+import { Map1 } from "./Map.js";
+
 // Menu Buttons
 import { MenuButtonsList } from "./ObjectLists.js";
 // Characters
@@ -17,8 +21,13 @@ function MenuScene() {
 }
 function GameScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // draw the map first
+    Map1.draw(ctx);
+
+    // then draw characters on top
     CharacterList.forEach(e => {
-        e.draw();
+        e.draw(ctx);
     });
 }
 
