@@ -12,6 +12,12 @@ import { CharacterList } from "./ObjectLists.js";
 export const canvas = document.getElementById("GameCanvas");
 export const ctx = canvas.getContext("2d");
 
+function resizeCanvas() {
+    canvas.width = window.innerWidth-20;
+    canvas.height = window.innerHeight-20;
+}
+
+resizeCanvas();
 function MenuScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     MenuButtonsList.forEach(e => {
@@ -27,7 +33,12 @@ function GameScene() {
 
     // then draw characters on top
     CharacterList.forEach(e => {
+<<<<<<< HEAD
         e.draw(ctx);
+=======
+        e.draw();
+        e.update();
+>>>>>>> 1ca7f6eb7279a47a4418f39c4578916d96699362
     });
 }
 
@@ -37,8 +48,10 @@ function gameLoop() {
     } else if (Scene === "Game") {
         GameScene();
     }
-    
+
     requestAnimationFrame(gameLoop);
 }
     
 gameLoop();
+
+window.addEventListener("resize", resizeCanvas);
