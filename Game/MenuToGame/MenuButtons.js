@@ -25,11 +25,19 @@ export class NewGame extends Button {
     onClick() {
         document.addEventListener("click", () => {
             document.documentElement.requestFullscreen().catch(() => {});
+            Scene = "Game";
         })
-        Scene = "Game";
     }
-
+    onEsc() {
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+                document.exitFullscreen().catch(() => {});
+                Scene = "Menu";
+            }
+        })
+    }
     upDate() {
         this.onClick();
+        this.onEsc();
     }
 }
