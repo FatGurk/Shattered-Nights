@@ -1,6 +1,5 @@
 import { Character } from "./SuperClass.js";
 import { ctx } from "../GameLoop.js";
-import {CharacterList} from "../ObjectLists.js";
 let keys = {};
 export class Player extends Character {
     constructor(x, y, name, imgSrc) {
