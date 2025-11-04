@@ -12,7 +12,7 @@ function MenuScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     MenuButtonsList.forEach(e => {
         e.draw(ctx);
-        e.upDate();
+        e.update();
     });
 }
 function GameScene() {
