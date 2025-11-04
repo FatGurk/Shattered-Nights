@@ -1,7 +1,7 @@
-import { Character } from "SuperClass.js";
+import { Character } from "./SuperClass.js";
+import { ctx } from "../GameLoop.js";
 export class Player extends Character {
-    constructor(x, y, width, height, name, image) {
-        super(x, y, width, height, name);
-        this.image = image;
+    constructor(x, y, width, height, name, imgSrc) {
+        super(x, y, width, height, name, imgSrc);
     }
 }
