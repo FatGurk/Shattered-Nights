@@ -24,16 +24,32 @@ export class Character {
     detectCollision(CharacterList) {
         let t = this;
             CharacterList.forEach((e) => {
-                if (!e.colliosion) return;
-                if (e == t) return false;
-                let right = t.x < e.x + e.width;
-                let left  = t.x + t.width > e.x;
-                let up = t.y < e.y + e.height;
-                let down = t.y + t.height > e.y;
-                if (right && left && up && down) {
-                    console.log(`Collision with ${e.name}`);
-                    return true;
-                }
+                if (!e.collision) return;
+                    if (e === t) return false;
+                        const Colliding = 
+                            t.x < e.x + e.width &&
+                            t.x + t.width > e.x &&
+                            t.y < e.y + e.height &&
+                            t.y + t.height > e.y;
+
+                        if (Colliding) {
+                            let overlapX = Math.min(t.x + t.width - e.x, e.x + e.width - t.x);
+                            let overlapY = Math.min(t.y + t.height - e.y, e.y + e.height - t.y);
+
+                            if (overlapX < overlapY) {
+                                if (t.x < e.x) {
+                                    t.x -= overlapX;
+                                } else {
+                                    t.x += overlapX;
+                                }
+                            } else {
+                                if (t.y < e.y) {
+                                    t.y -= overlapY;
+                                } else {
+                                    t.y += overlapY;
+                                }
+                            }
+                        }
             });
     }
 }   

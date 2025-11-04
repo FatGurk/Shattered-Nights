@@ -6,6 +6,5 @@ export class Npc extends Character {
     }
 
     update() {
-        // NPC update logic can be added here
     }
 }
