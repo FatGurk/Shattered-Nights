@@ -1,1930 +1,2060 @@
-Gå vidare till innehållet
-Chatthistorik
 Du sade:
-me and friends are making a game and we are going to use 16x16px art but that is very small and we need to resize it to well a playable size and depending on resolution, how do we do that?
+ehh huh?
+GET
+http://127.0.0.1:5500/MenuToGame/MenuButtons.js
+NS_ERROR_CORRUPTED_CONTENT
+
+Laddar modul från "http://127.0.0.1:5500/MenuToGame/MenuButtons.js" blockerades på grund av en otillåtet MIME-typ ("text/html").
+127.0.0.1:5500
+Laddning misslyckades för modulen med källan “http://127.0.0.1:5500/MenuToGame/MenuButtons.js”.
 ChatGPT sade:
 
-Good question — and it’s a super common issue when making pixel art games! You’re totally right that 16×16 pixels is tiny on modern screens, so you’ll need to scale it up (enlarge it) for it to be playable, without blurring or distorting the crisp pixel edges.
+Ah! That error explains exactly why your module isn’t loading. 😅
 
-Here’s a full rundown of how to do that properly:
-🧱 1. The Core Idea: Integer Scaling
+The browser message in English is basically:
 
-When you enlarge pixel art, you must scale by whole integers (2×, 3×, 4×, etc.).
-This keeps the pixels square and sharp.
+Loading failed for module "MenuButtons.js": blocked due to disallowed MIME type ("text/html")
 
-For example:
-Original	Scaled Size
-16×16 @ 1×	16×16
-2× scale	32×32
-3× scale	48×48
-4× scale	64×64
-5× scale	80×80
-🖥️ 2. Scaling In Your Game Engine
-If you're using Unity
+What this means
 
-    Import your sprites as “Point (no filter)” in the Texture Import Settings.
+    Your browser tried to load MenuButtons.js as a module.
 
-    Set Compression = None.
+    The server returned HTML instead of JS.
 
-    In your sprite renderer, you can just scale by integer multiples (transform.localScale = new Vector3(4, 4, 1)).
+    This usually happens when:
 
-    You can also use Pixel Perfect Camera (Unity package) to handle different screen resolutions cleanly.
+        The file path is wrong (404), and your dev server returns an HTML 404 page.
 
-If you're using Godot
+        Or the server isn’t serving the file correctly as JavaScript.
 
-    Go to Project Settings → Display → Window → Stretch → Mode = "2d" and Aspect = "keep".
+Steps to fix
+1️⃣ Check the file exists
 
-    Then set Stretch → Scale = 4 (or whatever integer multiple you like).
+Make sure MenuButtons.js is actually at:
 
-    Also, enable “Pixel Snap” in the 2D settings for perfect crispness.
+/MenuToGame/MenuButtons.js
 
-If you're using GameMaker
+    Case-sensitive! "MenuButtons.js" ≠ "menubuttons.js"
 
-    Set your room size to the logical (gameplay) resolution (e.g., 320×180).
+    Also check for typos in your import:
 
-    Then set the window/display size to an integer multiple (e.g., 1280×720 = 4× scale).
+import { NewGame } from "./MenuButtons.js"; // "./" means relative to current file
 
-    In the sprite settings, use “No interpolation”.
+2️⃣ Use the correct relative path
 
-If you’re coding from scratch (e.g., Python/Pygame or C++)
+    If your file is in the same folder, use:
 
-Use nearest-neighbor interpolation when scaling:
+import { NewGame } from "./MenuButtons.js";
 
-# Example in Pygame
-big_sprite = pygame.transform.scale(sprite, (sprite.get_width() * 4, sprite.get_height() * 4))
+    If it’s one folder up:
 
-or
+import { NewGame } from "../MenuToGame/MenuButtons.js";
 
-pygame.transform.scale_by(sprite, 4)
+3️⃣ Make sure your server serves JS as modules
 
-Just make sure to avoid any smoothing/blurring filters.
-📺 3. Resolution Independence
+    You must use type="module" in your <script> tag:
 
-You can decide your game’s base resolution (say 320×180 or 480×270), then scale the entire viewport up to fit modern screens.
-That way, all your sprites stay pixel-perfect, and the camera handles scaling for you.
+<script type="module" src="MenuLoop.js"></script>
+
+    If you’re opening the file directly in the browser with file://, ES modules may fail.
+    Use a local server like VS Code Live Server, http-server, or Python’s python -m http.server.
+
+4️⃣ Common pitfalls
+
+    Import path must match the file name exactly, including casing.
+
+    Must include the .js extension in ES6 module imports.
+
+    Don’t use # in getElementById or in imports.
+
+✅ TL;DR
+
+Your browser is trying to load HTML (probably a 404 page) instead of JS.
+
+    Double-check the file exists at the path.
+
+    Make sure the path in import is correct.
+
+    Use type="module" in your <script> tag.
+
+    Serve via a local server, not file://.
+
+If you want, I can show a working folder structure + HTML + imports setup that avoids all these MIME/path issues for your menu/game loops.
+
+Do you want me to do that?
+Du sade:
+this is my current gameLoop
+function gameLoop() {
+    if (Scene === "Menu") {
+        DrawMenuScene();
+        console.log("Menu Scene");
+    } else if (Scene === " Game") {
+        DrawGameScene();
+        console.log("Game Scene");
+    }
+    
+    requestAnimationFrame(gameLoop);
+}
+    
+gameLoop();
+
+but when I go into full screen mode im still in "menumode"
+ChatGPT sade:
+
+Ah! I see exactly what’s going on — and it’s actually two separate issues combined. 😅
+
+Let’s break it down carefully.
+1️⃣ Check your scene string
+
+In your code:
+
+} else if (Scene === " Game") {
+
+Notice the space before "Game". That means " Game" (with a space) is different from "Game" (no space).
+
+So if you call:
+
+Scene = "Game";
+
+it will not match " Game" in your conditional, and your game loop will keep running the menu branch. ✅ This is almost certainly why you’re stuck in menu mode.
+
+Fix:
+
+} else if (Scene === "Game") {  // no leading/trailing space
+
+2️⃣ Make sure you’re actually changing Scene
+
+If you’re doing fullscreen with something like:
+
+document.documentElement.requestFullscreen().catch(() => {});
+
+You must also update the scene at the same time:
+
+NewGameButton.onClick = () => {
+    document.documentElement.requestFullscreen().catch(() => {});
+    Scene = "Game"; // <-- change the scene here
+};
+
+If you don’t update the Scene variable, your loop will keep thinking it’s in menu mode.
+3️⃣ Extra tip: use a shared mutable state
+
+If Scene is imported from another module as a primitive (string), reassigning it may not propagate across modules. The best approach is:
+
+// SceneManager.js
+export const Scene = { current: "Menu" };
+
+export function SwapScene(newScene) {
+    Scene.current = newScene;
+}
+
+Then in your loop:
+
+if (Scene.current === "Menu") {
+    DrawMenuScene();
+} else if (Scene.current === "Game") {
+    DrawGameScene();
+}
+
+And in your button click:
+
+SwapScene("Game");
+
+This ensures all modules see the updated scene.
+✅ TL;DR
+
+    Remove the space in " Game" → "Game".
+
+    Make sure you actually update the scene variable when entering fullscreen.
+
+    Prefer a shared mutable object (Scene.current) rather than a plain string if using modules.
+
+If you want, I can rewrite your menu → fullscreen → game transition with proper ES6 module scene management so it works perfectly.
+
+Do you want me to do that?
+Du sade:
+how to make a big map using binaries and a tile set, there must be a better way to do it the const map {
+ 0,0,0,0,.........
+}
+
+the map original size is 320x240 16x16 tiles
+ChatGPT sade:
+
+Excellent question — and you’re 100% right! Writing a huge map manually like this:
+
+const map = {
+ 0,0,0,1,1,0, ...
+};
+
+is absolutely painful and not scalable 😅 — especially for something like a 320×240 tile map (that’s 4,800 tiles!).
+
+Let’s go over better, professional-level ways to handle tilemaps in a browser game using JavaScript.
+🧩 The goal
+
+    Map size: 320 × 240 pixels → 20 × 15 tiles (since 16×16 each)
+
+    You want to store level data efficiently
+
+    You want to draw it from a tile set image (a sprite sheet)
+
+✅ 1. Represent the map as a 2D array (not inline)
+
+Instead of one long line, use a 2D structure:
+
+const map = [
+  [0,0,0,1,1,1,0,0,0],
+  [0,1,1,1,2,1,1,1,0],
+  [0,0,1,1,1,1,1,0,0],
+  ...
+];
+
+Then render it with two for loops:
+
+for (let y = 0; y < map.length; y++) {
+  for (let x = 0; x < map[y].length; x++) {
+    const tileIndex = map[y][x];
+    drawTile(tileIndex, x * 16, y * 16);
+  }
+}
+
+This is good for small maps or debugging — but for a big world, you’ll want something even better 👇
+🗺️ 2. Store the map in an external file (JSON or binary)
+Option A — JSON
+
+Save your level data as a .json file:
+
+{
+  "width": 20,
+  "height": 15,
+  "tiles": [
+    [0,0,0,1,1,1,0,0,0],
+    [0,1,1,1,2,1,1,1,0],
+    ...
+  ]
+}
+
+Then load it dynamically:
+
+fetch("maps/level1.json")
+  .then(res => res.json())
+  .then(data => {
+    map = data.tiles;
+    drawMap();
+  });
+
+✅ Easy to edit and debug
+✅ Works directly with level editors (see below)
+Option B — Binary / compressed form
+
+If you want a compact format:
+
+    You can store your tile IDs in a Uint8Array
+
+    Or base64 encode them to save bandwidth
 
 Example:
 
-    Base resolution: 320×180
+const mapData = new Uint8Array([0,0,1,2,0,1,1,...]);
 
-    Window resolution: 1280×720 (4× scale)
+Then decode when drawing:
 
-    Everything looks exactly right — bigger, but crisp.
+for (let i = 0; i < mapData.length; i++) {
+  const x = i % mapWidth;
+  const y = Math.floor(i / mapWidth);
+  const tileIndex = mapData[i];
+  drawTile(tileIndex, x * 16, y * 16);
+}
 
-🧩 4. Tools for Upscaling Outside the Engine
+✅ Super fast
+✅ Perfect for very large worlds
+⚠️ Harder to read manually
+🎨 3. Use a tilemap editor like Tiled
 
-If you just want to resize art files for preview/testing (not in-engine), use a graphics program that supports nearest-neighbor scaling:
+This is what most indie devs and studios use.
 
-    Aseprite: Image → Resize → Interpolation: “Nearest Neighbor”
+    It lets you paint your map visually with your tileset image
 
-    Photoshop: Image Size → Resample: “Nearest Neighbor (Hard Edges)”
+    Exports as .json or .tmx (XML)
 
-    GIMP: Image → Scale Image → Interpolation: “None”
+    You can load that file directly in JS
 
-💡 Pro Tip
+Example load code:
 
-Try not to manually upscale the art files unless needed — it’s usually better to keep everything at 1× and let your engine scale the art consistently at runtime. That way, you can easily change resolution or zoom level later.
+fetch("maps/level1.json")
+  .then(r => r.json())
+  .then(map => {
+    map.layers[0].data.forEach((tileId, i) => {
+      const x = (i % map.width) * 16;
+      const y = Math.floor(i / map.width) * 16;
+      drawTile(tileId - 1, x, y);
+    });
+  });
 
-Would you like to tell me which engine or framework you’re using?
-I can show the exact setup for that one so your 16×16 art looks perfect on any resolution.
+✅ Visual editing
+✅ Easy to tweak tile size, layers, collisions
+✅ Works with any image tileset
+🧱 4. Rendering tiles
+
+Let’s say you have a tileset.png like this (each 16×16):
+
+const tileset = new Image();
+tileset.src = "assets/tileset.png";
+
+function drawTile(tileIndex, x, y) {
+  const tilesPerRow = tileset.width / 16;
+  const sx = (tileIndex % tilesPerRow) * 16;
+  const sy = Math.floor(tileIndex / tilesPerRow) * 16;
+  ctx.drawImage(tileset, sx, sy, 16, 16, x, y, 16, 16);
+}
+
+That will take care of mapping tile IDs to images.
+💡 TL;DR
+Approach	Pros	Cons
+2D array inline	Simple, fast	Hard to maintain large maps
+JSON file	Editable, structured	Slightly more load time
+Binary data	Super compact	Not human-readable
+Tiled editor	Visual editing, flexible	Requires import code
+🧠 Recommendation for you
+
+Since your map is 320×240 and you’re making a browser game, do this:
+
+    Build your map in Tiled (free).
+
+    Export it as .json.
+
+    Load it with fetch() in JS.
+
+    Use your tileset image to draw tiles.
+
+That’s the standard way to handle it — no manual typing, no spaghetti arrays. 🚀
+
+If you want, I can give you a ready-to-use Tiled loader example (HTML + JS + map.json + tileset.png layout).
+Would you like me to show that?
 Du sade:
-we are using js only
+ermm, we are talking about a 320x240 block world, it is super much, every block is 16x16p
 ChatGPT sade:
 
-Perfect — using JavaScript gives you full control, but you do need to handle pixel-perfect scaling yourself. Let’s go step by step on how to make your 16×16px art look crisp and playable in a JS game (using Canvas).
-🎨 1. The Key: Nearest-Neighbor Scaling
+Ah — yes! Got it now 😅
+You mean a world that’s 320×240 tiles, not 320×240 pixels.
+That’s a massive map:
+→ 320 × 240 = 76,800 tiles 😳
 
-By default, the browser blurs images when you scale them up.
-You need to turn that off so the pixel edges stay sharp.
+Totally, you don’t want to hardcode that.
+Let’s go step-by-step through how to handle a large 16×16-tile world efficiently in JavaScript.
+💡 Core Idea
 
-In your rendering code (for example, when using a <canvas>):
+You never actually need to store or draw all 76,800 tiles at once on screen.
+Instead, you:
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+    Store the map in a compact format (binary or JSON).
 
-// Disable smoothing
-ctx.imageSmoothingEnabled = false;
+    Draw only the visible tiles based on a camera.
 
-That’s the most important line — without it, your pixel art will look fuzzy.
-📏 2. Integer Scaling Example
+🧱 1. Store your map data efficiently
+✅ Option 1: JSON array
 
-Let’s say your sprite is 16×16, and you want it 4× bigger (so 64×64 on screen):
+If you’re okay with a few megabytes, you can still store it as JSON like:
 
-const sprite = new Image();
-sprite.src = "player.png";
+{
+  "width": 320,
+  "height": 240,
+  "tiles": [0,0,0,1,1,1,2,3,0, ... 76800 numbers ...]
+}
 
-sprite.onload = () => {
-  const scale = 4;
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(sprite, 0, 0, sprite.width * scale, sprite.height * scale);
+Then load it:
+
+const response = await fetch("maps/world1.json");
+const map = await response.json();
+
+The "tiles" array is one-dimensional — you compute coordinates with:
+
+const index = y * map.width + x;
+const tileId = map.tiles[index];
+
+That’s the same structure used by tools like Tiled (which you should really use).
+✅ Option 2: Binary (if you want compact)
+
+You can save the data as raw bytes:
+
+// each tile = 1 byte (0–255)
+const mapBuffer = new Uint8Array(320 * 240);
+// load via fetch + arrayBuffer
+const response = await fetch("maps/world1.bin");
+const arrayBuffer = await response.arrayBuffer();
+const mapData = new Uint8Array(arrayBuffer);
+
+Much smaller (76 KB) and very fast to load.
+🎮 2. Only draw what’s visible
+
+Let’s say your game shows only a 20×15-tile screen (320×240 px).
+You can have a simple camera:
+
+const camera = { x: 0, y: 0, width: 20, height: 15 };
+
+function drawVisibleTiles() {
+  for (let y = 0; y < camera.height; y++) {
+    for (let x = 0; x < camera.width; x++) {
+      const worldX = x + camera.x;
+      const worldY = y + camera.y;
+      const index = worldY * map.width + worldX;
+      const tileId = map.tiles[index];
+      drawTile(tileId, x * 16, y * 16);
+    }
+  }
+}
+
+Then when your player moves:
+
+camera.x = Math.floor(player.x / 16) - 10;
+camera.y = Math.floor(player.y / 16) - 7;
+
+That keeps the viewport following the player and only draws what’s on screen.
+🧩 3. Use a tileset
+
+Just one image containing all tile graphics:
+
+function drawTile(id, x, y) {
+  const tilesPerRow = tileset.width / 16;
+  const sx = (id % tilesPerRow) * 16;
+  const sy = Math.floor(id / tilesPerRow) * 16;
+  ctx.drawImage(tileset, sx, sy, 16, 16, x, y, 16, 16);
+}
+
+🧠 4. The ideal workflow
+
+    Create the world visually in Tiled
+
+    .
+
+    Export as JSON (width, height, tile array).
+
+    Load with fetch() in JS.
+
+    Render visible area based on camera.
+
+This is exactly what big 2D games do (Stardew Valley, Terraria, etc.).
+🔥 TL;DR
+Goal	Best Practice
+320×240 tile map	Store as binary or JSON
+Manage performance	Draw only what’s visible
+Edit world	Use Tiled map editor
+Memory use	76 800 bytes (tiny in JS)
+
+If you want, I can show a full minimal example that:
+
+    loads a 320×240 map from JSON,
+
+    scrolls with a camera,
+
+    and renders from a tileset efficiently.
+
+Would you like that?
+Du sade:
+we are only allowed to use java script 
+ChatGPT sade:
+
+No problem — EVERYTHING I explained can be done entirely in pure JavaScript.
+No engines, no libraries, no external programs required.
+You can build a full 320×240 tile world using only JS. ✅
+
+Let me show you the correct way to store and render a huge tilemap using only JavaScript, without manually typing 76,800 tiles.
+✅ HOW TO HANDLE A 320×240 TILE WORLD IN PURE JAVASCRIPT
+
+A world of 320×240 tiles (76,800 tiles) is big, but easily doable in plain JS.
+You just need to:
+
+✅ Store the map efficiently
+✅ Load it
+✅ Render only the visible tiles
+✅ 1. STORE THE MAP IN A SEPARATE JS FILE
+
+Create a file called World1.js
+
+export const World1 = {
+    width: 320,
+    height: 240,
+    tiles: new Uint16Array([
+        // 76800 tile IDs here!
+        // but you don’t write them manually...
+        // you generate them with a script.
+    ])
 };
 
-This draws your 16×16 sprite at 64×64 with perfect sharp pixels.
-🧱 3. Scaling Your Whole Game (Not Just Sprites)
+Even a 76,800-size Uint16Array is tiny in JS memory.
 
-You can also scale your entire game canvas by integer multiples.
-Let’s say your game’s logical resolution is 320×180 (like an old console).
-Then you render to a small internal canvas and scale it up to fit the window.
+A Uint16 can hold tile IDs (0–65535).
+✅ 2. Generate the world using JavaScript (NO manual typing!)
 
-const gameWidth = 320;
-const gameHeight = 180;
-const scale = 4;
+Example: Fill the world with random grass tiles:
 
-const gameCanvas = document.createElement("canvas");
-gameCanvas.width = gameWidth;
-gameCanvas.height = gameHeight;
-const gameCtx = gameCanvas.getContext("2d");
-gameCtx.imageSmoothingEnabled = false;
+const tiles = new Uint16Array(320 * 240);
 
-// Visible canvas
-const screen = document.getElementById("game");
-screen.width = gameWidth * scale;
-screen.height = gameHeight * scale;
-const screenCtx = screen.getContext("2d");
-screenCtx.imageSmoothingEnabled = false;
+for (let i = 0; i < tiles.length; i++) {
+    tiles[i] = Math.floor(Math.random() * 3);  
+}
 
-// Example render loop
-function render() {
-  gameCtx.clearRect(0, 0, gameWidth, gameHeight);
+export const World1 = {
+    width: 320,
+    height: 240,
+    tiles
+};
 
-  // draw everything in gameCtx at 1×
-  gameCtx.drawImage(sprite, 100, 100);
+Now you have a full world WITHOUT typing anything manually.
 
-  // draw the small canvas scaled up
-  screenCtx.clearRect(0, 0, screen.width, screen.height);
-  screenCtx.drawImage(gameCanvas, 0, 0, screen.width, screen.height);
+You can generate:
+
+    Forests
+
+    Caves
+
+    Biomes
+
+    Rivers
+
+    Dungeons
+
+All in pure JS.
+✅ 3. In your main game, load the map:
+
+import { World1 } from "./World1.js";
+
+✅ 4. Draw only the visible area using a camera
+
+Your screen might be 320×240 pixels
+→ that's 20×15 tiles visible.
+
+const camera = {
+    x: 0,
+    y: 0,
+    width: 20,
+    height: 15
+};
+
+Rendering:
+
+function drawWorld() {
+    for (let ty = 0; ty < camera.height; ty++) {
+        for (let tx = 0; tx < camera.width; tx++) {
+
+            const worldX = tx + camera.x;
+            const worldY = ty + camera.y;
+
+            const index = worldY * World1.width + worldX;
+            const tileId = World1.tiles[index];
+
+            drawTile(tileId, tx * 16, ty * 16);
+        }
+    }
+}
+
+✅ You never draw all 76,800 tiles
+✅ Only 300 tiles per frame
+✅ Fast even on old computers
+✅ 5. Draw tile from tileset (sprite sheet)
+
+const tileset = new Image();
+tileset.src = "tileset.png";
+
+function drawTile(id, x, y) {
+    const tilesPerRow = tileset.width / 16;
+    const sx = (id % tilesPerRow) * 16;
+    const sy = Math.floor(id / tilesPerRow) * 16;
+    ctx.drawImage(tileset, sx, sy, 16, 16, x, y, 16, 16);
+}
+
+✅ 6. Camera follows player
+
+camera.x = Math.floor(player.x / 16) - Math.floor(camera.width / 2);
+camera.y = Math.floor(player.y / 16) - Math.floor(camera.height / 2);
+
+✅ 7. Game loop
+
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawWorld();
+    drawPlayer();
+    requestAnimationFrame(gameLoop);
+}
+
+✅ TL;DR — You CAN handle a 320×240 tile world in PURE JAVASCRIPT
+
+✅ Use a Uint16Array for 76,800 tiles
+✅ Generate the world in JS (no manual typing!)
+✅ Render only visible tiles (~300 each frame)
+✅ Use a camera to scroll the world
+✅ All done with vanilla JS
+
+If you want, I can generate a full working example:
+
+    world generator
+
+    camera
+
+    player movement
+
+    smooth scrolling
+
+    tileset rendering
+
+All using ONLY JavaScript.
+Do you want the complete template?
+Du sade:
+well, the original size is 16x16p per block but we are going to scale it to 128x128p in photoshop so every tile is about to be 128x128
+ChatGPT sade:
+
+Perfect — that actually makes things simpler to see in-game, and it doesn’t change how you store or draw the world at all.
+
+The tilemap logic still works exactly the same; you just draw each tile bigger.
+🔹 What changes
+
+Only the rendering scale.
+Originally you drew:
+
+ctx.drawImage(tileset, sx, sy, 16, 16, x, y, 16, 16);
+
+Now your tiles are designed at 128×128, so you just draw them at that size:
+
+const TILE_SIZE = 128;   // size you want to draw on screen
+const TILE_SRC = 16;     // original size in the tileset (each tile in the PNG)
+
+function drawTile(id, x, y) {
+    const tilesPerRow = tileset.width / TILE_SRC;
+    const sx = (id % tilesPerRow) * TILE_SRC;
+    const sy = Math.floor(id / tilesPerRow) * TILE_SRC;
+
+    ctx.drawImage(
+        tileset,
+        sx, sy, TILE_SRC, TILE_SRC,    // source from tileset
+        x * TILE_SIZE, y * TILE_SIZE,  // position on canvas
+        TILE_SIZE, TILE_SIZE           // scaled size
+    );
+}
+
+🔹 If you only have the 128×128 version
+
+If your Photoshop-scaled tileset file already has 128×128 tiles, then set:
+
+const TILE_SRC = 128;
+const TILE_SIZE = 128;
+
+and the code works the same.
+🔹 Note about world size
+
+Your logical map is still 320×240 tiles, but visually that becomes:
+
+320 tiles * 128px = 40,960px wide
+240 tiles * 128px = 30,720px tall
+
+That’s huge, so you’ll definitely need a camera that only draws the part visible on screen — you never want to render 76,800 large tiles at once.
+🔹 Summary
+Concept	Before	After
+Tile size in art	16×16	128×128
+Stored in map	same (IDs only)	same
+Draw size	16×16	128×128
+World pixel size	5 120×3 840	40 960×30 720
+Map logic	unchanged	unchanged
+
+So the whole tilemap system stays the same — you just change two constants that control the draw scale.
+
+If you want, I can show how to combine this with a camera that automatically clips visible tiles for your 128×128 version, so it runs smoothly. Would you like that?
+Du sade:
+well im using OOP
+ChatGPT sade:
+
+Perfect — that’s even better. Using OOP (Object-Oriented Programming) for your map and tiles makes things cleaner, especially for a large, scaled world.
+Let’s set up a solid structure for your 128×128-tile world.
+🧱 Example OOP setup
+1️⃣ Tile class
+
+Handles one tile and how to draw it.
+
+class Tile {
+  constructor(id, sx, sy) {
+    this.id = id;       // tile ID or type
+    this.sx = sx;       // source x on tileset
+    this.sy = sy;       // source y on tileset
+  }
+
+  draw(ctx, tileset, x, y, tileSize, srcSize) {
+    ctx.drawImage(
+      tileset,
+      this.sx, this.sy, srcSize, srcSize, // part of tileset
+      x * tileSize, y * tileSize,          // position on screen
+      tileSize, tileSize                   // draw size
+    );
+  }
+}
+
+2️⃣ TileMap class
+
+Stores and draws all tiles.
+(We’ll use only the visible portion when drawing.)
+
+class TileMap {
+  constructor(width, height, tiles, tileset, tileSize = 128, srcSize = 16) {
+    this.width = width;
+    this.height = height;
+    this.tiles = tiles;      // Uint16Array or 2D array of tile IDs
+    this.tileset = tileset;  // Image object
+    this.tileSize = tileSize;
+    this.srcSize = srcSize;
+  }
+
+  draw(ctx, camera) {
+    const startX = Math.floor(camera.x / this.tileSize);
+    const startY = Math.floor(camera.y / this.tileSize);
+    const endX = Math.ceil((camera.x + camera.width) / this.tileSize);
+    const endY = Math.ceil((camera.y + camera.height) / this.tileSize);
+
+    for (let y = startY; y < endY; y++) {
+      for (let x = startX; x < endX; x++) {
+        if (x < 0 || y < 0 || x >= this.width || y >= this.height) continue;
+
+        const index = y * this.width + x;
+        const tileId = this.tiles[index];
+        const tilesPerRow = this.tileset.width / this.srcSize;
+        const sx = (tileId % tilesPerRow) * this.srcSize;
+        const sy = Math.floor(tileId / tilesPerRow) * this.srcSize;
+
+        ctx.drawImage(
+          this.tileset,
+          sx, sy, this.srcSize, this.srcSize,
+          x * this.tileSize - camera.x,
+          y * this.tileSize - camera.y,
+          this.tileSize, this.tileSize
+        );
+      }
+    }
+  }
+}
+
+3️⃣ Camera class
+
+Tracks what part of the world is visible.
+
+class Camera {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+
+  follow(target) {
+    this.x = target.x - this.width / 2;
+    this.y = target.y - this.height / 2;
+  }
+}
+
+4️⃣ Example usage
+
+const canvas = document.getElementById("GameCanvas");
+const ctx = canvas.getContext("2d");
+
+const tileset = new Image();
+tileset.src = "tileset.png";
+
+const mapWidth = 320;
+const mapHeight = 240;
+const tiles = new Uint16Array(mapWidth * mapHeight);
+
+for (let i = 0; i < tiles.length; i++) {
+  tiles[i] = Math.floor(Math.random() * 4); // random tile IDs 0–3
+}
+
+const map = new TileMap(mapWidth, mapHeight, tiles, tileset, 128, 16);
+const camera = new Camera(0, 0, canvas.width, canvas.height);
+const player = { x: 1000, y: 1000 }; // world coordinates
+
+function gameLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  camera.follow(player);
+  map.draw(ctx, camera);
+  requestAnimationFrame(gameLoop);
+}
+
+tileset.onload = gameLoop;
+
+✅ Notes
+
+    tileSize = 128 → how big each tile appears on screen.
+
+    srcSize = 16 → original size of each tile in the tileset PNG.
+
+    You can generate tiles procedurally or load them from a file.
+
+    Camera ensures you only draw visible tiles.
+
+Would you like me to extend this example so the player can move (with arrow keys) and the camera scrolls smoothly across your 128×128-tile world?
+Du sade:
+can you renew the gameloop
+// Scene
+import { Scene } from "./MenuToGame/MenuButtons.js";
+
+// World
+import { Map1 } from "./Map.js";
+
+// Menu Buttons
+import { MenuButtonsList } from "./ObjectLists.js";
+// Characters
+import { CharacterList } from "./ObjectLists.js";
+
+export const canvas = document.getElementById("GameCanvas");
+export const ctx = canvas.getContext("2d");
+
+function MenuScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    MenuButtonsList.forEach(e => {
+        e.draw(ctx);
+        e.update();
+    });
+}
+function GameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    CharacterList.forEach(e => {
+        e.draw();
+    });
 }
 
 function gameLoop() {
-  render();
-  requestAnimationFrame(gameLoop);
+    if (Scene === "Menu") {
+        MenuScene();
+    } else if (Scene === "Game") {
+        GameScene();
+    }
+    
+    requestAnimationFrame(gameLoop);
 }
+    
+gameLoop();
+ChatGPT sade:
+
+Absolutely! I can help rewrite your gameLoop in a clean, OOP-friendly, modular way while keeping your scene switching and world/character rendering consistent. I’ll also make it future-proof so you can expand with things like a camera, scaled tiles, or more scenes.
+
+Here’s a renewed version:
+
+// Scene management
+import { Scene } from "./MenuToGame/MenuButtons.js";
+
+// World
+import { Map1 } from "./Map.js";
+
+// Menu Buttons & Characters
+import { MenuButtonsList, CharacterList } from "./ObjectLists.js";
+
+// Canvas
+export const canvas = document.getElementById("GameCanvas");
+export const ctx = canvas.getContext("2d");
+
+// -----------------------------
+// Scene renderers
+// -----------------------------
+
+function renderMenuScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw and update all menu buttons
+    MenuButtonsList.forEach(button => {
+        button.draw(ctx);
+        button.update(); // assuming update handles hover/click logic
+    });
+}
+
+function renderGameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the map (if Map1 is a TileMap instance)
+    if (Map1?.draw) Map1.draw(ctx);
+
+    // Draw all characters
+    CharacterList.forEach(character => {
+        character.draw(ctx);
+    });
+}
+
+// -----------------------------
+// Main Game Loop
+// -----------------------------
+
+function gameLoop() {
+    switch (Scene.current) { // using Scene.current if Scene is an object
+        case "Menu":
+            renderMenuScene();
+            break;
+        case "Game":
+            renderGameScene();
+            break;
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+// Start loop
 gameLoop();
 
-✅ That setup ensures:
+✅ Improvements I made:
 
-    Your logic runs at a small, consistent resolution (good for pixel art).
+    Separated render functions: renderMenuScene and renderGameScene instead of lumping everything in one loop. Cleaner and easier to extend.
 
-    The screen shows a cleanly scaled version, without blur.
+    Switched to Scene.current:
 
-    You can easily adjust scale (2, 3, 4, etc.) for different resolutions.
+        In modern modular JS, primitives like strings won’t reflect updates across modules.
 
-💡 4. Bonus: Auto-fit to Screen (while keeping integer scale)
+        Using Scene.current (or any mutable object) ensures that when you change the scene, all modules see it.
 
-If you want it to resize automatically depending on window size:
+    Optional map drawing:
 
-function getScale() {
-  return Math.floor(window.innerHeight / gameHeight);
-}
+        Checks if Map1 has a draw method (works with your TileMap OOP class).
 
-function resize() {
-  const scale = getScale();
-  screen.width = gameWidth * scale;
-  screen.height = gameHeight * scale;
-}
+    Switch statement: cleaner than if/else if for multiple scenes.
 
-window.addEventListener("resize", resize);
-resize();
+    Single requestAnimationFrame loop:
 
-That keeps your game pixel-perfect no matter the display size.
+        Menu and game share the same loop; you no longer need separate loops for each scene.
 
-Would you like me to show a full working example (HTML + JS) where you can drop a 16×16 sprite and see it scaled up pixel-perfect on screen?
-I can make that as a ready-to-run demo snippet.
-Du sade:
-ok nvm, we are going for 1920x1080p and we scale everything in photoshop
-ChatGPT sade:
+💡 Next steps / recommendations:
 
-Got it 👍 — that’s a totally valid choice too, especially if you’ve settled on a fixed 1920×1080 resolution.
+    Make sure Scene is defined like this for live updates:
 
-If you’re scaling your pixel art in Photoshop, here’s how to make sure it stays crisp and doesn’t get blurry or distorted when you resize it:
-🎨 How to Properly Scale Pixel Art in Photoshop
+// MenuButtons.js
+export const Scene = { current: "Menu" };
+export function swapScene(newScene) { Scene.current = newScene; }
 
-    Open your sprite or tilesheet (e.g., 16×16px or 32×32px).
+    Clicking “New Game” button should call swapScene("Game").
 
-    Go to:
+    Later you can add a Camera class to only render the visible part of Map1.
 
-Image → Image Size…
-
-In the dialog:
-
-    Uncheck “Resample” (if it’s on).
-
-    Then check it again (to re-enable resampling).
-
-    For Resample, choose:
-
-        Nearest Neighbor (Hard Edges)
-
-    Now set the Width and Height to an integer multiple — for example:
-
-        200% (2×)
-
-        400% (4×)
-
-        1200% (12×), etc.
-
-    Click OK.
-
-✅ This keeps your pixels perfectly sharp — no smoothing, no blur.
-🧩 Example
-
-If your art was 16×16px and you want it to fit better in 1080p:
-
-    16 × 8 = 128px (nice large size for a sprite)
-
-    You can scale all art 8× in Photoshop, export, and use those assets directly in your 1920×1080 scene.
-
-⚙️ Workflow Tips
-
-    Keep your originals at 1× (the tiny ones) — they’re easier to edit later.
-
-    Do your scaling on copies so you can always regenerate higher/lower resolutions if you change your mind.
-
-    Make sure your Canvas Size (not Image Size) fits your target layout (for example, 1920×1080 final composition).
-
-💡 Optional but Recommended
-
-If you’re doing tile-based or sprite-sheet animation, scaling in Photoshop can make aligning frames or tiles trickier. In that case, it’s often better to:
-
-    Scale the whole sheet at once (not individual frames).
-
-    Keep grid snapping turned on (View → Snap To → Grid).
-
-Would you like me to show the exact scaling percentages (2×, 3×, etc.) you should use so your old 16×16 assets fit nicely on a 1920×1080 canvas without awkward gaps or fractional scaling?
-Du sade:
-well its a webbrowser game so we want it to fitt the webbrowser border
-ChatGPT sade:
-
-Ah — perfect clarification 👍
-So you’re making a browser game and want it to automatically fit inside the browser window (or a specific container), while keeping your pixel art sharp and not stretching it weirdly.
-
-Here’s how to do that cleanly and responsively in a 1920×1080 design.
-🧩 1. Core Principle: Dynamic Scaling
-
-Even though your base resolution is 1920×1080, you can dynamically scale the canvas to match the browser window — as long as you keep aspect ratio and nearest-neighbor rendering (so the pixels don’t blur).
-🖥️ 2. Example Setup (HTML + JS)
-
-Here’s a minimal structure you can use:
-
-<canvas id="game"></canvas>
-
-<script>
-const baseWidth = 1920;
-const baseHeight = 1080;
-
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-// keep crisp pixels
-ctx.imageSmoothingEnabled = false;
-
-// resize handler
-function resizeCanvas() {
-  // compute scale based on window
-  const scale = Math.min(
-    window.innerWidth / baseWidth,
-    window.innerHeight / baseHeight
-  );
-
-  canvas.width = baseWidth * scale;
-  canvas.height = baseHeight * scale;
-
-  // scale drawing
-  ctx.setTransform(scale, 0, 0, scale, 0, 0);
-
-  // optional: clear and redraw your game scene here
-  draw();
-}
-
-function draw() {
-  ctx.clearRect(0, 0, baseWidth, baseHeight);
-  // Example content
-  ctx.fillStyle = "red";
-  ctx.fillRect(100, 100, 200, 200); // scales nicely
-}
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas(); // initial
-</script>
-
-✅ What this does:
-
-    Keeps your game logic and coordinates in 1920×1080 units (your design resolution).
-
-    Scales it perfectly to fill the browser window (or as big as possible while preserving aspect ratio).
-
-    Uses nearest-neighbor rendering so your upscaled art stays sharp.
-
-🧱 3. How to Handle Letterboxing (Black Bars)
-
-If the browser window doesn’t match 16:9 exactly (like a tall mobile screen), the above code keeps aspect ratio but will leave small borders.
-
-If you want to center the canvas and fill the rest with black (like most games do), just add this CSS:
-
-body {
-  margin: 0;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  overflow: hidden;
-}
-canvas {
-  image-rendering: pixelated;
-}
-
-✅ This ensures:
-
-    Your game always fits in the window.
-
-    It stays centered.
-
-    Pixels remain crisp (no blur).
-
-📱 4. Mobile and Browser Scaling Notes
-
-    The image-rendering: pixelated; CSS is essential — it ensures scaling remains nearest-neighbor on the browser side too.
-
-    Always draw everything in base resolution (1920×1080) and let the ctx.setTransform(scale, 0, 0, scale, 0, 0) handle resizing.
-
-    You can even hide scrollbars and keep everything responsive with a meta viewport tag if you want mobile support.
-
-Would you like me to extend that example into a ready-to-run HTML file that you can just open in your browser and drop your sprites into (with crisp scaling and black-bar handling)?
-Du sade:
-no we dont rescale in code, only in photoshop
-ChatGPT sade:
-
-Ah! Got it — you’re taking a purely “pre-scaled” approach. Everything is resized in Photoshop to your target resolution (1920×1080 or whatever fits the browser), and the game will just display the images at their full size without any runtime scaling. That simplifies things a lot.
-
-Here’s what you need to know to make it work well:
-1️⃣ Scale Everything to the Browser Resolution in Photoshop
-
-    Set your canvas size in Photoshop to 1920×1080 (or whatever your intended browser resolution is).
-
-    Scale each sprite and background art before exporting, using nearest-neighbor to keep pixels sharp.
-
-    For example, a 16×16 sprite:
-
-        Decide how big you want it on the screen (e.g., 128×128 for a large player sprite).
-
-        Resize in Photoshop → Image → Image Size → Nearest Neighbor → Width = 128, Height = 128.
-
-2️⃣ Export at Final Size
-
-    Save all assets at the final size you want displayed in the browser.
-
-    Use .png format to preserve transparency and crisp pixels.
-
-3️⃣ Browser Setup
-
-    Your <canvas> (or HTML element) should match exactly 1920×1080 (or whatever you scaled to).
-
-    No scaling is done in JS; just draw the image at its full size:
-
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-// canvas size matches your exported assets
-canvas.width = 1920;
-canvas.height = 1080;
-
-const sprite = new Image();
-sprite.src = "player_scaled.png";
-sprite.onload = () => {
-  ctx.drawImage(sprite, 100, 100); // draw at full size
-};
-
-    No need for imageSmoothingEnabled = false, since you’re not scaling at runtime.
-
-4️⃣ Pros & Cons of Pre-Scaling
-
-Pros:
-
-    Very simple: no runtime scaling code.
-
-    Pixel-perfect as long as you use nearest-neighbor in Photoshop.
-
-    Everything looks exactly how you designed it.
-
-Cons:
-
-    Only works at the resolution you designed (1920×1080).
-
-    Won’t automatically fit different browser sizes or screens.
-
-    If you want to support smaller windows, you’ll need to make separate scaled versions or accept clipping/scrollbars.
-
-💡 Tip: For a browser game, you might want to center the canvas with CSS so it looks nice on screens smaller than 1920×1080:
-
-body {
-  margin: 0;
-  background-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  overflow: hidden;
-}
-canvas {
-  display: block;
-}
-
-If you want, I can make a step-by-step workflow for scaling all your 16×16 assets in Photoshop to 1920×1080 while keeping proportions consistent, so nothing looks weird in your browser game. This avoids guesswork. Do you want me to do that?
-Du sade:
-ok well we need to scale it after the webbrowser
-ChatGPT sade:
-
-Ah! Now I understand perfectly — you want to design your assets at 16×16 or some small pixel size, but scale them up dynamically in the browser so they fill the screen (like most pixel-art games do). That’s the typical “pixel-perfect scaling” workflow for browser games.
-
-Here’s how to do it properly:
-1️⃣ Core Principle: Integer Scaling & Pixel-Perfect
-
-    You never want fractional scaling (like 1.7×), because pixels will get blurry.
-
-    Always scale by whole numbers (2×, 3×, 4×, …), or scale your canvas proportionally to fill the browser while maintaining aspect ratio.
-
-    Base resolution = size of your art (e.g., 16×16 for a sprite, or 320×180 for the whole game world).
-
-    Scaled resolution = base resolution × integer scale factor to fill the browser.
-
-2️⃣ HTML + JS Canvas Setup
-
-<canvas id="game"></canvas>
-
-<script>
-const baseWidth = 320;  // your logical game width
-const baseHeight = 180; // your logical game height
-
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
-
-// make pixels sharp when scaling
-ctx.imageSmoothingEnabled = false;
-
-// resize canvas to fit browser
-function resizeCanvas() {
-  const scale = Math.floor(Math.min(
-    window.innerWidth / baseWidth,
-    window.innerHeight / baseHeight
-  ));
-
-  canvas.width = baseWidth * scale;
-  canvas.height = baseHeight * scale;
-
-  ctx.setTransform(scale, 0, 0, scale, 0, 0); // scale all drawing
-
-  draw(); // redraw
-}
-
-// example drawing
-function draw() {
-  ctx.clearRect(0, 0, baseWidth, baseHeight);
-  ctx.fillStyle = "red";
-  ctx.fillRect(10, 10, 16, 16); // scaled automatically
-}
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-</script>
-
-✅ What this does:
-
-    Keeps all game logic in base resolution (320×180).
-
-    Automatically scales everything to fill the largest integer multiple that fits the browser window.
-
-    Maintains crisp pixel art with no blur.
-
-3️⃣ Tips for Scaling Pixel Art in Browser
-
-    Use ctx.imageSmoothingEnabled = false — absolutely required for crisp pixels.
-
-    Design everything in small, manageable pixels (16×16, 32×32) and let the browser handle scaling.
-
-    For fullscreen, you can either:
-
-        Fill as much as possible with integer scaling (letterboxing/pillarboxing for leftover space).
-
-        Or, if you want full coverage at all costs, you can scale slightly non-integer, but pixels will get slightly blurry.
-
-💡 Workflow Summary
-
-    Make art at 16×16 (or small base size).
-
-    Export assets at native size (don’t scale in Photoshop).
-
-    Load into browser, then scale dynamically using integer scaling on the canvas.
-
-    Optionally, center the canvas with CSS for extra polish.
-
-If you want, I can make a full working HTML example where you drop a 16×16 sprite, and it automatically fills the browser window with crisp scaling, so you can copy-paste and start your game immediately.
+If you want, I can rewrite this full setup with 128×128 scaled tiles, a camera, moving player, and menu → game transition, fully OOP and modular.
 
 Do you want me to do that?
 Du sade:
-why wont this function work?
-class Button {
-    constructor(x, y, width, height, text) {
-        this.x = x;
-        this.y = y;
+Ok reset, this is what I have
+
+Map.js:
+class Tile {
+    constructor(type, sourceX, sourceY) {
+        this.type = type;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
+    }
+
+    draw(ctx, tileset, x, y, tileSize, srcSize) {
+        ctx.drawImage(
+            tileset,
+            this.sourceX, this.sourceY, srcSize, srcSize, x * tileSize, y * tileSize, tileSize, tileSize
+        );
+    }
+}
+
+class TileMap {
+    constructor(width, height, tiles, tileset, tileSize = 128, srcSize = 16) {
         this.width = width;
         this.height = height;
-        this.text = text;
-    }
-
-    function onclick() {
-        console.log(${this.text} button clicked);
-    }
-}
-ChatGPT sade:
-
-Ah! I see exactly what’s going wrong — it’s a syntax issue in your class definition. In JavaScript classes, you don’t use the function keyword for methods. You just write the method name directly.
-
-Here’s the corrected version:
-
-class Button {
-    constructor(x, y, width, height, text) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.text = text;
-    }
-
-    // ✅ Correct syntax for a class method
-    onclick() {
-        console.log(`${this.text} button clicked`);
+        this.tiles = tiles;
+        this.tileset = tileset;
+        this.tileSize = tileSize;
+        this.srcSize = srcSize;
     }
 }
 
-Explanation:
-
-    Inside a class, methods are defined like this:
-
-class MyClass {
-    myMethod() {
-        // code here
-    }
-}
-
-    Do NOT write function inside the class — that’s only for standalone functions or object literals.
-
-Quick Test:
-
-const btn = new Button(0, 0, 100, 50, "Play");
-btn.onclick(); // logs: "Play button clicked"
-
-✅ Works perfectly.
-
-If you want, I can also show how to detect actual mouse clicks on a canvas button using this class — so your onclick method is called when the user clicks it. That’s the next step for a browser game. Do you want me to do that?
-Du sade:
-why is get context null?
-const canvas = document.getElementById("#GameCanvas");
-const ctx = canvas.getContext("2d");
-ChatGPT sade:
-
-Excellent question — this is one of those tiny syntax gotchas in JavaScript that trips up a lot of people. 😄
-
-The problem is right here:
-
-document.getElementById("#GameCanvas");
-
-You should not include the # when using getElementById.
-
-The # prefix is only used in CSS selectors (like document.querySelector("#GameCanvas")).
-But getElementById() expects just the raw ID name, no symbol.
-✅ Correct version:
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-💡 Quick Checklist if it’s still null:
-
-    Make sure your <canvas> actually exists in the HTML, e.g.:
-
-<canvas id="GameCanvas" width="800" height="600"></canvas>
-
-Make sure your script runs after the canvas is in the DOM, e.g.:
-
-<!-- ✅ Best way -->
-<script src="main.js" defer></script>
-
-or place your script after the canvas in HTML:
-
-    <canvas id="GameCanvas" width="800" height="600"></canvas>
-    <script src="main.js"></script>
-
-    If your script runs before the canvas exists, getElementById() will return null.
-
-🧩 TL;DR
-
-✅ Correct code:
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-⚠️ Common mistakes:
-
-    Using # with getElementById()
-
-    Running script before the DOM is loaded
-
-Would you like me to show the safest setup for your HTML + JS (so your canvas always initializes correctly no matter where your script tag is placed)?
-Du sade:
-how do I import from MenuButtons into MenuLoop.js
-
-class Button {
-    constructor(width, height, text) {
-        this.width = width;
-        this.height = height;
-        this.text = text;
-    }
-
-    onClick() {
-        console.log("Button clicked:", this.text);
-    }
-}
-class NewGame extends Button {
-    constructor(x, y, width, height, text) {
-        super(width, height, text);
-        this.x = x;
-        this.y = y;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-
-    onClick() {
-        document.addEventListener("click", () => {
-        document.documentElement.requestFullscreen().catch(() => {});
-        })
-    }
-}
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-import { NewGame } from "./MenuButtons.js";
-
-MenuLooop = {
-
-}
-ChatGPT sade:
-
-Nice — you’re getting close! 🎮
-The problem here is mainly about module structure and load order in JavaScript. Let’s go over how to correctly import/export classes between files.
-✅ The Correct Setup
-1️⃣ MenuButtons.js
-
-This file defines and exports your classes:
-
-// MenuButtons.js
-export class Button {
-    constructor(width, height, text) {
-        this.width = width;
-        this.height = height;
-        this.text = text;
-    }
-
-    onClick() {
-        console.log("Button clicked:", this.text);
-    }
-}
-
-export class NewGame extends Button {
-    constructor(x, y, width, height, text) {
-        super(width, height, text);
-        this.x = x;
-        this.y = y;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-
-    onClick() {
-        document.addEventListener("click", () => {
-            document.documentElement.requestFullscreen().catch(() => {});
-        });
-    }
-}
-
-✅ Notice:
-We use the export keyword before each class we want to make available.
-2️⃣ MenuLoop.js
-
-Now we can import the NewGame class like this:
-
-// MenuLoop.js
-import { NewGame } from "./MenuButtons.js";
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-const button = new NewGame(100, 100, 200, 80, "Start Game");
-button.draw(ctx);
-button.onClick();
-
-✅ This works because NewGame was exported using export class NewGame.
-3️⃣ Make Sure Your HTML Uses Modules
-
-In your HTML file, you must tell the browser that you’re using ES modules:
-
-<script type="module" src="MenuLoop.js"></script>
-
-⚠️ Without type="module", the browser will throw errors like
-
-    “Cannot use import statement outside a module”.
-
-4️⃣ File Location Reminder
-
-Make sure your file structure matches your imports:
-
-project/
-│
-├── index.html
-├── MenuLoop.js
-└── MenuButtons.js
-
-If they’re in folders, adjust the import path accordingly:
-
-import { NewGame } from "./scripts/MenuButtons.js";
-
-✅ Final Summary
-File	Code
-MenuButtons.js	export class Button {…} / export class NewGame extends Button {…}
-MenuLoop.js	import { NewGame } from "./MenuButtons.js";
-index.html	<script type="module" src="MenuLoop.js"></script>
-
-Would you like me to show you how to make your MenuLoop actually detect and respond to button clicks (so your NewGame button works interactively on the canvas)?
-Du sade:
-why wont this work?
-import { NewGame } from "./MenuButtons.js";
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-MenuLooop = {
-    NewGameButton.draw();
-    requestAnimationFrame(gameLoop);
-}
-ChatGPT sade:
-
-Great — you’re so close! 🔥
-The issue here is a mix of syntax errors and a misunderstanding of what an object literal can contain.
-
-Let’s go step by step 👇
-❌ The Problem
-
-Your code:
-
-MenuLooop = {
-    NewGameButton.draw();
-    requestAnimationFrame(gameLoop);
-}
-
-That block looks like you’re trying to execute code inside an object literal, but inside {} like that, JavaScript expects key–value pairs, not normal statements.
-
-So the JS engine sees:
-
-    NewGameButton.draw(); → invalid inside an object literal
-
-    requestAnimationFrame(gameLoop); → also invalid
-
-✅ The Fix
-
-You likely meant to run code, not define an object.
-You can do that directly, like this:
-
-import { NewGame } from "./MenuButtons.js";
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-// define your game loop
-function gameLoop() {
+Camera.js:
+(empty)
+
+ObjectList.js:
+// Menu Buttons
+import { NewGame } from "./MenuToGame/MenuButtons.js";
+
+import {Player} from "./Characters/Player.js";
+import {Npc} from "./Characters/Npc.js";
+
+export const MenuButtonsList = [
+    new NewGame(150, 200, 200, 50, "New Game")
+]
+
+export const CharacterList = [
+    new Player(50, 50, 104, 128, "Pöjk", "../.Pictures/Pojk.png"),
+    /*
+    new Npc(200, 200, 50, 50, "Stefan", StefanImage),
+    new Npc(300, 300, 50, 50, "Anton", AntonImage),
+    new Npc(400, 400, 50, 50, "Gustav", GustavImage),
+    new Npc(500, 500, 50, 50, "Sten", StenImage)
+    */
+]
+
+GameLoop.js:
+// Scene
+import { Scene } from "./MenuToGame/MenuButtons.js";
+
+// World
+import { Map1 } from "./Map.js";
+
+// Menu Buttons
+import { MenuButtonsList } from "./ObjectLists.js";
+// Characters
+import { CharacterList } from "./ObjectLists.js";
+
+export const canvas = document.getElementById("GameCanvas");
+export const ctx = canvas.getContext("2d");
+
+function MenuScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-    requestAnimationFrame(gameLoop);
+    MenuButtonsList.forEach(e => {
+        e.draw(ctx);
+        e.update();
+    });
+}
+function GameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    CharacterList.forEach(e => {
+        e.draw();
+    });
 }
 
-// start the loop
+function gameLoop() {
+    if (Scene === "Menu") {
+        MenuScene();
+    } else if (Scene === "Game") {
+        GameScene();
+    }
+    
+    requestAnimationFrame(gameLoop);
+}
+    
 gameLoop();
 
-✅ This will:
 
-    Draw your NewGame button each frame.
+how do I make the tile map
+ChatGPT sade:
 
-    Keep the loop running with requestAnimationFrame.
+Perfect — now I understand exactly what you have and want. You have a Tile/TileMap class, a GameLoop, and a set of characters and buttons. Now we just need to make an actual tile map and render it in your game loop.
 
-⚠️ Bonus Fix: Typo
+Let’s build this step by step in a clean OOP way.
+1️⃣ Create the TileMap
 
-You also have a typo:
-MenuLooop → has three o’s instead of two.
-If that’s intentional, fine — but just double-check. 😄
-✅ Optional: If you really want a “MenuLoop object”
+We’ll use your Tile and TileMap classes but extend TileMap with a draw method and a way to store tiles in a 1D array (or 2D if you prefer).
 
-You can structure it like this:
+// Map.js
 
-const MenuLoop = {
-    start() {
-        function loop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            NewGameButton.draw(ctx);
-            requestAnimationFrame(loop);
+export class Tile {
+    constructor(type, sourceX, sourceY) {
+        this.type = type;       // e.g., 0 = grass, 1 = dirt
+        this.sourceX = sourceX; // position in tileset
+        this.sourceY = sourceY;
+    }
+
+    draw(ctx, tileset, x, y, tileSize, srcSize) {
+        ctx.drawImage(
+            tileset,
+            this.sourceX, this.sourceY, srcSize, srcSize, 
+            x * tileSize, y * tileSize, tileSize, tileSize
+        );
+    }
+}
+
+export class TileMap {
+    constructor(width, height, tileset, tileSize = 128, srcSize = 16) {
+        this.width = width;       // in tiles
+        this.height = height;
+        this.tileSize = tileSize; // draw size on canvas
+        this.srcSize = srcSize;   // source size in tileset
+        this.tileset = tileset;
+        this.tiles = new Array(width * height).fill(null); // empty initially
+    }
+
+    // Set a tile at (x, y) with a Tile instance
+    setTile(x, y, tile) {
+        this.tiles[y * this.width + x] = tile;
+    }
+
+    // Draw visible portion (or whole map for now)
+    draw(ctx) {
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                const tile = this.tiles[y * this.width + x];
+                if (!tile) continue;
+                tile.draw(ctx, this.tileset, x, y, this.tileSize, this.srcSize);
+            }
         }
-        loop();
+    }
+}
+
+// Example: create a map instance
+export const tilesetImage = new Image();
+tilesetImage.src = "./tileset.png"; // your tileset image
+
+export const Map1 = new TileMap(20, 15, tilesetImage); // 20x15 tiles on screen
+
+// Fill with tiles (simple example: alternating grass and dirt)
+tilesetImage.onload = () => {
+    const grass = new Tile(0, 0, 0);
+    const dirt = new Tile(1, 16, 0);
+
+    for (let y = 0; y < Map1.height; y++) {
+        for (let x = 0; x < Map1.width; x++) {
+            const tile = (x + y) % 2 === 0 ? grass : dirt;
+            Map1.setTile(x, y, tile);
+        }
     }
 };
 
-MenuLoop.start();
+2️⃣ Update your GameLoop
 
-That makes MenuLoop an object that contains your game loop logic.
+Now in GameLoop.js, just draw the map in your GameScene():
 
-So the TL;DR:
-Problem	Fix
-You used MenuLooop = { code }	Use a function or an object method instead
-Tried to execute code inside an object literal	Move the code into a function block {}
-Possible typo in MenuLooop	Rename to MenuLoop
+function GameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-Would you like me to show you how to hook up mouse click detection so clicking the button actually triggers its .onClick() method in this loop?
+    // draw the map first
+    Map1.draw(ctx);
+
+    // then draw characters on top
+    CharacterList.forEach(e => {
+        e.draw(ctx);
+    });
+}
+
+3️⃣ Scaling tiles
+
+You said your tiles are now 128×128 pixels. That’s handled by the tileSize parameter in TileMap.
+
+export const Map1 = new TileMap(20, 15, tilesetImage, 128, 16);
+
+    tileSize = 128 → each tile drawn at 128×128 on canvas
+
+    srcSize = 16 → each tile in your tileset PNG is 16×16 originally
+
+4️⃣ Next steps / improvements
+
+    Camera / viewport: only draw tiles visible on the screen.
+
+    Load big maps from JSON or generated arrays instead of manually placing tiles.
+
+    Tile types: store properties (walkable, collision, etc.) in the Tile class.
+
+If you want, I can make a working 128×128 tile map with scrolling camera and characters, fully integrated with your GameLoop and MenuScene.
+
+Do you want me to do that?
 Du sade:
-import { NewGame } from "./MenuButtons.js";
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-MenuLooop = {
-    NewGameButton.draw();
-    requestAnimationFrame(gameLoop);
-}
-ChatGPT sade:
-
-You’re super close again — just a couple of JavaScript syntax misunderstandings here. Let’s break it down clearly so it clicks (no pun intended 😄).
-❌ What’s wrong in your snippet
-
-Here’s your code:
-
-MenuLooop = {
-    NewGameButton.draw();
-    requestAnimationFrame(gameLoop);
-}
-
-The issues are:
-
-    Inside { ... }, JavaScript expects object properties, not executable code.
-    You can’t run NewGameButton.draw() directly inside an object literal.
-    It’s like writing this:
-
-    let obj = {
-        console.log("hi"); // ❌ invalid
+im making a camera that is stuck on the player, is this correct?
+Camera.js
+export class Camera {
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
-    You likely want a function that runs every frame (a game loop), not an object literal.
+    follow(Player) {
+        this.x = Player.x - this.width / 2 + Player.width / 2;
+        this.y = Player.y - this.height / 2 + Player.height / 2;
+    }
+}
 
-✅ The correct way
+Player.js:
 
-Here’s the version that works exactly as intended:
+import { Character } from "./SuperClass.js";
+import { ctx } from "../GameLoop.js";
+let keys = {};
+export class Player extends Character {
+    constructor(x, y, name, imgSrc) {
+        super(x, y, name, imgSrc);
+    }
 
-import { NewGame } from "./MenuButtons.js";
+    update() {
+        const speed = 5;
+        if (keys["ArrowUp"] || keys["w"]|| keys["W"]) this.y -= speed;
+        if (keys["ArrowDown"] || keys["s"] || keys["S"]) this.y += speed;
+        if (keys["ArrowLeft"] || keys["a"] || keys["A"]) this.x -= speed;
+        if (keys["ArrowRight"] || keys["d"] || keys["D"]) this.x += speed;
+    }
+}
 
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
 
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
+and GameLoop.js:
+// Scene
+import { Scene } from "./MenuToGame/MenuButtons.js";
+// Menu Buttons
+import { MenuButtonsList } from "./ObjectLists.js";
+// Characters
+import { CharacterList } from "./ObjectLists.js";
+
+export const canvas = document.getElementById("GameCanvas");
+export const ctx = canvas.getContext("2d");
+
+function canvasResize() {
+    canvas.width = window.innerWidth-20;
+    canvas.height = window.innerHeight-20;
+}
+
+canvasResize();
+
+function MenuScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    MenuButtonsList.forEach(e => {
+        e.draw(ctx);
+        e.update();
+    });
+}
+function GameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    CharacterList.forEach(e => {
+        e.draw();
+        e.update();
+    });
+}
 
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
+    if (Scene === "Menu") {
+        MenuScene();
+    } else if (Scene === "Game") {
+        GameScene();
+    }
 
     requestAnimationFrame(gameLoop);
 }
 
 gameLoop();
 
-✅ Explanation:
-
-    You define a function called gameLoop.
-
-    It clears the canvas each frame.
-
-    It calls NewGameButton.draw(ctx) to render your button.
-
-    Then requestAnimationFrame(gameLoop) keeps the loop going.
-
-💡 If you really want a MenuLoop object
-
-You can wrap the loop inside an object with a method like this:
-
-const MenuLoop = {
-    start() {
-        function loop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            NewGameButton.draw(ctx);
-            requestAnimationFrame(loop);
-        }
-        loop();
-    }
-};
-
-MenuLoop.start();
-
-That’s the clean, organized way to group it logically.
-TL;DR
-Issue	Fix
-Using { ... } to run code	Use a function instead
-Code inside object literal	Move it into a method or normal function
-Missing gameLoop definition	Add a proper function named gameLoop()
-
-Would you like me to show how to make that button actually clickable on the canvas (so it calls NewGameButton.onClick() when you click it)?
-Du sade:
-does it have to be called gameLoop?
+window.addEventListener("resize", canvasResize);
 ChatGPT sade:
 
-Great question — and nope! 😄
+Yes — your Camera class logic is basically correct for a “player-centered camera,” but there are a few key points and improvements to make it actually work smoothly with your current setup.
 
-It does not have to be called gameLoop.
-That’s just a common convention in games to make it clear that it’s the main update/render loop that runs every frame.
+Let’s go through them step by step.
+1️⃣ Camera logic
 
-You can name it anything you want, for example:
+Your Camera class:
 
-function menuLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-    requestAnimationFrame(menuLoop);
+export class Camera {
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    follow(Player) {
+        this.x = Player.x - this.width / 2 + Player.width / 2;
+        this.y = Player.y - this.height / 2 + Player.height / 2;
+    }
 }
-menuLoop();
+
+✅ This is correct in principle:
+
+    It centers the camera on the player.
+
+    Adding Player.width / 2 and Player.height / 2 ensures it centers on the player’s center, not top-left corner.
+
+2️⃣ What’s missing
+
+    Use the camera offset when drawing the map and characters.
+    Right now, in your GameScene():
+
+CharacterList.forEach(e => {
+    e.draw(); // draws at e.x, e.y
+});
+
+    This draws characters at world coordinates, not relative to the camera.
+
+    You need to subtract camera.x and camera.y to render correctly:
+
+CharacterList.forEach(e => {
+    e.draw(ctx, camera); // pass camera to draw
+});
+
+And in your Character draw method:
+
+draw(ctx, camera) {
+    ctx.drawImage(
+        this.image,
+        this.x - camera.x,
+        this.y - camera.y,
+        this.width,
+        this.height
+    );
+}
+
+    Map drawing also needs camera offset:
+
+If you’re using TileMap.draw(ctx), update it to accept a camera:
+
+draw(ctx, camera) {
+    for (let y = 0; y < this.height; y++) {
+        for (let x = 0; x < this.width; x++) {
+            const tile = this.tiles[y * this.width + x];
+            if (!tile) continue;
+            tile.draw(
+                ctx,
+                this.tileset,
+                x * this.tileSize - camera.x,
+                y * this.tileSize - camera.y,
+                this.tileSize,
+                this.srcSize
+            );
+        }
+    }
+}
+
+    Update camera every frame:
+
+function GameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const player = CharacterList[0]; // assuming first character is player
+    camera.follow(player);
+
+    Map1.draw(ctx, camera); // draw map with camera offset
+
+    CharacterList.forEach(e => {
+        e.draw(ctx, camera); // draw characters relative to camera
+        e.update();          // move characters
+    });
+}
+
+3️⃣ Optional: Clamp camera inside the world
+
+Right now, your camera can move beyond map boundaries. To fix:
+
+follow(player) {
+    this.x = Math.max(0, Math.min(player.x - this.width / 2 + player.width / 2, map.width * map.tileSize - this.width));
+    this.y = Math.max(0, Math.min(player.y - this.height / 2 + player.height / 2, map.height * map.tileSize - this.height));
+}
+
+4️⃣ Recap
+
+✅ Camera class logic is correct.
+✅ You must use camera offsets when drawing the map and characters.
+✅ Call camera.follow(player) each frame before drawing.
+✅ Optional: clamp the camera to map edges.
+
+If you want, I can rewrite your full GameLoop and Map classes to integrate the camera properly, so your 128×128 tiles, characters, and player-centered camera all work smoothly.
+
+Do you want me to do that?
+Du sade:
+camera is not defined
+
+this is my camera.js
+export class Camera {
+    constructor(x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    follow(Player) {
+        this.x = Player.x - this.width / 2 + Player.width / 2;
+        this.y = Player.y - this.height / 2 + Player.height / 2;
+    }
+}
+ChatGPT sade:
+
+Ah — the reason you’re getting camera is not defined is because you’ve only exported the Camera class in Camera.js but you never created an instance in your main game loop.
+
+In JavaScript ES6 modules, importing a class does not automatically create an object — you have to instantiate it yourself.
+✅ How to fix it
+
+    Import the Camera class
+
+import { Camera } from "./Camera.js";  // adjust the path
+
+    Create a camera instance
+
+const camera = new Camera(0, 0, canvas.width, canvas.height);
+
+Now camera exists, and you can use it in GameScene():
+
+function GameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const player = CharacterList[0]; // assuming first character is player
+    camera.follow(player);
+
+    Map1.draw(ctx, camera);          // map draw with camera offset
+    CharacterList.forEach(e => {
+        e.draw(ctx, camera);         // characters relative to camera
+        e.update();                  // update movement
+    });
+}
+
+🔹 Optional: Handle canvas resize
+
+If you resize the canvas, update the camera size too:
+
+function canvasResize() {
+    canvas.width = window.innerWidth - 20;
+    canvas.height = window.innerHeight - 20;
+    camera.width = canvas.width;
+    camera.height = canvas.height;
+}
+
+✅ Key points
+
+    Camera is a class, not an instance.
+
+    Always create an instance: const camera = new Camera(...).
+
+    Use this camera instance wherever you need offsets for drawing.
+
+If you want, I can rewrite your full GameLoop with the camera, map, player, and menu integration, so it’s all wired up correctly with camera.follow(player) and scaled 128×128 tiles.
+
+Do you want me to do that?
+Du sade:
+this is my ObjectList.js
+
+// Menu Buttons
+import { NewGame } from "./MenuToGame/MenuButtons.js";
+
+import {Player} from "./Characters/Player.js";
+import {Npc} from "./Characters/Npc.js";
+
+import { Camera } from "./Camera.js";
+
+export let CameraMan = new Camera(0, 0, 800, 600);
+
+export const MenuButtonsList = [
+    new NewGame(150, 200, 200, 50, "New Game")
+]
+
+export const CharacterList = [
+    new Player(50, 50, "Pöjk", "../.Pictures/Pojk.png"),
+    new Npc(100,100, "Mad scientist GW", "../.Pictures/GW.png")
+    /*
+    new Npc(200, 200, 50, 50, "Stefan", StefanImage),
+    new Npc(300, 300, 50, 50, "Anton", AntonImage),
+    new Npc(500, 500, 50, 50, "Sten", StenImage)
+    */
+]
+ChatGPT sade:
+
+Perfect — now I see your setup. ✅
+
+You already created a camera instance here:
+
+export let CameraMan = new Camera(0, 0, 800, 600);
+
+So in your GameLoop.js, instead of using an undefined camera, you just need to import that camera instance and use it everywhere.
+Example update to GameLoop.js:
+
+// Scene
+import { Scene } from "./MenuToGame/MenuButtons.js";
+// Menu Buttons
+import { MenuButtonsList, CameraMan } from "./ObjectLists.js";
+// Characters
+import { CharacterList } from "./ObjectLists.js";
+
+// World / Map
+import { Map1 } from "./Map.js";
+
+export const canvas = document.getElementById("GameCanvas");
+export const ctx = canvas.getContext("2d");
+
+function canvasResize() {
+    canvas.width = window.innerWidth - 20;
+    canvas.height = window.innerHeight - 20;
+
+    CameraMan.width = canvas.width;
+    CameraMan.height = canvas.height;
+}
+
+canvasResize();
+window.addEventListener("resize", canvasResize);
+
+function MenuScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    MenuButtonsList.forEach(e => {
+        e.draw(ctx);
+        e.update();
+    });
+}
+
+function GameScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const player = CharacterList[0]; // assume first character is player
+    CameraMan.follow(player);
+
+    // Draw map with camera offset
+    if (Map1.draw) Map1.draw(ctx, CameraMan);
+
+    // Draw characters relative to camera
+    CharacterList.forEach(character => {
+        if (character.draw) character.draw(ctx, CameraMan);
+        if (character.update) character.update();
+    });
+}
+
+function gameLoop() {
+    if (Scene === "Menu") {
+        MenuScene();
+    } else if (Scene === "Game") {
+        GameScene();
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+
+Key Notes
+
+    Use CameraMan everywhere instead of camera.
+
+    Make sure your Character.draw() method accepts the camera offset:
+
+draw(ctx, camera) {
+    ctx.drawImage(
+        this.image,
+        this.x - camera.x,
+        this.y - camera.y,
+        this.width,
+        this.height
+    );
+}
+
+    Map draw should also subtract camera coordinates for X/Y when drawing tiles.
+
+With this, your player-centered camera will work correctly, following the player, and everything else will render relative to it.
+
+If you want, I can rewrite your TileMap.draw and Character.draw methods fully integrated with CameraMan, so your 128×128 scaled tiles scroll smoothly as the player moves.
+
+Do you want me to do that?
+Du sade:
+to create my map I use this right?
+const Map1 = [[],[]];
+for (let row = 0; row < 320; row++) {
+    for (let col = 0; col < 240; col++) {
+        Map1[row][col] = new Tile(col*32, row*32, 32, 32, 0, 0);;
+    }
+}
+
+how do I continue to place out "blocks"
+ChatGPT sade:
+
+You're very close 👍 — you’re correctly building a 2D grid for your tile map.
+Let’s go over how to finish it properly and how to “place” blocks (tiles) in specific positions.
+🧱 Step 1: Fix the 2D array initialization
+
+This line:
+
+const Map1 = [[], []];
+
+creates an array with two rows only (not 320).
+You want to create an empty array with 320 rows, each with 240 columns.
+
+✅ Correct way:
+
+const Map1 = [];
+
+for (let row = 0; row < 240; row++) {      // height (Y)
+    Map1[row] = [];                        // create each row
+    for (let col = 0; col < 320; col++) {  // width (X)
+        Map1[row][col] = new Tile("grass", 0, 0); // for example
+    }
+}
+
+This gives you a full 240×320 map grid.
+Each cell stores a Tile object.
+🪓 Step 2: Make your Tile class accept types
+
+You might want to give tiles types like "grass", "dirt", "stone", etc., instead of manually setting pixel coordinates in the constructor. Example:
+
+class Tile {
+    constructor(type, sourceX, sourceY) {
+        this.type = type;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
+    }
+}
+
+Then you can easily fill your map like:
+
+Map1[row][col] = new Tile("grass", 0, 0);
 
 or
 
-function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-    requestAnimationFrame(update);
+Map1[row][col] = new Tile("water", 32, 0);
+
+depending on what you want to place.
+🎨 Step 3: Drawing the map
+
+When you draw, you loop through Map1 and draw each tile based on its grid position:
+
+function drawMap(ctx, tileset, camera) {
+    const tileSize = 128; // your scaled tile size
+
+    for (let row = 0; row < Map1.length; row++) {
+        for (let col = 0; col < Map1[row].length; col++) {
+            const tile = Map1[row][col];
+            if (!tile) continue;
+
+            ctx.drawImage(
+                tileset,
+                tile.sourceX, tile.sourceY, 16, 16,                 // src tile (16×16)
+                col * tileSize - camera.x, row * tileSize - camera.y, // world position
+                tileSize, tileSize                                   // draw size
+            );
+        }
+    }
 }
-update();
 
-or even:
+🧩 Step 4: Placing “blocks” (changing tiles)
 
-function main() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-    requestAnimationFrame(main);
+If you want to change what’s at a specific tile (for example when building or editing the map):
+
+function setTile(x, y, type, sx, sy) {
+    Map1[y][x] = new Tile(type, sx, sy);
 }
-main();
 
-✅ The important part is:
+Usage example:
 
-    Whatever function you pass to requestAnimationFrame() is what gets called every frame.
+setTile(5, 10, "stone", 32, 16); // places stone tile at grid (5,10)
 
-    That function then calls requestAnimationFrame() again to keep looping.
+🧠 Step 5: Alternative — store IDs instead of objects
 
-So this works just as well:
+If your map is very large (like 320×240 = 76,800 tiles), it’s often better to store only IDs and reference tile types separately:
 
-function renderMenu() {
-    NewGameButton.draw(ctx);
-    requestAnimationFrame(renderMenu);
+// Simple tile lookup table
+const TileTypes = {
+  0: { name: "grass", sx: 0, sy: 0 },
+  1: { name: "dirt",  sx: 16, sy: 0 },
+  2: { name: "stone", sx: 32, sy: 0 },
+};
+
+const Map1 = [];
+for (let row = 0; row < 240; row++) {
+    Map1[row] = [];
+    for (let col = 0; col < 320; col++) {
+        Map1[row][col] = Math.floor(Math.random() * 3); // random tile ID
+    }
 }
-renderMenu();
 
-TL;DR
-Name	Works?	Purpose
-gameLoop()	✅	Common convention for main loop
-menuLoop()	✅	Descriptive for menu scene
-update()	✅	Often used for logic updates
-render()	✅	Often used for drawing only
-Any valid function name	✅	Works fine as long as it’s recursive
+Then when drawing:
 
-Would you like me to show you a clean structure where you have multiple loops (like menuLoop, gameLoop, pauseLoop, etc.) that can switch between each other cleanly? That’s how most games handle menus and levels.
+const id = Map1[row][col];
+const tile = TileTypes[id];
+ctx.drawImage(tileset, tile.sx, tile.sy, 16, 16, col * tileSize - camera.x, row * tileSize - camera.y, tileSize, tileSize);
+
+This uses far less memory than 76,800 new Tile() objects.
+✅ TL;DR
+
+    Use Map1[row] = [] inside your outer loop.
+
+    Use IDs or new Tile() depending on performance needs.
+
+    To “place blocks,” just replace a tile in the array.
+
+Would you like me to show how to click and place blocks (like Minecraft creative mode) using your camera and player system?
 Du sade:
-its still not working
-import { NewGame } from "./MenuButtons.js";
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
+this is my Map.js right now
 
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
 
-function MenuLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-    requestAnimationFrame(MenuLoop);
-}
-
-MenuLoop();
-
-export class Button {
-    constructor(width, height, text) {
-        this.width = width;
-        this.height = height;
-        this.text = text;
-    }
-
-    onClick() {
-        console.log("Button clicked:", this.text);
-    }
-}
-export class NewGame extends Button {
-    constructor(x, y, width, height, text) {
-        super(width, height, text);
-        this.x = x;
-        this.y = y;
+class Tile {
+    constructor(type, sourceX, sourceY) {
+        this.type = type;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
     }
 
     draw(ctx) {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        
     }
+}
 
-    onClick() {
-        document.addEventListener("click", () => {
-        document.documentElement.requestFullscreen().catch(() => {});
-        })
+const Map1 = [];
+
+for (let row = 0; row < 240; row++) {
+    Map1[row] = [];
+    for (let col = 0; col < 320; col++) {
+        Map1[row][col] = new Tile("grass", 0, 0);
     }
+}
+
+
+
+function drawMap(ctx, camera) {
+
 }
 ChatGPT sade:
 
-Ah! I can see exactly why it’s not working. 😅 You’ve mixed importing and exporting in the same file incorrectly. Let me explain carefully.
-1️⃣ The problem
+Perfect — you’ve got a solid foundation 👍
 
-In your MenuLoop.js (or whatever file this is):
+Now let’s complete your Tile.draw() and drawMap() functions so your map actually renders and supports the camera follow logic.
+✅ 1. Load your tileset image
 
-import { NewGame } from "./MenuButtons.js";
+Before drawing anything, load your tileset once (usually at the top of Map.js):
 
-    This line imports NewGame from MenuButtons.js.
+const tileset = new Image();
+tileset.src = "../.Pictures/tileset.png"; // adjust the path to your tileset image
 
-    But then later in the same file, you try to define and export NewGame:
+✅ 2. Update Tile.draw()
 
-export class NewGame extends Button { ... }
+Each tile needs to draw itself from the tileset image to the canvas, using its own source coordinates (sourceX, sourceY).
 
-    You cannot import and define/export the same class in the same file — that’s why your code “doesn’t work.”
-
-    Essentially, your file is trying to be both a module that provides NewGame and a module that uses it, which causes a circular problem.
-
-2️⃣ How it should be structured
-
-You need two separate files:
-MenuButtons.js – defines and exports buttons
-
-// MenuButtons.js
-export class Button {
-    constructor(width, height, text) {
-        this.width = width;
-        this.height = height;
-        this.text = text;
+class Tile {
+    constructor(type, sourceX, sourceY) {
+        this.type = type;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
     }
 
-    onClick() {
-        console.log("Button clicked:", this.text);
+    draw(ctx, tileset, x, y, tileSize, srcSize, camera) {
+        ctx.drawImage(
+            tileset,
+            this.sourceX, this.sourceY, srcSize, srcSize,      // Source (in tileset)
+            x * tileSize - camera.x, y * tileSize - camera.y,  // Destination (in world)
+            tileSize, tileSize                                 // Size on screen
+        );
     }
 }
 
-export class NewGame extends Button {
-    constructor(x, y, width, height, text) {
-        super(width, height, text);
-        this.x = x;
-        this.y = y;
-    }
+✅ 3. Fill your map
 
-    draw(ctx) {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
+You’ve already done this:
 
-    onClick() {
-        document.addEventListener("click", () => {
-            document.documentElement.requestFullscreen().catch(() => {});
-        });
+const Map1 = [];
+for (let row = 0; row < 240; row++) {
+    Map1[row] = [];
+    for (let col = 0; col < 320; col++) {
+        Map1[row][col] = new Tile("grass", 0, 0); // All grass for now
     }
 }
 
-MenuLoop.js – imports and uses buttons
+Later you can randomize or load this from a .json or binary file.
+✅ 4. Draw the map efficiently
 
-// MenuLoop.js
-import { NewGame } from "./MenuButtons.js";
+Here’s the completed drawMap() function:
 
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
+function drawMap(ctx, camera) {
+    const tileSize = 128; // Size of each tile on screen
+    const srcSize = 16;   // Size of each tile in the tileset (source)
 
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
+    for (let row = 0; row < Map1.length; row++) {
+        for (let col = 0; col < Map1[row].length; col++) {
+            const tile = Map1[row][col];
+            if (!tile) continue;
 
-function MenuLoop() {
+            // Only draw visible tiles (optimization)
+            const screenX = col * tileSize - camera.x;
+            const screenY = row * tileSize - camera.y;
+
+            if (
+                screenX + tileSize < 0 || 
+                screenY + tileSize < 0 ||
+                screenX > ctx.canvas.width ||
+                screenY > ctx.canvas.height
+            ) continue;
+
+            tile.draw(ctx, tileset, col, row, tileSize, srcSize, camera);
+        }
+    }
+}
+
+✅ 5. Export everything
+
+Add this at the bottom of your Map.js:
+
+export { Map1, drawMap };
+
+✅ 6. Use it in GameLoop.js
+
+Import and use inside your GameScene():
+
+import { drawMap } from "./Map.js";
+import { CameraMan } from "./ObjectLists.js";
+
+function GameScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-    requestAnimationFrame(MenuLoop);
-}
 
-MenuLoop();
+    drawMap(ctx, CameraMan);
 
-3️⃣ Important Notes
-
-    In MenuLoop.js you do not define or export NewGame — you only use it.
-
-    In MenuButtons.js you only define and export the button classes.
-
-    In HTML, make sure to load the main file as a module:
-
-<script type="module" src="MenuLoop.js"></script>
-
-✅ With this setup:
-
-    MenuLoop.js has a working game/menu loop.
-
-    NewGame is correctly imported and can be instantiated.
-
-    Your canvas draws the button, and you can add click handling.
-
-If you want, I can rewrite this into a full working example with a clickable New Game button in the browser so you can see it actually respond when you click. Do you want me to do that?
-Du sade:
-well now is the hard part for me, I dont know how I should go from menuLoop and that scene to gameLoop and exit the menuLoop
-ChatGPT sade:
-
-Ah! Now we’re getting into the classic scene/state management problem in games — switching from a menu to the actual game. This is not as scary as it sounds. Let me break it down clearly and step by step.
-1️⃣ Core Idea: Use a “State” or “Scene” Variable
-
-Instead of having two
-Du sade:
-Now the hard part is that I have to go and exit the MenuLoop and go to the game loop when pressing new gameLoop
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-function DrawGameScene() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     CharacterList.forEach(e => {
         e.draw();
+        e.update();
     });
 }
 
-function gameLoop() {
-    DrawGameScene();
-    requestAnimationFrame(gameLoop);
-}
-ChatGPT sade:
+✅ Summary
 
-Ah! Got it — you want to stop your menu loop and start your game loop when the player clicks the “New Game” button. In JavaScript, this is usually done by using a scene/state variable rather than trying to literally “stop” a requestAnimationFrame.
+    Each Tile knows how to draw itself from the tileset.
 
-Here’s a clear way to structure it:
-1️⃣ Use a State Variable
+    drawMap() loops through all tiles and draws only visible ones (using the camera).
 
-let currentScene = "menu"; // possible values: "menu", "game"
+    You can later replace individual tiles to “place blocks” dynamically.
 
-2️⃣ Single Main Loop
-
-Instead of separate loops, have one main requestAnimationFrame loop that decides what to draw based on the current scene:
-
-function mainLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (currentScene === "menu") {
-        NewGameButton.draw(ctx);
-    } else if (currentScene === "game") {
-        DrawGameScene();
-    }
-
-    requestAnimationFrame(mainLoop);
-}
-
-mainLoop(); // start the loop
-
-✅ Benefits:
-
-    You only have one loop running at all times.
-
-    You switch “scenes” simply by changing currentScene.
-
-3️⃣ Handle the Button Click
-
-Make the New Game button set the scene to "game":
-
-canvas.addEventListener("click", (e) => {
-    // Simple bounding box check for the button
-    if (
-        e.offsetX >= NewGameButton.x &&
-        e.offsetX <= NewGameButton.x + NewGameButton.width &&
-        e.offsetY >= NewGameButton.y &&
-        e.offsetY <= NewGameButton.y + NewGameButton.height
-    ) {
-        currentScene = "game"; // switch to game
-        console.log("Starting game!");
-    }
-});
-
-    e.offsetX / e.offsetY gives the mouse position relative to the canvas.
-
-    We check if it falls inside the button’s rectangle.
-
-4️⃣ Draw the Game Scene
-
-You already have this:
-
-function DrawGameScene() {
-    CharacterList.forEach(e => e.draw());
-}
-
-And now it will only be called once you switch to "game".
-✅ Key Points
-
-    You don’t stop requestAnimationFrame. You just conditionally render different scenes.
-
-    This makes adding more scenes easy — e.g., "pause", "gameOver", etc.
-
-    All mouse/keyboard input can be handled similarly by checking currentScene.
-
-If you want, I can rewrite your menu + button + game loop code into a full working JS example so that clicking the “New Game” button seamlessly switches to the game scene. It will be fully functional in the browser.
-
-Do you want me to do that?
+Would you like me to show how to load the map data from a text or JSON file instead of generating 320×240 tiles manually? That’ll make it much easier to design levels.
 Du sade:
-Well my menyLoop.js and GameLoop.js is in separate maps
+Uncaught ReferenceError: tileset is not defined
+    drawMap http://127.0.0.1:5500/Game/Map/Map.js:45
+    GameScene http://127.0.0.1:5500/Game/GameLoop.js:34
 ChatGPT sade:
 
-Ah, perfect — so now we’re talking about splitting menu and game logic into separate modules. That’s a common setup, and it actually makes things cleaner. You just need a shared “scene manager” or some way for the menu to tell the main loop which scene to switch to.
-
-Here’s a good pattern for this:
-1️⃣ Shared State Module
-
-Create a small file called, for example, SceneManager.js:
-
-// SceneManager.js
-export let currentScene = "menu";
-
-export function setScene(newScene) {
-    currentScene = newScene;
-}
-
-    Both MenuLoop.js and GameLoop.js can import this.
-
-    Only one source of truth for the current scene.
-
-2️⃣ MenuLoop.js
-
-import { setScene } from "./SceneManager.js";
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-import { NewGame } from "./MenuButtons.js";
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-// Draw menu items
-export function drawMenu() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-}
-
-// Handle clicks
-canvas.addEventListener("click", (e) => {
-    if (
-        e.offsetX >= NewGameButton.x &&
-        e.offsetX <= NewGameButton.x + NewGameButton.width &&
-        e.offsetY >= NewGameButton.y &&
-        e.offsetY <= NewGameButton.y + NewGameButton.height
-    ) {
-        setScene("game"); // switch to game
-    }
-});
-
-3️⃣ GameLoop.js
-
-import { currentScene } from "./SceneManager.js";
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-export function drawGame() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    CharacterList.forEach(e => e.draw());
-}
-
-4️⃣ MainLoop.js
-
-This is your entry point, loaded from HTML:
-
-import { currentScene } from "./SceneManager.js";
-import { drawMenu } from "./MenuLoop.js";
-import { drawGame } from "./GameLoop.js";
-
-function mainLoop() {
-    if (currentScene === "menu") drawMenu();
-    else if (currentScene === "game") drawGame();
-
-    requestAnimationFrame(mainLoop);
-}
-
-mainLoop();
-
-✅ Now your structure is modular:
-
-    MenuLoop.js → draws menu + handles menu input.
-
-    GameLoop.js → draws the game scene.
-
-    SceneManager.js → holds the current scene state.
-
-    MainLoop.js → decides which scene to draw each frame.
-
-This way, when the user clicks “New Game” in MenuLoop.js, it updates the scene in SceneManager.js, and MainLoop.js automatically switches to the game scene — no stopping loops needed.
-
-If you want, I can make a full working folder structure example with MenuLoop.js, GameLoop.js, MenuButtons.js, SceneManager.js, and MainLoop.js, fully functional in the browser.
-
-Do you want me to do that?
-Du sade:
-no mainloop
-ChatGPT sade:
-
-Ah! Got it — you don’t want a separate MainLoop.js. You want each module (MenuLoop.js and GameLoop.js) to handle its own loop, but still be able to switch from menu to game.
-
-Here’s a clean way to do it without a “main loop” module:
-1️⃣ Use a Shared Scene Manager
-
-Create a tiny shared file SceneManager.js:
-
-// SceneManager.js
-export let currentScene = "menu";
-
-export function setScene(newScene) {
-    currentScene = newScene;
-}
-
-    Both MenuLoop.js and GameLoop.js can import this to check or change the scene.
-
-2️⃣ MenuLoop.js
-
-import { setScene, currentScene } from "./SceneManager.js";
-import { NewGame } from "./MenuButtons.js";
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-function menuLoop() {
-    if (currentScene !== "menu") return; // stop menu loop if scene changed
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-
-    requestAnimationFrame(menuLoop);
-}
-
-// handle clicks
-canvas.addEventListener("click", (e) => {
-    if (
-        e.offsetX >= NewGameButton.x &&
-        e.offsetX <= NewGameButton.x + NewGameButton.width &&
-        e.offsetY >= NewGameButton.y &&
-        e.offsetY <= NewGameButton.y + NewGameButton.height
-    ) {
-        setScene("game"); // switch to game
-    }
-});
-
-menuLoop(); // start menu loop
-
-✅ Key trick: if (currentScene !== "menu") return;
-
-    This automatically exits the menu loop when the scene changes.
-
-3️⃣ GameLoop.js
-
-import { currentScene } from "./SceneManager.js";
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-function drawGameScene() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    CharacterList.forEach(e => e.draw());
-}
-
-export function gameLoop() {
-    if (currentScene !== "game") return; // stop if not game scene
-
-    drawGameScene();
-
-    requestAnimationFrame(gameLoop);
-}
-
-// You can start it somewhere when needed, e.g., after menu sets scene:
-
-✅ How it works
-
-    MenuLoop.js starts its own loop.
-
-    Clicking New Game sets currentScene = "game".
-
-    menuLoop() sees currentScene !== "menu" and exits.
-
-    You can now start gameLoop() in GameLoop.js when the scene switches.
-
-4️⃣ Optional: Start GameLoop Automatically
-
-In MenuLoop.js, after setting scene:
-
-if (
-    e.offsetX >= NewGameButton.x &&
-    e.offsetX <= NewGameButton.x + NewGameButton.width &&
-    e.offsetY >= NewGameButton.y &&
-    e.offsetY <= NewGameButton.y + NewGameButton.height
-) {
-    setScene("game"); // switch to game
-    import("./GameLoop.js").then(module => module.gameLoop()); // start game loop
-}
-
-    Dynamically imports GameLoop.js and starts its loop only when needed.
-
-    No main loop required.
-
-This approach lets you keep MenuLoop and GameLoop completely separate, each with its own requestAnimationFrame, and still switch scenes cleanly.
-
-If you want, I can write a fully working browser example with just MenuLoop.js and GameLoop.js using this pattern, so clicking the button starts the game seamlessly. Do you want me to do that?
-Du sade:
-why is the canvas undefined?
-const ctx = canvas.getContext("2d");
-ChatGPT sade:
-
-Ah! That’s a very common JavaScript gotcha. 😅
-
-If you see something like:
-
-const ctx = canvas.getContext("2d");
-
-throwing an error or canvas being undefined, the problem is almost always how you’re referencing the canvas element.
-1️⃣ Make sure your <canvas> exists in the HTML
-
-<canvas id="GameCanvas" width="1920" height="1080"></canvas>
-
-    The id must exactly match what you use in JS.
-
-    IDs are case-sensitive: "GameCanvas" ≠ "gamecanvas"
-
-2️⃣ Get the element correctly
-
-const canvas = document.getElementById("GameCanvas"); // NO #
-const ctx = canvas.getContext("2d");
-
-Common mistake:
-
-document.getElementById("#GameCanvas"); // ❌ WRONG, no # needed
-
-3️⃣ Make sure the script runs after the canvas exists
-
-If your <script> tag is in the <head> or before the canvas in HTML, document.getElementById() will return null because the element isn’t created yet.
-
-Solutions:
-a) Put the script at the end of <body>
-
-<body>
-    <canvas id="GameCanvas" width="1920" height="1080"></canvas>
-    <script type="module" src="MenuLoop.js"></script>
-</body>
-
-b) Or wait for DOMContentLoaded
-
-document.addEventListener("DOMContentLoaded", () => {
-    const canvas = document.getElementById("GameCanvas");
-    const ctx = canvas.getContext("2d");
-    // start your loops here
-});
-
-✅ TL;DR
-
-    Canvas undefined = your JS is running before the canvas exists or getElementById() has the wrong ID.
-
-    Remove # from getElementById.
-
-    Ensure your script runs after the DOM is loaded (end of <body> or DOMContentLoaded).
-
-If you want, I can show a full working module setup with MenuLoop.js and GameLoop.js where the canvas is correctly referenced and switching from menu to game works. Do you want me to do that?
-Du sade:
-well cant I just import the const canvas from gameLoop that uses the originall canvas?
-ChatGPT sade:
-
-Ah — I see what you’re thinking! You want to share the same canvas variable between modules. Technically, yes, you can, but there are a few important rules about JavaScript modules:
-1️⃣ How ES modules export values
-
-In GameLoop.js:
-
-export const canvas = document.getElementById("GameCanvas");
-export const ctx = canvas.getContext("2d");
-
-Then in MenuLoop.js, you can import it:
-
-import { canvas, ctx } from "./GameLoop.js";
-
-// Use the same canvas and context
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-✅ This works because ES module imports are live references — both modules share the same canvas and ctx objects.
-2️⃣ Things to be careful about
-
-    Order of execution matters
-
-        The module that exports canvas must run first, so the element exists in the DOM.
-
-        Usually, this isn’t a problem if both modules are imported from an HTML file using type="module".
-
-    Do not re-declare the canvas in another module
-
-        const canvas = document.getElementById(...) again in MenuLoop.js will create a new constant local to that module, not the one in GameLoop.
-
-        Just use the imported canvas and ctx.
-
-    Mutual imports can break
-
-        Avoid circular imports (MenuLoop imports GameLoop, GameLoop imports MenuLoop). That can cause undefined.
-
-        A good fix is to have a small shared module for the canvas, like Canvas.js:
-
-// Canvas.js
-export const canvas = document.getElementById("GameCanvas");
-export const ctx = canvas.getContext("2d");
-
-Then both loops just do:
-
-import { canvas, ctx } from "./Canvas.js";
-
-✅ Recommended Approach
-
-    Create a single module that exports the canvas & context.
-
-    Import that module wherever you need it.
-
-    Avoid trying to import the canvas from the GameLoop module directly if MenuLoop also needs it, because that can lead to circular references.
-
-If you want, I can show a clean folder structure with MenuLoop.js, GameLoop.js, and Canvas.js, all sharing the same canvas and context, and switching from menu to game works perfectly.
-
-Do you want me to do that?
-Du sade:
-I get this error in this file
-Uncaught TypeError: CanvasRenderingContext2D.drawImage: Argument 1 could not be converted to any of: HTMLImageElement, SVGImageElement, HTMLCanvasElement, HTMLVideoElement, OffscreenCanvas, ImageBitmap, VideoFrame.
-    draw http://127.0.0.1:5500/Game/Characters/SuperClass.js:13
-    DrawGameScene http://127.0.0.1:5500/Game/GameLoop.js:9
-    DrawGameScene http://127.0.0.1:5500/Game/GameLoop.js:8
-    gameLoop http://127.0.0.1:5500/Game/GameLoop.js:16
-
-import { canvas } from "../GameLoop.js";
-import { ctx } from "../GameLoop.js";
-export class Character {
-    constructor(x, y, width, height, name) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.name = name;
+Ah — good catch 👍
+That error means the tileset image variable I used inside drawMap() isn’t actually defined in your file’s scope when you call it.
+
+Let’s fix that cleanly.
+✅ Here’s a fixed version of your Map.js
+
+// --- Tile class ---
+class Tile {
+    constructor(type, sourceX, sourceY) {
+        this.type = type;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
     }
 
-    draw() {
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-    }
-}
-ChatGPT sade:
-
-Ah! That error is a classic one when using ctx.drawImage. The message:
-
-Argument 1 could not be converted to any of: HTMLImageElement, ...
-
-means that this.image is not a valid image object at the time you call draw().
-
-Let’s break it down carefully.
-1️⃣ The problem
-
-In your Character class:
-
-draw() {
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-}
-
-    this.image needs to be an actual HTMLImageElement (or Canvas, Video, etc.).
-
-    Right now, you never set this.image in the constructor or elsewhere, so it’s probably undefined.
-
-2️⃣ Fix: Initialize the image
-
-You need to create a proper Image object, for example:
-
-export class Character {
-    constructor(x, y, width, height, name, imageSrc) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.name = name;
-
-        this.image = new Image();
-        this.image.src = imageSrc;
-    }
-
-    draw() {
-        if (!this.image.complete) return; // wait until image is loaded
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    draw(ctx, tileset, x, y, tileSize, srcSize, camera) {
+        ctx.drawImage(
+            tileset,
+            this.sourceX, this.sourceY, srcSize, srcSize,     // Source (in tileset)
+            x * tileSize - camera.x, y * tileSize - camera.y, // Destination
+            tileSize, tileSize
+        );
     }
 }
 
-Then when you create a character:
+// --- Load the tileset globally once ---
+const tileset = new Image();
+tileset.src = "../.Pictures/tileset.png"; // change path to your actual tileset
 
-import { Character } from "./SuperClass.js";
+// --- Create map ---
+const Map1 = [];
+for (let row = 0; row < 240; row++) {
+    Map1[row] = [];
+    for (let col = 0; col < 320; col++) {
+        Map1[row][col] = new Tile("grass", 0, 0); // example tile
+    }
+}
 
-const hero = new Character(100, 100, 64, 64, "Hero", "sprites/hero.png");
+// --- Draw map ---
+function drawMap(ctx, camera) {
+    const tileSize = 128; // size of tile on screen
+    const srcSize = 16;   // size in tileset
 
-3️⃣ Optional: Handle async image loading
+    // if tileset isn’t loaded yet, skip drawing
+    if (!tileset.complete) return;
 
-Images in JS load asynchronously, so sometimes draw() is called before the image is ready. You can either:
-a) Only draw after onload:
+    for (let row = 0; row < Map1.length; row++) {
+        for (let col = 0; col < Map1[row].length; col++) {
+            const tile = Map1[row][col];
+            if (!tile) continue;
 
-this.image.onload = () => {
-    // optionally set a flag like this.loaded = true;
+            const screenX = col * tileSize - camera.x;
+            const screenY = row * tileSize - camera.y;
+
+            // draw only visible area (optimization)
+            if (
+                screenX + tileSize < 0 ||
+                screenY + tileSize < 0 ||
+                screenX > ctx.canvas.width ||
+                screenY > ctx.canvas.height
+            ) continue;
+
+            tile.draw(ctx, tileset, col, row, tileSize, srcSize, camera);
+        }
+    }
+}
+
+// --- Export ---
+export { Map1, drawMap };
+
+✅ What changed
+
+    ✅ Moved the tileset image into the same file’s scope.
+
+    ✅ Added a tileset.complete check so it doesn’t try drawing before it loads.
+
+    ✅ Clean structure: all Tile/Map1/drawMap are in one place.
+
+✅ Optional improvement
+
+If you want to ensure the map doesn’t try to draw until the tileset is fully loaded, you can add:
+
+tileset.onload = () => {
+    console.log("Tileset loaded!");
 };
 
-b) Skip drawing until loaded:
+Now when your GameLoop calls:
 
-draw() {
-    if (!this.image.complete) return; // don’t draw yet
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-}
+drawMap(ctx, CameraMan);
 
-✅ TL;DR
+…the tileset will be defined, and your world should appear correctly.
 
-    this.image must be an HTMLImageElement (or Canvas, etc.) before using drawImage.
-
-    Initialize it in the constructor:
-
-this.image = new Image();
-this.image.src = imageSrc;
-
-    Optionally wait until it’s loaded before drawing.
-
-If you want, I can rewrite your Character class and GameLoop to properly load multiple images for multiple characters and draw them safely without crashing. It will work in your browser setup.
-
-Do you want me to do that?
+Would you like me to show how to “paint” specific tile types (like dirt, grass, water, etc.) in your 320×240 map array next?
 Du sade:
-hmmmm my gameLoop is allways running why?
-
-GameLoop:
-import { CurrentScene } from "../SceneManager.js";
-import { CharacterList } from "./ObjectLists.js";
-export const canvas = document.getElementById("GameCanvas");
-export const ctx = canvas.getContext("2d");
-
-function DrawGameScene() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    CharacterList.forEach(e => {
-        e.draw();
-    });
-}
-
-function gameLoop() {
-    if (CurrentScene !== "Game") return;
-
-    DrawGameScene();
-    requestAnimationFrame(gameLoop);
-}
-if (CurrentScene === "Game") {
-    gameLoop();
-} else {
-    CurrentScene = "Menu"
-}
-
-MenuLoop.js:
-import { CurrentScene } from "../SceneManager.js";
-import { NewGame } from "./MenuButtons.js";
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-function MenuLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-
-    NewGameButton.upDate();
-    requestAnimationFrame(MenuLoop);
-}
-if (CurrentScene === "Menu") {
-    MenuLoop();
-}
-
-SceneManager.js:
-export let CurrentScene = "Menu";
-
-export function SwapScene(NewScene) {
-    CurrentScene = NewScene;
-}
+everything is 128x128 when imported from photoshop
 ChatGPT sade:
 
-Ah — I see exactly what’s happening. 😅 This is a classic module & ES6 export gotcha. The reason your GameLoop is always “running” (or appears to be) is because of how CurrentScene is being imported.
+Perfect — that actually simplifies things a lot! 🎨
 
-Let me explain carefully.
-1️⃣ The problem: let exports are not live mutable values like objects
+If each tile is already 128×128 px in your tileset image (no scaling needed), then we can clean up the code — no need for source scaling (srcSize), everything is just 128×128 straight from the tileset.
 
-In SceneManager.js:
+Here’s your optimized and corrected Map.js for 128×128 tiles:
+✅ Final Map.js
 
-export let CurrentScene = "Menu";
-
-    This exports a primitive string.
-
-    When you do:
-
-import { CurrentScene } from "../SceneManager.js";
-
-    CurrentScene is not a reference you can reassign from another module.
-
-    This means when MenuLoop or GameLoop changes CurrentScene internally, other modules don’t see the update — the value is fixed at the time of import.
-
-So when you do in GameLoop.js:
-
-if (CurrentScene !== "Game") return;
-
-    CurrentScene is still whatever it was at import time (likely "Menu" or "Game" depending on load order).
-
-    Updates from MenuLoop using SwapScene() don’t reflect here unless you reference the module object.
-
-2️⃣ How to fix it: use a mutable object for state
-
-Instead of exporting a let, export an object:
-
-// SceneManager.js
-export const Scene = {
-    current: "Menu"
-};
-
-export function SwapScene(NewScene) {
-    Scene.current = NewScene;
-}
-
-    Now Scene is an object.
-
-    Objects are always live references, so changes are visible across modules.
-
-3️⃣ Update your loops
-GameLoop.js
-
-import { Scene } from "../SceneManager.js";
-import { CharacterList } from "./ObjectLists.js";
-
-export const canvas = document.getElementById("GameCanvas");
-export const ctx = canvas.getContext("2d");
-
-function DrawGameScene() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    CharacterList.forEach(e => e.draw());
-}
-
-function gameLoop() {
-    if (Scene.current !== "Game") return; // stops loop if not in game
-
-    DrawGameScene();
-    requestAnimationFrame(gameLoop);
-}
-
-// only start if already in Game scene
-if (Scene.current === "Game") gameLoop();
-
-MenuLoop.js
-
-import { Scene, SwapScene } from "../SceneManager.js";
-import { NewGame } from "./MenuButtons.js";
-
-const canvas = document.getElementById("GameCanvas");
-const ctx = canvas.getContext("2d");
-const NewGameButton = new NewGame(800, 400, 200, 100, "New Game");
-
-function MenuLoop() {
-    if (Scene.current !== "Menu") return; // stop loop if scene changes
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    NewGameButton.draw(ctx);
-    NewGameButton.upDate(); // whatever this does
-    requestAnimationFrame(MenuLoop);
-}
-
-// start menu loop
-if (Scene.current === "Menu") MenuLoop();
-
-// handle click to swap scene
-canvas.addEventListener("click", (e) => {
-    if (
-        e.offsetX >= NewGameButton.x &&
-        e.offsetX <= NewGameButton.x + NewGameButton.width &&
-        e.offsetY >= NewGameButton.y &&
-        e.offsetY <= NewGameButton.y + NewGameButton.height
-    ) {
-        SwapScene("Game");   // updates Scene.current
-        import("./GameLoop.js").then(module => module.gameLoop()); // start game loop
+// --- Tile class ---
+class Tile {
+    constructor(type, sourceX, sourceY) {
+        this.type = type;
+        this.sourceX = sourceX;
+        this.sourceY = sourceY;
     }
-});
 
-✅ Key Takeaways
+    draw(ctx, tileset, x, y, tileSize, camera) {
+        ctx.drawImage(
+            tileset,
+            this.sourceX, this.sourceY, tileSize, tileSize,   // Source area (1 tile)
+            x * tileSize - camera.x, y * tileSize - camera.y, // World position with camera offset
+            tileSize, tileSize                                // Draw at 1:1 scale
+        );
+    }
+}
 
-    Primitive let exports are not live references.
-    Use an object if you need mutable shared state between modules.
+// --- Load the tileset image ---
+const tileset = new Image();
+tileset.src = "../.Pictures/tileset.png"; // Adjust path to your tileset
 
-    Each loop should check the current scene and exit early if it’s no longer active.
+// --- Create the map ---
+const MAP_WIDTH = 320;
+const MAP_HEIGHT = 240;
+const TILE_SIZE = 128;
 
-    Trigger the other loop when swapping scenes instead of trying to “stop” the first one.
+const Map1 = [];
+for (let row = 0; row < MAP_HEIGHT; row++) {
+    Map1[row] = [];
+    for (let col = 0; col < MAP_WIDTH; col++) {
+        // All grass for now (top-left tile in tileset)
+        Map1[row][col] = new Tile("grass", 0, 0);
+    }
+}
 
-    Avoid circular imports; you can dynamically import the other module when switching scenes if needed.
+// --- Draw visible map area ---
+function drawMap(ctx, camera) {
+    if (!tileset.complete) return; // tileset not loaded yet
 
-If you want, I can rewrite your MenuLoop + GameLoop + SceneManager setup into a fully working browser example where:
+    // calculate visible area (only draw what fits on screen)
+    const startCol = Math.floor(camera.x / TILE_SIZE);
+    const endCol = Math.ceil((camera.x + ctx.canvas.width) / TILE_SIZE);
+    const startRow = Math.floor(camera.y / TILE_SIZE);
+    const endRow = Math.ceil((camera.y + ctx.canvas.height) / TILE_SIZE);
 
-    Clicking “New Game” stops the menu loop
+    for (let row = startRow; row < endRow; row++) {
+        for (let col = startCol; col < endCol; col++) {
+            if (row < 0 || col < 0 || row >= MAP_HEIGHT || col >= MAP_WIDTH) continue;
+            const tile = Map1[row][col];
+            if (!tile) continue;
 
-    Starts the game loop
+            tile.draw(ctx, tileset, col, row, TILE_SIZE, camera);
+        }
+    }
+}
 
-    Both loops share the same canvas and context
+// --- Exports ---
+export { Map1, drawMap, TILE_SIZE };
 
-It will use proper ES6 modules and live scene references.
+✅ What this does:
 
-Do you want me to do that?
+    Uses 128×128 px tiles directly (no scaling).
+
+    Draws only visible tiles (big performance win).
+
+    Supports a scrolling camera that follows your player.
+
+    Clean and ready to expand with more tile types (e.g. grass, dirt, water).
+
+🧠 Next step ideas:
+
+    Use different tiles:
+    In your map generation, you can vary the sourceX and sourceY to grab other tiles from the tileset:
+
+    Map1[row][col] = new Tile("dirt", 128, 0); // second tile in the row of the tileset
+
+    Map editor / loader:
+    Later, you can load maps from JSON files or generate them procedurally — so you’re not manually looping 320×240.
+
+Would you like me to show you a small helper script that lets you paint maps visually (clicking on tiles to change them in real time) so you can build your level faster?
 Du sade:
-Uncaught ReferenceError: assignment to undeclared variable CurrentScene
-    SwapScene http://127.0.0.1:5500/SceneManager.js:6
-    onClick http://127.0.0.1:5500/MenuToGame/MenuButtons.js:29
-    upDate http://127.0.0.1:5500/MenuToGame/MenuButtons.js:33
-    MenuLoop http://127.0.0.1:5500/MenuToGame/MenuLoop.js:17
-    <anonymous> http://127.0.0.1:5500/MenuToGame/MenuLoop.js:21
+Uncaught DOMException: CanvasRenderingContext2D.drawImage: Passed-in image is "broken"
+    draw http://127.0.0.1:5500/Game/Map/Map.js:9
+    drawMap http://127.0.0.1:5500/Game/Map/Map.js:45
+    GameScene http://127.0.0.1:5500/Game/GameLoop.js:34
+   
 ChatGPT sade:
 
-Ah! That error explains everything. 😅
+Nice — this is actually a common and easy fix 🙂
 
-Uncaught ReferenceError: assignment to undeclared variable CurrentScene
+That error means:
 
-This happens because in your SceneManager.js you’re trying to reassign a let that was imported, like this:
+    The tileset image didn’t load correctly before you tried to drawImage it.
 
-export let CurrentScene = "Menu";
+Let’s fix it properly step by step 👇
+✅ 1. Check the file path
 
-export function SwapScene(NewScene) {
-    CurrentScene = NewScene; // ❌ This will fail
-}
+Your tileset path here:
 
-1️⃣ Why it fails
+tileset.src = "../.Pictures/tileset.png";
 
-    When you import { CurrentScene } in another module, you cannot reassign the imported binding.
+If your folder is really named .Pictures (with a dot in front), that’s very likely the problem — browsers treat dot-prefixed folders as hidden and may block loading them depending on your local server.
 
-    ES module imports of primitives are read-only views.
+👉 Rename that folder to Pictures (no dot).
+Then fix the path:
 
-    Only the module that defines let CurrentScene can reassign it, but then you also need to access it consistently.
+tileset.src = "../Pictures/tileset.png";
 
-This is why your SwapScene() throws a ReferenceError.
-2️⃣ How to fix: Use a mutable object instead
+✅ 2. Only draw after the image has fully loaded
 
-// SceneManager.js
-export const Scene = {
-    current: "Menu"
+The browser might start your game loop before the tileset finishes loading.
+Wrap your drawing logic in an onload event so it starts only when ready.
+
+Update the top of your Map.js like this:
+
+const tileset = new Image();
+tileset.src = "../Pictures/tileset.png"; // path without dot folder!
+
+let tilesetLoaded = false;
+tileset.onload = () => {
+    tilesetLoaded = true;
+    console.log("✅ Tileset loaded");
+};
+tileset.onerror = () => {
+    console.error("❌ Failed to load tileset image:", tileset.src);
 };
 
-export function SwapScene(newScene) {
-    Scene.current = newScene; // ✅ mutable property of object
-}
+Then update the start of your drawMap():
 
-    Now Scene.current can be read and updated from any module.
+function drawMap(ctx, camera) {
+    if (!tilesetLoaded) return; // Wait until the image is ready
 
-    Objects are always live references, so changes propagate to all imports.
+✅ 3. Optional – check in the browser console
 
-3️⃣ Update your other modules
-MenuLoop.js
+If you still get an error, open the Network tab (F12 → “Network”) and check:
 
-import { Scene, SwapScene } from "../SceneManager.js";
+    Does tileset.png load successfully?
 
-canvas.addEventListener("click", (e) => {
-    if (
-        e.offsetX >= NewGameButton.x &&
-        e.offsetX <= NewGameButton.x + NewGameButton.width &&
-        e.offsetY >= NewGameButton.y &&
-        e.offsetY <= NewGameButton.y + NewGameButton.height
-    ) {
-        SwapScene("Game"); // ✅ now works
-        import("./GameLoop.js").then(module => module.gameLoop());
-    }
-});
+    What’s its path?
 
-GameLoop.js
+    Does it say 404 or “blocked”?
 
-import { Scene } from "../SceneManager.js";
+If it says 404, you just need to correct the file path.
+✅ 4. Confirm your folder layout looks like this:
 
-function gameLoop() {
-    if (Scene.current !== "Game") return;
+Game/
+├── GameLoop.js
+├── Map/
+│   ├── Map.js
+│   └── ...
+├── Pictures/
+│   └── tileset.png
 
-    DrawGameScene();
-    requestAnimationFrame(gameLoop);
-}
+Then your import path from Map.js → tileset should be:
 
-✅ Key Takeaways
+tileset.src = "../Pictures/tileset.png";
 
-    Do not reassign imported primitives — you can only read them.
+Once you do that, the error will disappear — your map will render normally 🎨
 
-    Use an object for shared state (Scene.current) so it’s mutable across modules.
-
-    Now SwapScene("Game") will correctly update the scene, and your loops can check it.
-
-If you want, I can rewrite your MenuLoop + GameLoop + SceneManager + Button setup into a working ES6 modular example that switches cleanly from menu to game.
-
-Do you want me to do that?
+Would you like me to show you a quick way to log which tile indices are being drawn (for debugging large maps)? It helps confirm your camera + map math are correct visually.
 
 
 ChatGPT kan begå misstag. Kontrollera viktig information.

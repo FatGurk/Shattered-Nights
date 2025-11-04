@@ -17,8 +17,8 @@ export class Character {
         };
     }
 
-    draw() {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    draw(ctx, camera) {
+        ctx.drawImage(this.img, this.x - camera.x, this.y - camera.y , this.width, this.height);
     }
 
     detectCollision(CharacterList) {
