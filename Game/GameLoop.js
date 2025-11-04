@@ -8,6 +8,12 @@ import { CharacterList } from "./ObjectLists.js";
 export const canvas = document.getElementById("GameCanvas");
 export const ctx = canvas.getContext("2d");
 
+function resizeCanvas() {
+    canvas.width = window.innerWidth-20;
+    canvas.height = window.innerHeight-20;
+}
+
+resizeCanvas();
 function MenuScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     MenuButtonsList.forEach(e => {
@@ -29,8 +35,10 @@ function gameLoop() {
     } else if (Scene === "Game") {
         GameScene();
     }
-    
+
     requestAnimationFrame(gameLoop);
 }
     
 gameLoop();
+
+window.addEventListener("resize", resizeCanvas);

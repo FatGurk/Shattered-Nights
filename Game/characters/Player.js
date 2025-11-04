@@ -18,7 +18,8 @@ export class Player extends Character {
     detectCollision(Object) {
         let t = this;
         CharacterList.forEach((e) => {
-
+            if (!e.colliosion) return;
+            if (e == t) return false;
         });
     }
 }
