@@ -33,12 +33,8 @@ function GameScene() {
 
     // then draw characters on top
     CharacterList.forEach(e => {
-<<<<<<< HEAD
-        e.draw(ctx);
-=======
         e.draw();
         e.update();
->>>>>>> 1ca7f6eb7279a47a4418f39c4578916d96699362
     });
 }
 
