@@ -36,7 +36,7 @@ export class NewGame extends Button {
             }
         })
     }
-    upDate() {
+    update() {
         this.onClick();
         this.onEsc();
     }

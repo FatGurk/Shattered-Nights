@@ -2,3 +2,4 @@
 Storbokstav i början på alla javascript filer
 Skriv alla varibler i variabel listan
 Stor bokstav i början av klasser
+draw o update alltid litet
