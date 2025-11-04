@@ -14,14 +14,6 @@ export class Player extends Character {
         if (keys["ArrowLeft"] || keys["a"] || keys["A"]) this.x -= speed;
         if (keys["ArrowRight"] || keys["d"] || keys["D"]) this.x += speed;
     }
-
-    detectCollision(Object) {
-        let t = this;
-        CharacterList.forEach((e) => {
-            if (!e.colliosion) return;
-            if (e == t) return false;
-        });
-    }
 }
 
 document.addEventListener("keydown", e => keys[e.key] = true);

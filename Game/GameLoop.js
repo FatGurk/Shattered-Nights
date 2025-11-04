@@ -26,6 +26,7 @@ function GameScene() {
     CharacterList.forEach(e => {
         e.draw();
         e.update();
+        e.detectCollision(CharacterList);
     });
 }
 
