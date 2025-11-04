@@ -19,6 +19,7 @@ function GameScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     CharacterList.forEach(e => {
         e.draw();
+        e.update();
     });
 }
 

@@ -1,7 +1,12 @@
 import { Character } from "./SuperClass.js";
 import { ctx } from "../GameLoop.js";
+import {CharacterList} from "../ObjectLists.js";
 export class Npc extends Character {
-    constructor(x, y, width, height, name, imgSrc) {
-        super(x, y, width, height, name, imgSrc);
+    constructor(x, y, name, imgSrc) {
+        super(x, y, name, imgSrc);
+    }
+
+    update() {
+        // NPC update logic can be added here
     }
 }
