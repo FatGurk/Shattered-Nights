@@ -16,8 +16,8 @@ export const canvas = document.getElementById("GameCanvas");
 export const ctx = canvas.getContext("2d");
 
 export function canvasResize() {
-    canvas.width = window.innerWidth-20;
-    canvas.height = window.innerHeight-20;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     CameraMan.width = canvas.width;
     CameraMan.height = canvas.height;
 }

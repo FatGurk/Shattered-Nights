@@ -15,7 +15,7 @@ export class Player extends Character {
     }
 
     update() {
-        const speed = 10;
+        const speed = 20;
         if (keys["ArrowUp"] || keys["w"]|| keys["W"]) { 
             this.y -= speed; 
             this.facing = "up"; 
