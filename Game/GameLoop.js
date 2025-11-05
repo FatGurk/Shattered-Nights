@@ -5,8 +5,6 @@ import { drawMap } from "./Map/Map.js";
 import { MAP_HEIGHT } from "./Map/Map.js";
 import { MAP_WIDTH } from "./Map/Map.js";
 import { TILE_SIZE } from "./Map/Map.js";
-// Menu Buttons
-import { MenuButtonsList } from "./ObjectLists.js";
 // Characters
 import { CharacterList } from "./ObjectLists.js";
 // Camera
@@ -27,18 +25,21 @@ export function canvasResize() {
 canvasResize();
 
 function MenuScene() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     DrawMenuScreen();
 
-    MenuButtonsList.forEach(e => {
-        e.draw(ctx);
-        e.update();
-    });
+    window.addEventListener("click", () => {
+        document.documentElement.requestFullscreen()
+        .then(() => {
+            Scene.value = "Game";
+        })
+        .catch(() => {
+            console.warn("Fullscreen failed");
+        });
+    }, { once: true });
 }
 
+
 function GameScene() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     const player = CharacterList[0];
     CameraMan.follow(player);
 
@@ -55,11 +56,9 @@ function GameScene() {
 }
 
 function gameLoop() {
-    if (Scene === "Menu") {
-        MenuScene();
-    } else if (Scene === "Game") {
-        GameScene();
-    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (Scene.value === "Menu") MenuScene();
+    else if (Scene.value === "Game") GameScene();
 
     requestAnimationFrame(gameLoop);
 }

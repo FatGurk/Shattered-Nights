@@ -8,12 +8,8 @@ import { Camera } from "./Camera.js";
 
 export const CameraMan = new Camera(0, 0, 800, 600);
 
-export const MenuButtonsList = [
-    new NewGame(150, 200, 200, 50, "New Game")
-]
-
 export const CharacterList = [
-    new Player(1000, 1000, "Pöjk", {
+    new Player(1000, 1000, "Simon", {
         up: "./Game/Pictures/Characters/PojkUp.png",
         down: "./Game/Pictures/Characters/PojkDown.png",
         left: "./Game/Pictures/Characters/PojkLeft.png",

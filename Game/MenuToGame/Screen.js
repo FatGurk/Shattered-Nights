@@ -1,11 +1,16 @@
 import { ctx, canvas } from "../GameLoop.js";
 
-const MenuScreen = new Image();
-MenuScreen.src = "./Game/Pictures/Menu/MenuScreen.png";
+const Title = new Image();
+Title.src = "./Game/Pictures/Menu/MenuScreen.png";
+
+let loaded = false;
+
+Title.onload = () => {
+    loaded = true;
+};
 
 export function DrawMenuScreen() {
-    window.onload = function() {
-        ctx.drawImage(MenuScreen, 0, 0, canvas.width, canvas.height);
-        console.log("Menu Screen drawn");
-    };
+    if (loaded) {
+        ctx.drawImage(Title, 0, 0, canvas.width, canvas.height);
+    }
 }

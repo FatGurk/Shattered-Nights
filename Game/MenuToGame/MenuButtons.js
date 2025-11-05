@@ -1,4 +1,4 @@
-export let Scene = "Menu";
+export let Scene = { value: "Menu" };
 export class Button {
     constructor(width, height, img) {
         this.width = width;
@@ -10,34 +10,18 @@ export class Button {
         console.log("Button clicked:", this.text);
     }
 }
+
 export class NewGame extends Button {
-    constructor(x, y, width, height, img) {
+    constructor(x, y, width, height, text) {
+        const img = new Image();
+        img.src = "./Game/Pictures/Menu/NewGameButton.png";
         super(width, height, img);
         this.x = x;
         this.y = y;
+        this.text = text;
     }
-
-    draw(ctx) {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-
     onClick() {
-        document.addEventListener("click", () => {
-            document.documentElement.requestFullscreen().catch(() => {});
-            Scene = "Game";
-        })
-    }
-    onEsc() {
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") {
-                document.exitFullscreen().catch(() => {});
-                Scene = "Menu";
-            }
-        })
-    }
-    update() {
-        this.onClick();
-        this.onEsc();
+        Scene = "Game";
+        console.log("Starting New Game...");
     }
 }
