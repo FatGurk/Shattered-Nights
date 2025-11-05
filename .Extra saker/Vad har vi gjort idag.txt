@@ -1,7 +1,7 @@
 Kim:
 Måndag v.45: Gjort Huvud klass för karaktärer och lagt till object lista + drawscene + majoriteten av filerna
 Tisdag v.45: Fixat movement + canvas storlek efter din skärm börjat på collision Lagt in en GW
-Onsdag v.45:
+Onsdag v.45: Fixat i title screen och så man kollar åt olika håll beroende på vart man kollar
 Torsdag v.45:
 Fredag v.45:
 Måndag v.46:
