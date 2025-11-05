@@ -11,7 +11,7 @@ export class Player extends Character {
             img.src = imgscr[dir];
             this.pojk[dir] = img;
         }
-        this.facing = "up";
+        this.facing = "down";
     }
 
     update() {
