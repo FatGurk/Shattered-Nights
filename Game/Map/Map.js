@@ -11,9 +11,9 @@ export class Tile {
 }
 
 export const SpriteList = {
-    Sand1: new Tile("Sand1", "../.Pictures/Tiles/Sand1.png"),
-    Dottgras1: new Tile("Dottgras1", "../.Pictures/Tiles/Dottgras1.png"),
-    Kullersten1: new Tile("Kullersten1", "../.Pictures/Tiles/Kullersten1.png")
+    Sand1: new Tile("Sand1", "../Pictures/Tiles/Sand1.png"),
+    Dottgras1: new Tile("Dottgras1", "../Pictures/Tiles/Dottgras1.png"),
+    Kullersten1: new Tile("Kullersten1", "../Pictures/Tiles/Kullersten1.png")
 }
 
 export const MAP_WIDTH = 320;
