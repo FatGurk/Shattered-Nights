@@ -16,8 +16,8 @@ export const MenuButtonsList = [
 ]
 
 export const CharacterList = [
-    new Player(1000, 1000, "Pöjk", "../.Pictures/Pojk.png"),
-    new Npc(800,800, "Mad scientist GW", "../.Pictures/GW.png")
+    new Player(1000, 1000, "Pöjk", "../.Pictures/Characters/PojkUp.png"),
+    new Npc(800,800, "Mad scientist GW", "../.Pictures/Characters/GW.png")
     /*
     new Npc(200, 200, 50, 50, "Stefan", StefanImage),
     new Npc(300, 300, 50, 50, "Anton", AntonImage),
