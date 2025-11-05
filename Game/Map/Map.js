@@ -45,11 +45,11 @@ export const SpriteList = {
 
 export const Houses = {
     StandardHouse: [
-        [SpriteList.StandardHouse1, SpriteList.StandardHouse2, SpriteList.StandardHouse3, SpriteList.StandardHouse4, SpriteList.StandardHouse5],
-        [SpriteList.StandardHouse6, SpriteList.StandardHouse7, SpriteList.StandardHouse8, SpriteList.StandardHouse9, SpriteList.StandardHouse10],
-        [SpriteList.StandardHouse11, SpriteList.StandardHouse12, SpriteList.StandardHouse13, SpriteList.StandardHouse14, SpriteList.StandardHouse15],
+        [SpriteList.StandardHouse21, SpriteList.StandardHouse22, SpriteList.StandardHouse23, SpriteList.StandardHouse24, SpriteList.StandardHouse25],
         [SpriteList.StandardHouse16, SpriteList.StandardHouse17, SpriteList.StandardHouse18, SpriteList.StandardHouse19, SpriteList.StandardHouse20],
-        [SpriteList.StandardHouse21, SpriteList.StandardHouse22, SpriteList.StandardHouse23, SpriteList.StandardHouse24, SpriteList.StandardHouse25]
+        [SpriteList.StandardHouse11, SpriteList.StandardHouse12, SpriteList.StandardHouse13, SpriteList.StandardHouse14, SpriteList.StandardHouse15],
+        [SpriteList.StandardHouse6,  SpriteList.StandardHouse7,  SpriteList.StandardHouse8,  SpriteList.StandardHouse9,  SpriteList.StandardHouse10],
+        [SpriteList.StandardHouse1,  SpriteList.StandardHouse2,  SpriteList.StandardHouse3,  SpriteList.StandardHouse4,  SpriteList.StandardHouse5]
     ]
 }
 
@@ -99,12 +99,16 @@ for (let row = 59; row < 62; row++) {
     //Standard Hus
     export function PlaceStandardHouse(map, StartRow, StartCol, House) {
         for (let row = 0; row < House.length; row++) {
-            for (let col = 0; col < 5; col++) {
+            for (let col = 0; col < House[row].length; col++) {
                 const tile = House[row][col];
+                if (!tile) continue; // skip empty tiles
                 map[StartRow + row][StartCol + col] = tile;
             } 
         };
     }
+PlaceStandardHouse(Map1, 0, 0, Houses.StandardHouse);
+PlaceStandardHouse(Map1, 60, 60, Houses.StandardHouse);
+PlaceStandardHouse(Map1, 100, 40, Houses.StandardHouse);
 
 console.log(Map1);
 
