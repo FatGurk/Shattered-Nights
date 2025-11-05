@@ -1,34 +1,52 @@
-class Tile {
-    constructor(type, sourceX, sourceY) {
+export class Tile {
+    constructor(type, imgSrc) {
         this.type = type;
-        this.sourceX = sourceX;
-        this.sourceY = sourceY;
+        this.img = new Image();
+        this.img.src = imgSrc;
     }
 
-    draw(ctx, tileset, x, y, tileSize, camera) {
-        ctx.drawImage(tileset, this.sourceX, this.sourceY, tileSize, tileSize, x * tileSize - camera.x, y * tileSize - camera.y, tileSize, tileSize
-        );
+    draw(ctx, x, y, tileSize, camera) {
+        ctx.drawImage(this.img, x * tileSize - camera.x, y * tileSize - camera.y, tileSize, tileSize);
     }
 }
 
-const tileset = new Image();
-tileset.src = "../.Pictures/Dottgras1.png";
+export const SpriteList = {
+    Sand1: new Tile("Sand1", "../.Pictures/Sand1.png"),
+    Dottgras1: new Tile("Dottgras1", "../.Pictures/Dottgras1.png"),
+    Kullersten1: new Tile("Kullersten1", "../.Pictures/Kullersten1.png")
+}
 
-const MAP_WIDTH = 320;
-const MAP_HEIGHT = 240;
-const TILE_SIZE = 128;
+export const MAP_WIDTH = 320;
+export const MAP_HEIGHT = 240;
+export const TILE_SIZE = 128;
+
 
 const Map1 = [];
 
-for (let row = 0; row < MAP_WIDTH; row++) {
+// Sand över hela mappen
+for (let row = 0; row < MAP_HEIGHT; row++) {
     Map1[row] = [];
-    for (let col = 0; col < MAP_HEIGHT; col++) {
-        Map1[row][col] = new Tile("Dottgras", 0, 0);
+    for (let col = 0; col < MAP_WIDTH; col++) {
+        Map1[row][col] = SpriteList.Sand1;
     }
 }
 
+// Gräs ibörjan
+for (let row = 0; row < 20; row++) {
+    for (let col = 0; col < 10; col++) {
+        Map1[row][col] = SpriteList.Dottgras1;
+    }
+}
+
+//  Spwan Kullersten väg
+for (let row = 5; row < 8; row++) {
+    for (let col = 8; col < 20; col++) {
+        Map1[row][col] = SpriteList.Kullersten1;
+    }
+}
+console.log(Map1);
+
 function drawMap(ctx, camera) {
-    if (!tileset.complete) return;
 
     // Vad kameran visar aka vilka tiles som ska ritas
     const startCol = Math.floor(camera.x / TILE_SIZE);
@@ -42,7 +60,7 @@ function drawMap(ctx, camera) {
             const tile = Map1[row][col];
             if (!tile) continue;
 
-            tile.draw(ctx, tileset, col, row, TILE_SIZE, camera);
+            tile.draw(ctx, col, row, TILE_SIZE, camera);
         }
     }
 }

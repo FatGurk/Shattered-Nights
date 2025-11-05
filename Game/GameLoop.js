@@ -2,6 +2,9 @@
 import { Scene } from "./MenuToGame/MenuButtons.js";
 // World
 import { drawMap } from "./Map/Map.js";
+import { MAP_HEIGHT } from "./Map/Map.js";
+import { MAP_WIDTH } from "./Map/Map.js";
+import { TILE_SIZE } from "./Map/Map.js";
 // Menu Buttons
 import { MenuButtonsList } from "./ObjectLists.js";
 // Characters
@@ -23,6 +26,7 @@ canvasResize();
 
 function MenuScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     MenuButtonsList.forEach(e => {
         e.draw(ctx);
         e.update();
@@ -33,6 +37,9 @@ function GameScene() {
     const player = CharacterList[0];
     CameraMan.follow(player);
 
+    const WORLD_HEIGHT = MAP_HEIGHT * TILE_SIZE
+    const WORLD_WIDTH = MAP_WIDTH * TILE_SIZE
+    
     drawMap(ctx, CameraMan);
 
     CharacterList.forEach(e => {
