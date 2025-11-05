@@ -1,5 +1,5 @@
 const MenuScreen = new Image();
-MenuScreen.scr = "../.Pictures/TitleScreen/MenuScreen.png";
+MenuScreen.scr = "../Pictures/TitleScreen/MenuScreen.png";
 import { ctx, canvas } from "../GameLoop.js";
 
 export function DrawMenuScreen() {
