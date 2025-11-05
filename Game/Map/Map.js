@@ -38,12 +38,27 @@ for (let row = 0; row < 90; row++) {
     }
 }
 
-//  Spwan Kullersten väg
+// Kullersten vägar
 for (let row = 15; row < 18; row++) {
     for (let col = 15; col < 100; col++) {
         Map1[row][col] = SpriteList.Kullersten1;
     }
 }
+
+for (let row = 18; row < 100; row++) {
+    for (let col = 50; col < 53; col++) {
+        Map1[row][col] = SpriteList.Kullersten1;
+    }
+    for (let col = 70; col < 73; col++) {
+        Map1[row][col] = SpriteList.Kullersten1;
+    }
+}
+for (let row = 59; row < 62; row++) {
+    for (let col = 4; col < 100; col++) {
+        Map1[row][col] = SpriteList.Kullersten1;
+    }
+}
+
 console.log(Map1);
 
 function drawMap(ctx, camera) {
