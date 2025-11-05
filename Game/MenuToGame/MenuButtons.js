@@ -1,9 +1,9 @@
 export let Scene = "Menu";
 export class Button {
-    constructor(width, height, text) {
+    constructor(width, height, img) {
         this.width = width;
         this.height = height;
-        this.text = text;
+        this.img = img;
     }
 
     onClick() {
@@ -11,8 +11,8 @@ export class Button {
     }
 }
 export class NewGame extends Button {
-    constructor(x, y, width, height, text) {
-        super(width, height, text);
+    constructor(x, y, width, height, img) {
+        super(width, height, img);
         this.x = x;
         this.y = y;
     }

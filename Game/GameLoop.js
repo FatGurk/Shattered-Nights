@@ -11,6 +11,8 @@ import { MenuButtonsList } from "./ObjectLists.js";
 import { CharacterList } from "./ObjectLists.js";
 // Camera
 import { CameraMan } from "./ObjectLists.js";
+// Title screen
+import { DrawMenuScreen } from "./MenuToGame/Screen.js";
 
 export const canvas = document.getElementById("GameCanvas");
 export const ctx = canvas.getContext("2d");
@@ -27,11 +29,14 @@ canvasResize();
 function MenuScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    DrawMenuScreen();
+
     MenuButtonsList.forEach(e => {
         e.draw(ctx);
         e.update();
     });
 }
+
 function GameScene() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const player = CharacterList[0];

@@ -1,9 +1,8 @@
 // Menu Buttons
 import { NewGame } from "./MenuToGame/MenuButtons.js";
-
+import { canvas } from "./GameLoop.js";
 // Tile class för tile sprites
 import { Tile } from "./Map/Map.js";
-
 import {Player} from "./Characters/Player.js";
 import {Npc} from "./Characters/Npc.js";
 
