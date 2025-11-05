@@ -1,40 +1,4 @@
-Du sade:
-hello i want to make my canvas size equal to my screen size in javascript
-ChatGPT sade:
-Sure! 👋
-To make your HTML <canvas> automatically match the full size of the screen (or browser window), you can use JavaScript like this:
+https://chatgpt.com/share/690b2b20-72b4-800c-93ce-ce75a4b0f7d2
 
-<canvas id="myCanvas"></canvas>
+https://chatgpt.com/share/690b2b45-0d3c-800c-9076-b03f70424654
 
-<script>
-const canvas = document.getElementById("myCanvas");
-const ctx = canvas.getContext("2d");
-
-// Function to resize the canvas to fit the window
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  
-  // Optional: redraw or clear content when resizing
-  // ctx.fillStyle = "black";
-  // ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
-
-// Set initial size
-resizeCanvas();
-
-// Resize canvas automatically when window size changes
-window.addEventListener("resize", resizeCanvas);
-</script>
-🔍 How it works:
-canvas.width and canvas.height are set to window.innerWidth and window.innerHeight.
-
-The resizeCanvas() function ensures it always matches the screen size.
-
-The resize event listener updates the canvas whenever the window is resized.
-
-💡 Tip:
-If you want the canvas to fill the entire screen (even outside the browser UI) — like for fullscreen games — you can use the Fullscreen API:
-
-canvas.requestFullscreen();
-Would you like the code to make it automatically go fullscreen when the user clicks (like in a game)?

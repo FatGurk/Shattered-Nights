@@ -5,4 +5,7 @@ export class Npc extends Character {
         super(x, y, name, imgSrc);
     }
 
+    draw(ctx, CameraMan) {
+        ctx.drawImage(this.img, this.x - CameraMan.x, this.y - CameraMan.y);
+    }
 }
