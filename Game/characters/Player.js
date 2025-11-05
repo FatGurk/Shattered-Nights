@@ -13,6 +13,7 @@ export class Player extends Character {
         if (keys["ArrowLeft"] || keys["a"] || keys["A"]) this.x -= speed;
         if (keys["ArrowRight"] || keys["d"] || keys["D"]) this.x += speed;
     }
+    
 }
 
 document.addEventListener("keydown", e => keys[e.key] = true);
