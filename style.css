@@ -5,8 +5,18 @@ html, body {
     height: 100%;
     width: 100%;
 }
-canvas {
+#CanvasContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+#canvas {
     display: block;
     width: 100vw;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

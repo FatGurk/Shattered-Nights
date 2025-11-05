@@ -1,6 +1,7 @@
 import { canvas } from "../GameLoop.js";
 import { ctx } from "../GameLoop.js";
-import {CharacterList} from "../ObjectLists.js";
+import { CharacterList } from "../ObjectLists.js";
+import { CameraMan } from "../ObjectLists.js";
 export class Character {
     constructor(x, y, name, imgSrc) {
         this.x = x;
@@ -17,8 +18,8 @@ export class Character {
         };
     }
 
-    draw() {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    draw(ctx, CameraMan) {
+        ctx.drawImage(this.img, this.x - CameraMan.x, this.y - CameraMan.y , this.width, this.height);
     }
 
     detectCollision(CharacterList) {
