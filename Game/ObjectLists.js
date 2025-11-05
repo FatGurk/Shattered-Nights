@@ -14,12 +14,12 @@ export const MenuButtonsList = [
 
 export const CharacterList = [
     new Player(1000, 1000, "Pöjk", {
-        up: "../Pictures/Characters/PojkUp.png",
-        down: "../Pictures/Characters/PojkDown.png",
-        left: "../Pictures/Characters/PojkLeft.png",
-        right: "../Pictures/Characters/PojkRight.png"
+        up: "./Game/Pictures/Characters/PojkUp.png",
+        down: "./Game/Pictures/Characters/PojkDown.png",
+        left: "./Game/Pictures/Characters/PojkLeft.png",
+        right: "./Game/Pictures/Characters/PojkRight.png"
     }),
-    new Npc(800,800, "Mad scientist GW", "../Pictures/Characters/GW.png")
+    new Npc(800,800, "Mad scientist GW", "./Game/Pictures/Characters/GW.png")
     /*
     new Npc(200, 200, 50, 50, "Stefan", StefanImage),
     new Npc(300, 300, 50, 50, "Anton", AntonImage),
