@@ -31,7 +31,7 @@ Onsdag v.46:
 Jesper:
 Måndag v.45: Grundgjorde kartans grafik, utav vilket sand, klippsidor, olika material/sprites ingår. Även grunden för karaktären samt kart-storleken
 Tisdag v.45: Gjorde meny bildsbakgrund (delvis ???), mer sprites/material, logga, GW.
-Onsdag v.45:
+Onsdag v.45: Massor av transsprites och andra sprites, pojkens vinklar, hus, meny knappar
 Torsdag v.45:
 Fredag v.45:
 Måndag v.46:
