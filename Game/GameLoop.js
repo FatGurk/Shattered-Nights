@@ -43,9 +43,9 @@ function GameScene() {
     drawMap(ctx, CameraMan);
 
     CharacterList.forEach(e => {
-        e.update();
-        e.detectCollision(CharacterList);
         e.draw(ctx, CameraMan);
+        e.detectCollision(CharacterList);
+        e.update();
     });
 }
 

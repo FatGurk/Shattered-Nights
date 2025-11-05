@@ -7,7 +7,7 @@ export class Player extends Character {
     }
 
     update() {
-        const speed = 10;
+        const speed = 20;
         if (keys["ArrowUp"] || keys["w"]|| keys["W"]) this.y -= speed;
         if (keys["ArrowDown"] || keys["s"] || keys["S"]) this.y += speed;
         if (keys["ArrowLeft"] || keys["a"] || keys["A"]) this.x -= speed;

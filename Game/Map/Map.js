@@ -31,16 +31,16 @@ for (let row = 0; row < MAP_HEIGHT; row++) {
     }
 }
 
-// Gräs ibörjan
-for (let row = 0; row < 20; row++) {
-    for (let col = 0; col < 10; col++) {
+// Gräs övre delen
+for (let row = 0; row < 90; row++) {
+    for (let col = 0; col < MAP_WIDTH; col++) {
         Map1[row][col] = SpriteList.Dottgras1;
     }
 }
 
 //  Spwan Kullersten väg
-for (let row = 5; row < 8; row++) {
-    for (let col = 8; col < 20; col++) {
+for (let row = 15; row < 18; row++) {
+    for (let col = 15; col < 100; col++) {
         Map1[row][col] = SpriteList.Kullersten1;
     }
 }
