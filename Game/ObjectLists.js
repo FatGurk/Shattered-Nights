@@ -1,16 +1,23 @@
 // Menu Buttons
 import { NewGame } from "./MenuToGame/MenuButtons.js";
 
+// Tile class för tile sprites
+import { Tile } from "./Map/Map.js";
+
 import {Player} from "./Characters/Player.js";
 import {Npc} from "./Characters/Npc.js";
+
+import { Camera } from "./Camera.js";
+
+export const CameraMan = new Camera(0, 0, 800, 600);
 
 export const MenuButtonsList = [
     new NewGame(150, 200, 200, 50, "New Game")
 ]
 
 export const CharacterList = [
-    new Player(50, 50, "Pöjk", "../.Pictures/PojkUp.png"),
-    new Npc(200, 300, "Mad scientist GW", "../.Pictures/GW.png")
+    new Player(1000, 1000, "Pöjk", "../.Pictures/Pojk.png"),
+    new Npc(800,800, "Mad scientist GW", "../.Pictures/GW.png")
     /*
     new Npc(200, 200, 50, 50, "Stefan", StefanImage),
     new Npc(300, 300, 50, 50, "Anton", AntonImage),
