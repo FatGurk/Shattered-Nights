@@ -5,6 +5,4 @@ export class Npc extends Character {
         super(x, y, name, imgSrc);
     }
 
-    update() {
-    }
 }
