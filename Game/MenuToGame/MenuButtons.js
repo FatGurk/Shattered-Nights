@@ -55,11 +55,7 @@ export class playbutton extends Button {
         document.documentElement.requestFullscreen()
             .then(() => {
                 Scene.value = "Game";
-                console.log("Starting Game...");
             })
-            .catch(() => {
-                console.warn("Fullscreen failed");
-            });
     }
 }
 
@@ -69,7 +65,6 @@ export class Creditsbutton extends Button {
     }
     onClick() {
         Scene.value = "Credits";
-        console.log("Showing Credits...");
     }
 }
 
@@ -79,6 +74,5 @@ export class Settingsbutton extends Button {
     }
     onClick() {
         Scene.value = "Settings";
-        console.log("Showing Settings...");
     }
 }
