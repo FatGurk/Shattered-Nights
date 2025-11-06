@@ -53,8 +53,8 @@ export const Houses = {
     ]
 }
 
-export const MAP_WIDTH = 320;
-export const MAP_HEIGHT = 240;
+export const MAP_WIDTH = 200;
+export const MAP_HEIGHT = 140;
 export const TILE_SIZE = 128;
 
 
@@ -84,14 +84,18 @@ for (let row = 15; row < 18; row++) {
         Map1[row][col].base = SpriteList.Kullersten1;
     }
 }
+    
 for (let row = 18; row < 100; row++) {
+    // Första | vägen
     for (let col = 50; col < 53; col++) {
         Map1[row][col].base = SpriteList.Kullersten1;
     }
-    for (let col = 70; col < 73; col++) {
+    // Andra | vägen
+    for (let col = 65; col < 68; col++) {
         Map1[row][col].base = SpriteList.Kullersten1;
     }
 }
+    // Nedre vägen ----
 for (let row = 59; row < 62; row++) {
     for (let col = 4; col < 100; col++) {
         Map1[row][col].base = SpriteList.Kullersten1;
@@ -99,7 +103,7 @@ for (let row = 59; row < 62; row++) {
 }
 
 // Hus
-    //Standard Hus
+    //Prefab hus funktion
     export function PlaceStandardHouse(map, StartRow, StartCol, House) {
         for (let row = 0; row < House.length; row++) {
             for (let col = 0; col < House[row].length; col++) {
@@ -114,8 +118,12 @@ const houseWidth = 5;
 const houseHeight = 5;
 const spacing = 0;
 
-for (let row = 10; row < 15; row += houseHeight + spacing) {
-    for (let col = 25; col < 60; col += houseWidth + spacing) {
+// Hus på rad/column
+for (let col = 25; col < 50; col += houseWidth + spacing) {
+    for (let row = 10; row < 15; row += houseHeight + spacing) {
+        PlaceStandardHouse(Map1, row, col, Houses.StandardHouse);
+    }
+    for (let row = 54; row < 59; row += houseHeight + spacing) {
         PlaceStandardHouse(Map1, row, col, Houses.StandardHouse);
     }
 }

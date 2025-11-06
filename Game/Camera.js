@@ -1,3 +1,4 @@
+import { MAP_WIDTH, MAP_HEIGHT, TILE_SIZE } from './Map/Map.js';
 export class Camera {
     constructor(x, y, width, height) {
         this.x = x;
@@ -11,7 +12,7 @@ export class Camera {
         this.y = Player.y - this.height / 2 + Player.height / 2;
 
         // Camera Clamp Match.max(0 aka inte mindre än 0 och Math.min( this.x or y, tile antal * pixel per tile - camera bredd/ höjd))
-        this.x = Math.max(0, Math.min(this.x, 320 * 128 - this.width));
-        this.y = Math.max(0, Math.min(this.y, 240 * 128 - this.height));
+        this.x = Math.max(0, Math.min(this.x, MAP_WIDTH * TILE_SIZE - this.width));
+        this.y = Math.max(0, Math.min(this.y, MAP_HEIGHT * TILE_SIZE - this.height));
     }
 }
