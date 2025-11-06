@@ -3,17 +3,17 @@ import { Scene } from "./MenuToGame/MenuButtons.js";
 // World
 import { drawMap, MAP_HEIGHT, MAP_WIDTH, TILE_SIZE } from "./Map/Map.js";
 // Skit från ObjectLists
-import { CharacterList, MenuButtonList, CameraMan, canvas } from "./ObjectLists.js";
+import { CharacterList, MenuButtonList, CameraMan } from "./ObjectLists.js";
 // Title screen
 import { DrawMenuScreen } from "./MenuToGame/Screen.js";
 
-export const ctx = canvas.getContext("2d");
+import { Canvas, ctx } from "./CanvasCtx.js";
 
 export function canvasResize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    CameraMan.width = canvas.width;
-    CameraMan.height = canvas.height;
+    Canvas.width = window.innerWidth;
+    Canvas.height = window.innerHeight;
+    CameraMan.width = Canvas.width;
+    CameraMan.height = Canvas.height;
 }
 
 canvasResize();
@@ -21,16 +21,8 @@ canvasResize();
 function MenuScene() {
     DrawMenuScreen();
 
-    window.addEventListener("click", () => {
-        document.documentElement.requestFullscreen()
-        .catch(() => {
-            console.warn("Fullscreen failed");
-        });
-    }, { once: true });
-
-    MenuButtonList.forEach(button => {
-        button.draw(ctx);
-        button.onClick();
+    MenuButtonList.forEach(Button => {
+        Button.draw(ctx);
     });
 }
 
@@ -58,7 +50,7 @@ function GameScene() {
 }
 
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, Canvas.width, Canvas.height);
     if (Scene.value === "Menu") MenuScene();
     else if (Scene.value === "Game") GameScene();
 
