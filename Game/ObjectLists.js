@@ -20,11 +20,11 @@ export const MenuButtonList = [
 ]
 
 export const CharacterList = [
-    new Player(1000, 1000, "Simon", {
+    new Player(2000, 2000, "Simon", {
         up: "./Game/Pictures/Characters/PojkUp.png",
         down: "./Game/Pictures/Characters/PojkDown.png",
         left: "./Game/Pictures/Characters/PojkLeft.png",
         right: "./Game/Pictures/Characters/PojkRight.png"
     }),
-    new Npc(800,800, "Mad scientist GW", "./Game/Pictures/Characters/GW.png")
+    new Npc(2600,1800, "Mad scientist GW", "./Game/Pictures/Characters/GW.png")
 ]

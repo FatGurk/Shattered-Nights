@@ -1,5 +1,5 @@
 import { Character } from "./SuperClass.js";
-
+import { CharacterList } from "../ObjectLists.js";
 import { ctx } from "../CanvasCtx.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile} from "../Map/Map.js";
 import { Camera } from "../Camera.js";
@@ -19,13 +19,14 @@ export class Player extends Character {
 
     hitbox() {
         return {
-            x: this.x,
-            y:this.y + this.nHeight,
-            width: this.nWidth,
-            height: this.nHeight,
+            x: this.x + 20,
+            y: this.y + 100,
+            width: 70,
+            height: 68  
         }
     }
 
+    // Collision för Map items
     Collision(x, y, width, height) {
         let topRow = Math.floor(y / TILE_SIZE)
         let botRow = Math.floor((y + height) / TILE_SIZE)
@@ -44,6 +45,22 @@ export class Player extends Character {
             }
         }
         return false;
+    }
+    
+    // Collision
+    NpcCollision(other, nextX, nextY) {
+        const a = this.hitbox();
+        const b = other.hitbox();
+
+        a.x = nextX;
+        a.y = nextY;
+
+        return (
+            a.x < b.x + b.width &&
+            a.x + a.width > b.x &&
+            a.y < b.y + b.height &&
+            a.y + a.height > b.y
+        );
     }
 
     update() {
@@ -68,10 +85,21 @@ export class Player extends Character {
             this.facing = "right"; 
         }
 
-        if (!this.Collision(this.x + dx, this.y, this.hitbox().width, this.hitbox().height)) {
-            this.x += dx;
+        const willHitTileX = this.Collision(this.x + dx, this.y, this.hitbox().width, this.hitbox().height);
+        const willHitTileY = this.Collision(this.x, this.y + dy, this.hitbox().width, this.hitbox().height);
+        let willHitNpcX = false;
+        let willHitNpcY = false;
+
+        for (const npc of CharacterList) {
+            if (npc === this) continue;
+            if (this.NpcCollision(npc, this.x + dx, this.y)) willHitNpcX = true;
+            if (this.NpcCollision(npc, this.x, this.y + dy)) willHitNpcY = true;
         }
-        if (!this.Collision(this.x, this.y + dy, this.hitbox().width, this.hitbox().height)) {
+
+        if (!willHitNpcX && !willHitTileX) {
+            this.x += dx;
+        } 
+        if (!willHitNpcY && !willHitTileY) {
             this.y += dy;
         }
     }
