@@ -54,8 +54,8 @@ export const Houses = {
     ]
 }
 
-export const MAP_WIDTH = 200;
-export const MAP_HEIGHT = 140;
+export const MAP_WIDTH = 160;
+export const MAP_HEIGHT = 120;
 export const TILE_SIZE = 128;
 
 

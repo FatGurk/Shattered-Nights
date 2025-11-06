@@ -1,6 +1,8 @@
 import { Character } from "./SuperClass.js";
+
 import { ctx } from "../GameLoop.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1} from "../Map/Map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile} from "../Map/Map.js";
+import { Camera } from "../Camera.js";
 const keys = {};
 
 export class Player extends Character {

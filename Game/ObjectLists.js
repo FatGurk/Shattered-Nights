@@ -1,12 +1,23 @@
-import { NewGame } from "./MenuToGame/MenuButtons.js";
-import { canvas } from "./GameLoop.js";
-import { Tile } from "./Map/Map.js";
-import {Player} from "./Characters/Player.js";
-import {Npc} from "./Characters/Npc.js";
+import { playbutton, Creditsbutton, Settingsbutton } from "./MenuToGame/MenuButtons.js";
+import { Player } from "./Characters/Player.js";
+import { Npc } from "./Characters/Npc.js";
 
 import { Camera } from "./Camera.js";
 
+import { Canvas } from "./CanvasCtx.js";
+
+Canvas.width = window.innerWidth;
+Canvas.height = window.innerHeight;
+
 export const CameraMan = new Camera(0, 0, 800, 600);
+
+export const MenuButtonList = [
+    new playbutton(Canvas.width / 2, Canvas.height / 2, "./Game/Pictures/Menu/NewGame.png")
+    /*
+    new Creditsbutton(Canvas.width / 2, Canvas.height / 1.4, "./Game/Pictures/Menu/Credits.png"),
+    new Settingsbutton(Canvas.width / 1.05, Canvas.height / 1.1, "./Game/Pictures/Menu/Settings.png")
+    */
+]
 
 export const CharacterList = [
     new Player(1000, 1000, "Simon", {
@@ -16,9 +27,4 @@ export const CharacterList = [
         right: "./Game/Pictures/Characters/PojkRight.png"
     }),
     new Npc(800,800, "Mad scientist GW", "./Game/Pictures/Characters/GW.png")
-    /*
-    new Npc(200, 200, 50, 50, "Stefan", StefanImage),
-    new Npc(300, 300, 50, 50, "Anton", AntonImage),
-    new Npc(500, 500, 50, 50, "Sten", StenImage)
-    */
 ]
