@@ -46,8 +46,9 @@ function GameScene() {
     const WORLD_HEIGHT = MAP_HEIGHT * TILE_SIZE
     const WORLD_WIDTH = MAP_WIDTH * TILE_SIZE
     
-    //Base tiles
-    drawMap(ctx, CameraMan, "base");
+    //Ground och behind tiles
+    drawMap(ctx, CameraMan, "ground");
+    drawMap(ctx, CameraMan, "behind");
 
     // Gubbar
     CharacterList.forEach(e => {
@@ -56,8 +57,8 @@ function GameScene() {
         e.update();
     });
 
-    //Overlay tiles
-    drawMap(ctx, CameraMan, "overlay");
+    //Infront tiles
+    drawMap(ctx, CameraMan, "infront");
 }
 
 function gameLoop() {

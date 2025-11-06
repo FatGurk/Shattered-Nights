@@ -65,8 +65,9 @@ for (let row = 0; row < MAP_HEIGHT; row++) {
     Map1[row] = [];
     for (let col = 0; col < MAP_WIDTH; col++) {
         Map1[row][col] = {
-            base: SpriteList.Sand1,
-            overlay: null
+            ground: SpriteList.Sand1,
+            behind: null,
+            infront: null,
         };
     }
 }
@@ -74,31 +75,31 @@ for (let row = 0; row < MAP_HEIGHT; row++) {
 // Gräs övre delen
 for (let row = 0; row < 90; row++) {
     for (let col = 0; col < MAP_WIDTH; col++) {
-        Map1[row][col].base = SpriteList.Dottgras1;
+        Map1[row][col].ground = SpriteList.Dottgras1;
     }
 }
 
 // Kullersten vägar
 for (let row = 15; row < 18; row++) {
     for (let col = 15; col < 100; col++) {
-        Map1[row][col].base = SpriteList.Kullersten1;
+        Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
     
 for (let row = 18; row < 100; row++) {
     // Första | vägen
     for (let col = 50; col < 53; col++) {
-        Map1[row][col].base = SpriteList.Kullersten1;
+        Map1[row][col].ground = SpriteList.Kullersten1;
     }
     // Andra | vägen
     for (let col = 65; col < 68; col++) {
-        Map1[row][col].base = SpriteList.Kullersten1;
+        Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
     // Nedre vägen ----
 for (let row = 59; row < 62; row++) {
     for (let col = 4; col < 100; col++) {
-        Map1[row][col].base = SpriteList.Kullersten1;
+        Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
 
@@ -109,7 +110,13 @@ for (let row = 59; row < 62; row++) {
             for (let col = 0; col < House[row].length; col++) {
                 const tile = House[row][col];
                 if (!tile) continue; // skip empty tiles
-                map[StartRow + row][StartCol + col].overlay = tile;
+                
+                // Ritar tile baserat på lager
+                if (row < 2) {
+                    map[StartRow + row][StartCol + col].infront = tile;
+                } else {
+                    map[StartRow + row][StartCol + col].behind = tile;
+                }
             } 
         };
     }
@@ -144,14 +151,19 @@ function drawMap(ctx, camera, layer = "base") {
             const tile = Map1[row][col];
             if (!tile) continue;
 
-            // Base layer
-            if (layer === "base" && tile.base) {
-                tile.base.draw(ctx, col, row, TILE_SIZE, camera);
+            // Ground layer
+            if (layer === "ground" && tile.ground) {
+                tile.ground.draw(ctx, col, row, TILE_SIZE, camera);
             }
-            // Hus layer
-            if (layer === "overlay" && tile.overlay) {
-                tile.overlay.draw(ctx, col, row, TILE_SIZE, camera);
+            // Behind layer
+            if (layer === "behind" && tile.behind) {
+                tile.behind.draw(ctx, col, row, TILE_SIZE, camera);
             }
+            // Infront layer
+            if (layer === "infront" && tile.infront) {
+                tile.infront.draw(ctx, col, row, TILE_SIZE, camera);
+            }
+
         }
     }
 }
