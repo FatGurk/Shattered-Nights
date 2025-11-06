@@ -64,34 +64,37 @@ const Map1 = [];
 for (let row = 0; row < MAP_HEIGHT; row++) {
     Map1[row] = [];
     for (let col = 0; col < MAP_WIDTH; col++) {
-        Map1[row][col] = SpriteList.Sand1;
+        Map1[row][col] = {
+            base: SpriteList.Sand1,
+            overlay: null
+        };
     }
 }
 
 // Gräs övre delen
 for (let row = 0; row < 90; row++) {
     for (let col = 0; col < MAP_WIDTH; col++) {
-        Map1[row][col] = SpriteList.Dottgras1;
+        Map1[row][col].base = SpriteList.Dottgras1;
     }
 }
 
 // Kullersten vägar
 for (let row = 15; row < 18; row++) {
     for (let col = 15; col < 100; col++) {
-        Map1[row][col] = SpriteList.Kullersten1;
+        Map1[row][col].base = SpriteList.Kullersten1;
     }
 }
 for (let row = 18; row < 100; row++) {
     for (let col = 50; col < 53; col++) {
-        Map1[row][col] = SpriteList.Kullersten1;
+        Map1[row][col].base = SpriteList.Kullersten1;
     }
     for (let col = 70; col < 73; col++) {
-        Map1[row][col] = SpriteList.Kullersten1;
+        Map1[row][col].base = SpriteList.Kullersten1;
     }
 }
 for (let row = 59; row < 62; row++) {
     for (let col = 4; col < 100; col++) {
-        Map1[row][col] = SpriteList.Kullersten1;
+        Map1[row][col].base = SpriteList.Kullersten1;
     }
 }
 
@@ -102,17 +105,24 @@ for (let row = 59; row < 62; row++) {
             for (let col = 0; col < House[row].length; col++) {
                 const tile = House[row][col];
                 if (!tile) continue; // skip empty tiles
-                map[StartRow + row][StartCol + col] = tile;
+                map[StartRow + row][StartCol + col].overlay = tile;
             } 
         };
     }
-PlaceStandardHouse(Map1, 0, 0, Houses.StandardHouse);
-PlaceStandardHouse(Map1, 60, 60, Houses.StandardHouse);
-PlaceStandardHouse(Map1, 100, 40, Houses.StandardHouse);
+
+const houseWidth = 5;
+const houseHeight = 5;
+const spacing = 0;
+
+for (let row = 10; row < 15; row += houseHeight + spacing) {
+    for (let col = 25; col < 60; col += houseWidth + spacing) {
+        PlaceStandardHouse(Map1, row, col, Houses.StandardHouse);
+    }
+}
 
 console.log(Map1);
 
-function drawMap(ctx, camera) {
+function drawMap(ctx, camera, layer = "base") {
 
     // Vad kameran visar aka vilka tiles som ska ritas
     const startCol = Math.floor(camera.x / TILE_SIZE);
@@ -126,7 +136,14 @@ function drawMap(ctx, camera) {
             const tile = Map1[row][col];
             if (!tile) continue;
 
-            tile.draw(ctx, col, row, TILE_SIZE, camera);
+            // Base layer
+            if (layer === "base" && tile.base) {
+                tile.base.draw(ctx, col, row, TILE_SIZE, camera);
+            }
+            // Hus layer
+            if (layer === "overlay" && tile.overlay) {
+                tile.overlay.draw(ctx, col, row, TILE_SIZE, camera);
+            }
         }
     }
 }
