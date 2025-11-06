@@ -1,4 +1,6 @@
 import { Character } from "./SuperClass.js";
+import { Camera } from "../Camera.js";
+import { Map1, Tile } from "../Map/Map.js";
 const keys = {};
 
 export class Player extends Character {
@@ -13,9 +15,17 @@ export class Player extends Character {
         this.facing = "down";
     }
 
+    hitbox() {
+        
+    }
+
+    hitcolider() {
+
+    }
+
     update() {
         const speed = 20;
-        if (keys["ArrowUp"] || keys["w"]|| keys["W"]) { 
+        if (keys["ArrowUp"] || keys["w"]|| keys["W"]) {
             this.y -= speed; 
             this.facing = "up"; 
         }
