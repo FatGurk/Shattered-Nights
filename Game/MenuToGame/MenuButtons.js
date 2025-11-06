@@ -1,6 +1,6 @@
 export let Scene = { value: "Menu" };
 import { Canvas } from "../CanvasCtx.js";
-export class Button {
+class Button {
     constructor(x, y, imgSrc) {
         this.x = x;
         this.y = y;
@@ -35,6 +35,17 @@ export class Button {
         });
     }
 
+    draw(ctx) {
+        if (this.width && this.height) {
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        }
+    }
+}
+
+export class playbutton extends Button {
+    constructor(x, y, imgSrc) {
+        super(x, y, imgSrc);
+    }
     onClick() {
         document.documentElement.requestFullscreen()
             .then(() => {
@@ -45,10 +56,24 @@ export class Button {
                 console.warn("Fullscreen failed");
             });
     }
+}
 
-    draw(ctx) {
-        if (this.width && this.height) {
-            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-        }
+export class Creditsbutton extends Button {
+    constructor(x, y, imgSrc) {
+        super(x, y, imgSrc);
+    }
+    onClick() {
+        Scene.value = "Credits";
+        console.log("Showing Credits...");
+    }
+}
+
+export class Settingsbutton extends Button {
+    constructor(x, y, imgSrc) {
+        super(x, y, imgSrc);
+    }
+    onClick() {
+        Scene.value = "Settings";
+        console.log("Showing Settings...");
     }
 }
