@@ -22,7 +22,7 @@ export class Player extends Character {
             x: this.x + 20,
             y: this.y + 100,
             width: 70,
-            height: 68  
+            height: 110  
         }
     }
 

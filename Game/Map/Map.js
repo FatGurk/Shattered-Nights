@@ -12,11 +12,16 @@ export class Tile {
 }
 
 export const SpriteList = {
+
+    // Ground Tiles
     Sand1: new Tile("Sand1", "./Game/Pictures/Tiles/Sand1.png", false),
     Dottgras1: new Tile("Dottgras1", "./Game/Pictures/Tiles/Dottgras1.png", false),
     Kullersten1: new Tile("Kullersten1", "./Game/Pictures/Tiles/Kullersten1.png", false),
 
-    //HouseTiles
+    // Dirt Tiles
+    DirtWithMoon: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Dirtwithmoon.png", true),
+
+    //House Tiles
     StandardHouse1: new Tile("StandardHouse1", "./Game/Pictures/House/standard1.png", false),
     StandardHouse2: new Tile("StandardHouse2", "./Game/Pictures/House/standard2.png", false),
     StandardHouse3: new Tile("StandardHouse3", "./Game/Pictures/House/standard3.png", false),
@@ -135,6 +140,10 @@ for (let col = 25; col < 50; col += houseWidth + spacing) {
         PlaceStandardHouse(Map1, row, col, Houses.StandardHouse);
     }
 }
+
+// Dirt med månbit
+Map1[19][25].behind = SpriteList.DirtWithMoon;
+
 
 console.log(Map1);
 
