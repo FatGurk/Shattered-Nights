@@ -1,8 +1,9 @@
 export class Tile {
-    constructor(type, imgSrc) {
+    constructor(type, imgSrc, solid = false) {
         this.type = type;
         this.img = new Image();
         this.img.src = imgSrc;
+        this.solid = solid;
     }
 
     draw(ctx, x, y, tileSize, camera) {
@@ -11,36 +12,36 @@ export class Tile {
 }
 
 export const SpriteList = {
-    Sand1: new Tile("Sand1", "./Game/Pictures/Tiles/Sand1.png"),
-    Dottgras1: new Tile("Dottgras1", "./Game/Pictures/Tiles/Dottgras1.png"),
-    Kullersten1: new Tile("Kullersten1", "./Game/Pictures/Tiles/Kullersten1.png"),
+    Sand1: new Tile("Sand1", "./Game/Pictures/Tiles/Sand1.png", false),
+    Dottgras1: new Tile("Dottgras1", "./Game/Pictures/Tiles/Dottgras1.png", false),
+    Kullersten1: new Tile("Kullersten1", "./Game/Pictures/Tiles/Kullersten1.png", false),
 
     //HouseTiles
-    StandardHouse1: new Tile("StandardHouse1", "./Game/Pictures/House/standard1.png"),
-    StandardHouse2: new Tile("StandardHouse2", "./Game/Pictures/House/standard2.png"),
-    StandardHouse3: new Tile("StandardHouse3", "./Game/Pictures/House/standard3.png"),
-    StandardHouse4: new Tile("StandardHouse4", "./Game/Pictures/House/standard4.png"),
-    StandardHouse5: new Tile("StandardHouse5", "./Game/Pictures/House/standard5.png"),
-    StandardHouse6: new Tile("StandardHouse6", "./Game/Pictures/House/standard6.png"),
-    StandardHouse7: new Tile("StandardHouse7", "./Game/Pictures/House/standard7.png"),
-    StandardHouse8: new Tile("StandardHouse8", "./Game/Pictures/House/standard8.png"),
-    StandardHouse9: new Tile("StandardHouse9", "./Game/Pictures/House/standard9.png"),
-    StandardHouse10: new Tile("StandardHouse10", "./Game/Pictures/House/standard10.png"),
-    StandardHouse11: new Tile("StandardHouse11", "./Game/Pictures/House/standard11.png"),
-    StandardHouse12: new Tile("StandardHouse12", "./Game/Pictures/House/standard12.png"),
-    StandardHouse13: new Tile("StandardHouse13", "./Game/Pictures/House/standard13.png"),
-    StandardHouse14: new Tile("StandardHouse14", "./Game/Pictures/House/standard14.png"),
-    StandardHouse15: new Tile("StandardHouse15", "./Game/Pictures/House/standard15.png"),
-    StandardHouse16: new Tile("StandardHouse16", "./Game/Pictures/House/standard16.png"),
-    StandardHouse17: new Tile("StandardHouse17", "./Game/Pictures/House/standard17.png"),
-    StandardHouse18: new Tile("StandardHouse18", "./Game/Pictures/House/standard18.png"),
-    StandardHouse19: new Tile("StandardHouse19", "./Game/Pictures/House/standard19.png"),
-    StandardHouse20: new Tile("StandardHouse20", "./Game/Pictures/House/standard20.png"),
-    StandardHouse21: new Tile("StandardHouse21", "./Game/Pictures/House/standard21.png"),
-    StandardHouse22: new Tile("StandardHouse22", "./Game/Pictures/House/standard22.png"),
-    StandardHouse23: new Tile("StandardHouse23", "./Game/Pictures/House/standard23.png"),
-    StandardHouse24: new Tile("StandardHouse24", "./Game/Pictures/House/standard24.png"),
-    StandardHouse25: new Tile("StandardHouse25", "./Game/Pictures/House/standard25.png"),
+    StandardHouse1: new Tile("StandardHouse1", "./Game/Pictures/House/standard1.png", false),
+    StandardHouse2: new Tile("StandardHouse2", "./Game/Pictures/House/standard2.png", false),
+    StandardHouse3: new Tile("StandardHouse3", "./Game/Pictures/House/standard3.png", false),
+    StandardHouse4: new Tile("StandardHouse4", "./Game/Pictures/House/standard4.png", false),
+    StandardHouse5: new Tile("StandardHouse5", "./Game/Pictures/House/standard5.png", false),
+    StandardHouse6: new Tile("StandardHouse6", "./Game/Pictures/House/standard6.png", true),
+    StandardHouse7: new Tile("StandardHouse7", "./Game/Pictures/House/standard7.png", true),
+    StandardHouse8: new Tile("StandardHouse8", "./Game/Pictures/House/standard8.png", true),
+    StandardHouse9: new Tile("StandardHouse9", "./Game/Pictures/House/standard9.png", true),
+    StandardHouse10: new Tile("StandardHouse10", "./Game/Pictures/House/standard10.png", true),
+    StandardHouse11: new Tile("StandardHouse11", "./Game/Pictures/House/standard11.png", true),
+    StandardHouse12: new Tile("StandardHouse12", "./Game/Pictures/House/standard12.png", true),
+    StandardHouse13: new Tile("StandardHouse13", "./Game/Pictures/House/standard13.png", true),
+    StandardHouse14: new Tile("StandardHouse14", "./Game/Pictures/House/standard14.png", true),
+    StandardHouse15: new Tile("StandardHouse15", "./Game/Pictures/House/standard15.png", true),
+    StandardHouse16: new Tile("StandardHouse16", "./Game/Pictures/House/standard16.png", true),
+    StandardHouse17: new Tile("StandardHouse17", "./Game/Pictures/House/standard17.png", true),
+    StandardHouse18: new Tile("StandardHouse18", "./Game/Pictures/House/standard18.png", true),
+    StandardHouse19: new Tile("StandardHouse19", "./Game/Pictures/House/standard19.png", true),
+    StandardHouse20: new Tile("StandardHouse20", "./Game/Pictures/House/standard20.png", true),
+    StandardHouse21: new Tile("StandardHouse21", "./Game/Pictures/House/standard21.png", false),
+    StandardHouse22: new Tile("StandardHouse22", "./Game/Pictures/House/standard22.png", false),
+    StandardHouse23: new Tile("StandardHouse23", "./Game/Pictures/House/standard23.png", false),
+    StandardHouse24: new Tile("StandardHouse24", "./Game/Pictures/House/standard24.png", false),
+    StandardHouse25: new Tile("StandardHouse25", "./Game/Pictures/House/standard25.png", false),
 }
 
 export const Houses = {

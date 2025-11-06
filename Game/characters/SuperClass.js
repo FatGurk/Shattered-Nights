@@ -17,6 +17,9 @@ export class Character {
             this.height = this.img.naturalHeight;
         };
 
+        this.nWidth = this.img.naturalWidth;
+        this.nHeight = this.img.naturalHeight;
+
     }
 
     update() {
