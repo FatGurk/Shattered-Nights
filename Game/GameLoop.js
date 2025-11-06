@@ -1,18 +1,12 @@
 // Scene
 import { Scene } from "./MenuToGame/MenuButtons.js";
 // World
-import { drawMap } from "./Map/Map.js";
-import { MAP_HEIGHT } from "./Map/Map.js";
-import { MAP_WIDTH } from "./Map/Map.js";
-import { TILE_SIZE } from "./Map/Map.js";
-// Characters
-import { CharacterList } from "./ObjectLists.js";
-// Camera
-import { CameraMan } from "./ObjectLists.js";
+import { drawMap, MAP_HEIGHT, MAP_WIDTH, TILE_SIZE } from "./Map/Map.js";
+// Skit från ObjectLists
+import { CharacterList, MenuButtonList, CameraMan, canvas } from "./ObjectLists.js";
 // Title screen
 import { DrawMenuScreen } from "./MenuToGame/Screen.js";
 
-export const canvas = document.getElementById("GameCanvas");
 export const ctx = canvas.getContext("2d");
 
 export function canvasResize() {
@@ -29,13 +23,15 @@ function MenuScene() {
 
     window.addEventListener("click", () => {
         document.documentElement.requestFullscreen()
-        .then(() => {
-            Scene.value = "Game";
-        })
         .catch(() => {
             console.warn("Fullscreen failed");
         });
     }, { once: true });
+
+    MenuButtonList.forEach(button => {
+        button.draw(ctx);
+        button.onClick();
+    });
 }
 
 

@@ -1,7 +1,3 @@
-import { canvas } from "../GameLoop.js";
-import { ctx } from "../GameLoop.js";
-import { CharacterList } from "../ObjectLists.js";
-import { CameraMan } from "../ObjectLists.js";
 export class Character {
     constructor(x, y, name, imgsrc) {
         this.x = x;

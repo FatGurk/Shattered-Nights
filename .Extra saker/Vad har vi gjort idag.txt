@@ -11,7 +11,7 @@ Onsdag v.46:
 Gustav:
 Måndag v.45: Planerat majoritet för att underlätta framöver, börjat skapa klasser, speciellt i meny medans kim sitter med spel klasserna. Mycket prat om desing idag.
 Tisdag v.45: Kamera följer efter spelaren, sitter på att göra mapen med kameran.
-Onsdag v.45:
+Onsdag v.45: Fixa layers, world building och satte ut hus. Nu kan jag börja fixa med SPELET!!!
 Torsdag v.45:
 Fredag v.45:
 Måndag v.46:
@@ -21,7 +21,7 @@ Onsdag v.46:
 Kevin:
 Måndag v.45: har undersökt hur man gör en knapp som får sidan i helt skärm, har även udnersökt hur vi ska göra med UI. har också börjat tänka hur MVP ska se ut och hur vi ska göra med settings menun.
 Tisdag v.45: har hjälpt Kim lite med att göra movement till playern, har även bollat lite med gustav kring kartan och hur vi skulle göra det. sen har mesta lektionen gått på att fixa ljud, sound effects som footstep och även gjort background music.
-Onsdag v.45:
+Onsdag v.45: Var på sjukhus
 Torsdag v.45:
 Fredag v.45:
 Måndag v.46:

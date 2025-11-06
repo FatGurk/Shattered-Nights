@@ -1,4 +1,5 @@
-import { ctx, canvas } from "../GameLoop.js";
+import { ctx } from "../GameLoop.js";
+import { canvas } from "../ObjectLists.js";
 
 const Title = new Image();
 Title.src = "./Game/Pictures/Menu/MenuScreen.png";

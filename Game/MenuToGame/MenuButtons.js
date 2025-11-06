@@ -1,27 +1,28 @@
 export let Scene = { value: "Menu" };
 export class Button {
-    constructor(width, height, img) {
-        this.width = width;
-        this.height = height;
-        this.img = img;
-    }
-
-    onClick() {
-        console.log("Button clicked:", this.text);
-    }
-}
-
-export class NewGame extends Button {
-    constructor(x, y, width, height, text) {
-        const img = new Image();
-        img.src = "./Game/Pictures/Menu/NewGameButton.png";
-        super(width, height, img);
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.text = text;
+
+        this.img = new Image();
+        this.img.src = "./Game/Pictures/Menu/NewGame.png";
+
+        this.width = 0;
+        this.height = 0;
+
+        this.img.onload = () => {
+            this.width = this.img.naturalWidth;
+            this.height = this.img.naturalHeight;
+        };
     }
+
     onClick() {
-        Scene = "Game";
-        console.log("Starting New Game...");
+        Scene.value = "Game";
+    }
+
+    draw(ctx) {
+        if (this.width && this.height) {
+            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        }
     }
 }

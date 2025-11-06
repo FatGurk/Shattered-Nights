@@ -1,5 +1,4 @@
 import { Character } from "./SuperClass.js";
-import { ctx } from "../GameLoop.js";
 const keys = {};
 
 export class Player extends Character {

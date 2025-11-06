@@ -1,12 +1,16 @@
-import { NewGame } from "./MenuToGame/MenuButtons.js";
-import { canvas } from "./GameLoop.js";
-import { Tile } from "./Map/Map.js";
-import {Player} from "./Characters/Player.js";
-import {Npc} from "./Characters/Npc.js";
+import { Button } from "./MenuToGame/MenuButtons.js";
+import { Player } from "./Characters/Player.js";
+import { Npc } from "./Characters/Npc.js";
 
 import { Camera } from "./Camera.js";
 
+export const canvas = document.getElementById("GameCanvas");
+
 export const CameraMan = new Camera(0, 0, 800, 600);
+
+export const MenuButtonList = [
+    new Button(canvas.width / 2, canvas.height / 2, "./Game/Pictures/Menu/NewGame.png")
+]
 
 export const CharacterList = [
     new Player(1000, 1000, "Simon", {
