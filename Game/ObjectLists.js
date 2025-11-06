@@ -4,12 +4,15 @@ import { Npc } from "./Characters/Npc.js";
 
 import { Camera } from "./Camera.js";
 
-export const canvas = document.getElementById("GameCanvas");
+import { Canvas } from "./CanvasCtx.js";
+
+Canvas.width = window.innerWidth;
+Canvas.height = window.innerHeight;
 
 export const CameraMan = new Camera(0, 0, 800, 600);
 
 export const MenuButtonList = [
-    new Button(canvas.width / 2, canvas.height / 2, "./Game/Pictures/Menu/NewGame.png")
+    new Button(Canvas.width / 2, Canvas.height / 2, "./Game/Pictures/Menu/NewGame.png")
 ]
 
 export const CharacterList = [
@@ -20,9 +23,4 @@ export const CharacterList = [
         right: "./Game/Pictures/Characters/PojkRight.png"
     }),
     new Npc(800,800, "Mad scientist GW", "./Game/Pictures/Characters/GW.png")
-    /*
-    new Npc(200, 200, 50, 50, "Stefan", StefanImage),
-    new Npc(300, 300, 50, 50, "Anton", AntonImage),
-    new Npc(500, 500, 50, 50, "Sten", StenImage)
-    */
 ]
