@@ -34,6 +34,9 @@ export class Player extends Character {
 
         for ( let row = topRow; row <= botRow; row++) {
             for ( let col = leftCol; col <= rightCol; col++) {
+                if (row < 0|| col < 0 || row >= MAP_HEIGHT || col >= MAP_WIDTH) {
+                    return true;
+                }
                 const tile = Map1[row][col];
                 if (tile.ground?.solid || tile.behind?.solid || tile.infront?.solid) {
                     return true;
