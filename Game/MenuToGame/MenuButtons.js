@@ -1,9 +1,10 @@
 export let Scene = { value: "Menu" };
 import { Canvas } from "../CanvasCtx.js";
+
 class Button {
-    constructor(x, y, imgSrc) {
-        this.x = x;
-        this.y = y;
+    constructor(centerX, centerY, imgSrc) {
+        this.centerX = centerX;
+        this.centerY = centerY;
 
         this.img = new Image();
         this.img.src = imgSrc;
@@ -14,9 +15,6 @@ class Button {
         this.img.onload = () => {
             this.width = this.img.naturalWidth;
             this.height = this.img.naturalHeight;
-
-            this.x -= this.width / 2;
-            this.y -= this.height / 2;
         };
 
         window.addEventListener("click", (event) => {
@@ -24,11 +22,14 @@ class Button {
             const mouseX = event.clientX - rect.left;
             const mouseY = event.clientY - rect.top;
 
+            const x = this.centerX - this.width / 2;
+            const y = this.centerY - this.height / 2;
+
             if (
-                mouseX >= this.x + 20 &&
-                mouseX <= this.x + this.width - 20 &&
-                mouseY >= this.y + 20 &&
-                mouseY <= this.y + this.height - 20
+                mouseX >= x &&
+                mouseX <= x + this.width &&
+                mouseY >= y &&
+                mouseY <= y + this.height
             ) {
                 this.onClick();
             }
@@ -36,11 +37,15 @@ class Button {
     }
 
     draw(ctx) {
-        if (this.width && this.height) {
-            ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-        }
+        if (!this.width || !this.height) return;
+
+        const x = this.centerX - this.width / 2;
+        const y = this.centerY - this.height / 2;
+
+        ctx.drawImage(this.img, x, y, this.width, this.height);
     }
 }
+
 
 export class playbutton extends Button {
     constructor(x, y, imgSrc) {

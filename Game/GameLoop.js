@@ -14,6 +14,11 @@ export function canvasResize() {
     Canvas.height = window.innerHeight;
     CameraMan.width = Canvas.width;
     CameraMan.height = Canvas.height;
+
+    MenuButtonList.forEach(button => {
+        button.centerX = Canvas.width / 2;
+        button.centerY = Canvas.height / 2;
+    });
 }
 
 canvasResize();
