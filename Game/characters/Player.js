@@ -1,6 +1,8 @@
 import { Character } from "./SuperClass.js";
+
+import { ctx } from "../GameLoop.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile} from "../Map/Map.js";
 import { Camera } from "../Camera.js";
-import { Map1, Tile } from "../Map/Map.js";
 const keys = {};
 
 export class Player extends Character {
@@ -16,30 +18,58 @@ export class Player extends Character {
     }
 
     hitbox() {
-        
+        return {
+            x: this.x,
+            y:this.y + this.nHeight,
+            width: this.nWidth,
+            height: this.nHeight,
+        }
     }
 
-    hitcolider() {
+    Collision(x, y, width, height) {
+        let topRow = Math.floor(y / TILE_SIZE)
+        let botRow = Math.floor((y + height) / TILE_SIZE)
+        let leftCol = Math.floor(x / TILE_SIZE)
+        let rightCol = Math.floor((x + width) / TILE_SIZE)
 
+        for ( let row = topRow; row <= botRow; row++) {
+            for ( let col = leftCol; col <= rightCol; col++) {
+                const tile = Map1[row][col];
+                if (tile.ground?.solid || tile.behind?.solid || tile.infront?.solid) {
+                    return true;
+                } 
+            }
+        }
+        return false;
     }
 
     update() {
         const speed = 20;
-        if (keys["ArrowUp"] || keys["w"]|| keys["W"]) {
-            this.y -= speed; 
+        let dx = 0
+        let dy = 0
+
+        if (keys["ArrowUp"] || keys["w"]|| keys["W"]) { 
+            dy -= speed; 
             this.facing = "up"; 
         }
         if (keys["ArrowDown"] || keys["s"] || keys["S"]) { 
-            this.y += speed; 
+            dy += speed; 
             this.facing = "down"; 
         }
         if (keys["ArrowLeft"] || keys["a"] || keys["A"]) { 
-            this.x -= speed; 
+            dx -= speed; 
             this.facing = "left"; 
         }
         if (keys["ArrowRight"] || keys["d"] || keys["D"]) { 
-            this.x += speed; 
+            dx += speed; 
             this.facing = "right"; 
+        }
+
+        if (!this.Collision(this.x + dx, this.y, this.hitbox().width, this.hitbox().height)) {
+            this.x += dx;
+        }
+        if (!this.Collision(this.x, this.y + dy, this.hitbox().width, this.hitbox().height)) {
+            this.y += dy;
         }
     }
 
