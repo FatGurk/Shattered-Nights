@@ -1,4 +1,4 @@
-import { playbutton, Creditsbutton, Settingsbutton } from "./MenuToGame/MenuButtons.js";
+import { playbutton, Creditsbutton } from "./MenuToGame/MenuButtons.js";
 import { Player } from "./Characters/Player.js";
 import { Npc } from "./Characters/Npc.js";
 
@@ -13,10 +13,7 @@ export const CameraMan = new Camera(0, 0, 800, 600);
 
 export const MenuButtonList = [
     new playbutton(Canvas.width / 2, Canvas.height / 2, "./Game/Pictures/Menu/NewGame.png")
-    /*
-    new Creditsbutton(Canvas.width / 2, Canvas.height / 1.4, "./Game/Pictures/Menu/Credits.png"),
-    new Settingsbutton(Canvas.width / 1.05, Canvas.height / 1.1, "./Game/Pictures/Menu/Settings.png")
-    */
+    // new Creditsbutton(Canvas.width / 2, Canvas.height / 1.4, "./Game/Pictures/Menu/Credits.png"),
 ]
 
 export const CharacterList = [

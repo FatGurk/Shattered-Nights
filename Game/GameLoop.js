@@ -8,7 +8,7 @@ import { CharacterList, MenuButtonList, CameraMan } from "./ObjectLists.js";
 import { DrawMenuScreen } from "./MenuToGame/Screen.js";
 
 // Player
-import { Player } from "./characters/Player.js"
+import { Player } from "./Characters/Player.js"
 
 import { Canvas, ctx } from "./CanvasCtx.js";
 
