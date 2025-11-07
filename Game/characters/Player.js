@@ -188,7 +188,7 @@ document.addEventListener("keydown", e => {
 
     if (e.key === "e" || e.key === "E") {
         for(const p in CharacterList) {
-            if (CharacterList[p] instanceof Player){
+            if (CharacterList[p] instanceof Player && canInteract){
                 CharacterList[p].interact();
                 canInteract = false;
             }
