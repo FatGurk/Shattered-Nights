@@ -7,7 +7,12 @@ import { CharacterList, MenuButtonList, CameraMan } from "./ObjectLists.js";
 // Title screen
 import { DrawMenuScreen } from "./MenuToGame/Screen.js";
 
+// Player
+import { Player } from "./characters/Player.js"
+
 import { Canvas, ctx } from "./CanvasCtx.js";
+
+export let player;
 
 export function canvasResize() {
     Canvas.width = window.innerWidth;

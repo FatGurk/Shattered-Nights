@@ -13,6 +13,10 @@ export class Npc extends Character {
         }
     }
 
+    onInteract() {
+        
+    }
+
     draw(ctx, CameraMan) {
         ctx.drawImage(this.img, this.x - CameraMan.x, this.y - CameraMan.y);
     }

@@ -18,9 +18,6 @@ export const SpriteList = {
     Dottgras1: new Tile("Dottgras1", "./Game/Pictures/Tiles/Dottgras1.png", false),
     Kullersten1: new Tile("Kullersten1", "./Game/Pictures/Tiles/Kullersten1.png", false),
 
-    // Dirt Tiles
-    DirtWithMoon: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Dirtwithmoon.png", true),
-
     //House Tiles
     StandardHouse1: new Tile("StandardHouse1", "./Game/Pictures/House/standard1.png", false),
     StandardHouse2: new Tile("StandardHouse2", "./Game/Pictures/House/standard2.png", false),
@@ -57,6 +54,11 @@ export const Houses = {
         [SpriteList.StandardHouse6,  SpriteList.StandardHouse7,  SpriteList.StandardHouse8,  SpriteList.StandardHouse9,  SpriteList.StandardHouse10],
         [SpriteList.StandardHouse1,  SpriteList.StandardHouse2,  SpriteList.StandardHouse3,  SpriteList.StandardHouse4,  SpriteList.StandardHouse5]
     ]
+}
+
+export const InteractableSprites = {
+    // Dirt Tile
+    DirtWithMoon: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Dirtwithmoon.png", true),
 }
 
 export const MAP_WIDTH = 160;
@@ -142,7 +144,7 @@ for (let col = 25; col < 50; col += houseWidth + spacing) {
 }
 
 // Dirt med månbit
-Map1[19][25].behind = SpriteList.DirtWithMoon;
+Map1[19][25].behind = InteractableSprites.DirtWithMoon;
 
 
 console.log(Map1);

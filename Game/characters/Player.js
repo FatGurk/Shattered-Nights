@@ -1,9 +1,13 @@
 import { Character } from "./SuperClass.js";
+import { Npc } from "./Npc.js";
 import { CharacterList } from "../ObjectLists.js";
 import { ctx } from "../CanvasCtx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile} from "../Map/Map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites} from "../Map/Map.js";
 import { Camera } from "../Camera.js";
 const keys = {};
+
+export let equippedItem1 = "Spade";
+export let canInteract = true;
 
 export class Player extends Character {
     constructor(x, y, name, imgscr) {
@@ -63,6 +67,28 @@ export class Player extends Character {
         );
     }
 
+    interact() {
+        for (const npc of CharacterList) {
+            // Skippar att räknar player(de i samma lista)
+            if (npc === this) continue;
+
+            if (this.NpcCollision(npc, this.x, this.y)) {
+                console.log("Du pratar med ${Npc.name}");
+                Npc.onInteract();
+            }
+        }
+
+        for (const key in InteractableSprites) {
+            const Tile = InteractableSprites[key];
+
+            if (this.Collision(Tile, this.x, this.y)) {
+                if (equippedItem1 === "spade") {
+                    console.log("du grävde");
+                }
+            }
+        }
+    }
+
     update() {
         const speed = 20;
         let dx = 0
@@ -110,6 +136,18 @@ export class Player extends Character {
         ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
     }
 }
+document.addEventListener("keydown", e => {
+    keys[e.key] = true;
 
-document.addEventListener("keydown", e => keys[e.key] = true);
-document.addEventListener("keyup", e => keys[e.key] = false);
+    if (e.key === "e" || e.key === "E") {
+        player.interact();
+        canInteract = false;
+    }
+});
+document.addEventListener("keyup", e => {
+    keys[e.key] = false;
+
+    if (e.key === "e" || e.key === "E") {
+        canInteract = true;
+    }
+});
