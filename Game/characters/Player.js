@@ -81,7 +81,7 @@ export class Player extends Character {
     }
 
     interact() {
-            for (const npc of CharacterList) {
+        for (const npc of CharacterList) {
             if (npc === this) continue;
 
             const playerBox = this.intHitbox();

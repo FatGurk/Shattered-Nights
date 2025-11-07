@@ -59,10 +59,11 @@ export const Houses = {
 export const InteractableSprites = {
     // Dirt Tile
     DirtWithMoon: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Dirtwithmoon.png", true),
+    
 }
 
-export const MAP_WIDTH = 160;
-export const MAP_HEIGHT = 120;
+export const MAP_WIDTH = 100;
+export const MAP_HEIGHT = 100;
 export const TILE_SIZE = 128;
 
 
