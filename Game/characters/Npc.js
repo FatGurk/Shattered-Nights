@@ -4,17 +4,27 @@ export class Npc extends Character {
         super(x, y, name, imgSrc);
     }
 
-    hitbox() {
+    
+    moveHitbox() {
         return {
-            x: this.x + 20,
-            y: this.y + 190,
-            width: 88,
-            height: 48, 
+            x: this.x + 23,
+            y: this.y, 
+            width: 75,
+            height: 256      
+        }
+    }
+
+    intHitbox() {
+        return {
+            x: this.x - 30,
+            y: this.y -50, 
+            width: 188,
+            height: 336
         }
     }
 
     onInteract() {
-        
+
     }
 
     draw(ctx, CameraMan) {

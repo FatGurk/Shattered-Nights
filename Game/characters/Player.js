@@ -21,12 +21,21 @@ export class Player extends Character {
         this.facing = "down";
     }
 
-    hitbox() {
+    moveHitbox() {
         return {
-            x: this.x + 20,
-            y: this.y + 100,
-            width: 70,
-            height: 110  
+            x: this.x + 23,
+            y: this.y,
+            width: 75,
+            height: 128
+        };
+    }
+
+    intHitbox() {
+        return {
+            x: this.x - 30,
+            y: this.y - 30,
+            width: 158,
+            height: 188
         }
     }
 
@@ -52,40 +61,68 @@ export class Player extends Character {
     }
     
     // Collision
-    NpcCollision(other, nextX, nextY) {
-        const a = this.hitbox();
-        const b = other.hitbox();
+    NpcCollision(other) {
+        if (!other) return false;
 
-        a.x = nextX;
-        a.y = nextY;
+        const playerCenter = {
+            x: this.x + 64,  // half of 128 width
+            y: this.y + 64   // half of 128 height
+        };
 
+        const npcBox = other.hitbox(); // full NPC hitbox
+
+        // Check if player center is inside NPC hitbox
         return (
-            a.x < b.x + b.width &&
-            a.x + a.width > b.x &&
-            a.y < b.y + b.height &&
-            a.y + a.height > b.y
+            playerCenter.x >= npcBox.x &&
+            playerCenter.x <= npcBox.x + npcBox.width &&
+            playerCenter.y >= npcBox.y &&
+            playerCenter.y <= npcBox.y + npcBox.height
         );
     }
 
     interact() {
-        for (const npc of CharacterList) {
-            // Skippar att räknar player(de i samma lista)
+            for (const npc of CharacterList) {
             if (npc === this) continue;
 
-            if (this.NpcCollision(npc, this.x, this.y)) {
-                console.log("Du pratar med ${Npc.name}");
-                Npc.onInteract();
+            const playerBox = this.intHitbox();
+            const npcBox = npc.intHitbox();
+
+            if (rectOverlap(playerBox, npcBox)) {
+                console.log(`Du pratar med ${npc.name}`);
+                if (typeof npc.onInteract === "function") npc.onInteract();
             }
         }
 
-        for (const key in InteractableSprites) {
-            const Tile = InteractableSprites[key];
+        for (let row = 0; row < MAP_HEIGHT; row++) {
+            for (let col = 0; col < MAP_WIDTH; col++) {
+                const tile = Map1[row][col].behind;
+                if (!tile) continue;
 
-            if (this.Collision(Tile, this.x, this.y)) {
-                if (equippedItem1 === "spade") {
-                    console.log("du grävde");
+                if (tile === InteractableSprites.DirtWithMoon) {
+                    const tileRectangle = {
+                        x: col * TILE_SIZE,
+                        y: row * TILE_SIZE,
+                        width: TILE_SIZE,
+                        height: TILE_SIZE
+                    };
+
+                    if (rectOverlap(this.intHitbox(), tileRectangle)) {
+                        console.log("Player interacts with tile:", tile.type);
+                        if (equippedItem1 === "Spade") {
+                            console.log("You dug the dirt!");
+                        }
+                    }
                 }
             }
+        }
+
+        function rectOverlap(a, b) {
+            return (
+                a.x < b.x + b.width &&
+                a.x + a.width > b.x &&
+                a.y < b.y + b.height &&
+                a.y + a.height > b.y
+            );
         }
     }
 
@@ -111,24 +148,34 @@ export class Player extends Character {
             this.facing = "right"; 
         }
 
-        const willHitTileX = this.Collision(this.x + dx, this.y, this.hitbox().width, this.hitbox().height);
-        const willHitTileY = this.Collision(this.x, this.y + dy, this.hitbox().width, this.hitbox().height);
-        let willHitNpcX = false;
-        let willHitNpcY = false;
+        const willHitTileX = this.Collision(this.x + dx, this.y, this.moveHitbox().width, this.moveHitbox().height);
+        const willHitTileY = this.Collision(this.x, this.y + dy, this.moveHitbox().width, this.moveHitbox().height);
+
+        let willHitNpcX = false, willHitNpcY = false;
 
         for (const npc of CharacterList) {
             if (npc === this) continue;
-            if (this.NpcCollision(npc, this.x + dx, this.y)) willHitNpcX = true;
-            if (this.NpcCollision(npc, this.x, this.y + dy)) willHitNpcY = true;
+
+            const npcBox = npc.moveHitbox();
+            const nextXHitbox = { ...this.moveHitbox(), x: this.x + dx };
+            const nextYHitbox = { ...this.moveHitbox(), y: this.y + dy };
+
+            if (rectOverlap(nextXHitbox, npcBox)) willHitNpcX = true;
+            if (rectOverlap(nextYHitbox, npcBox)) willHitNpcY = true;
         }
 
-        if (!willHitNpcX && !willHitTileX) {
-            this.x += dx;
-        } 
-        if (!willHitNpcY && !willHitTileY) {
-            this.y += dy;
+        if (!willHitTileX && !willHitNpcX) this.x += dx;
+        if (!willHitTileY && !willHitNpcY) this.y += dy;
+
+        function rectOverlap(a, b) {
+            return (
+                a.x < b.x + b.width &&
+                a.x + a.width > b.x &&
+                a.y < b.y + b.height &&
+                a.y + a.height > b.y
+            );
         }
-    }
+    } 
 
     draw(ctx, CameraMan) {
         const img = this.pojk[this.facing];
@@ -140,8 +187,12 @@ document.addEventListener("keydown", e => {
     keys[e.key] = true;
 
     if (e.key === "e" || e.key === "E") {
-        player.interact();
-        canInteract = false;
+        for(const p in CharacterList) {
+            if (CharacterList[p] instanceof Player){
+                CharacterList[p].interact();
+                canInteract = false;
+            }
+        }
     }
 });
 document.addEventListener("keyup", e => {
