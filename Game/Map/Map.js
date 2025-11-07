@@ -14,9 +14,9 @@ export class Tile {
 export const SpriteList = {
 
     // Ground Tiles
-    Sand1: new Tile("Sand1", "./Game/Pictures/Tiles/Sand1.png", false),
-    Dottgras1: new Tile("Dottgras1", "./Game/Pictures/Tiles/Dottgras1.png", false),
+    gras1: new Tile("gras1", "./Game/Pictures/Tiles/gras.png", false),
     Kullersten1: new Tile("Kullersten1", "./Game/Pictures/Tiles/Kullersten1.png", false),
+    Water1: new Tile("Water1", "./Game/Pictures/Tiles/Water.png", true),
 
     //House Tiles
     StandardHouse1: new Tile("StandardHouse1", "./Game/Pictures/House/standard1.png", false),
@@ -59,58 +59,76 @@ export const Houses = {
 export const InteractableSprites = {
     // Dirt Tile
     DirtWithMoon: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Dirtwithmoon.png", true),
-    
+
+    // Morot
+    MorotMed1: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/fullplottupp.png", true),
+    MorotMed2: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/fullcenterplott.png", true),
+    MorotMed3: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/fullplottbotten.png", true),
+
+    MorotUtan1: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/tomplottupp.png", true),
+    MorotUtan2: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/tomcenterplott.png", true),
+    MorotUtan3: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/tomplottbotten.png", true),
+
+    // Blommor
+    RodBlomma:  new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Rodblomma.png", false),
+    BlaBlomma:  new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Blablomma.png", false),
+    VitBlomma:   new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Vitblomma.png", false),
 }
 
-export const MAP_WIDTH = 100;
-export const MAP_HEIGHT = 100;
+export const MorotFaltMed = [
+    [InteractableSprites.MorotMed1],
+    [InteractableSprites.MorotMed2],
+    [InteractableSprites.MorotMed3]
+];
+export const MorotFaltUtan = [
+    [InteractableSprites.MorotUtan1],
+    [InteractableSprites.MorotUtan2],
+    [InteractableSprites.MorotUtan3]
+];
+
+export const MAP_WIDTH = 40;
+export const MAP_HEIGHT = 40;
 export const TILE_SIZE = 128;
 
 
 const Map1 = [];
 
-// Sand över hela mappen
+// Gräs över hela mappen
 for (let row = 0; row < MAP_HEIGHT; row++) {
     Map1[row] = [];
     for (let col = 0; col < MAP_WIDTH; col++) {
         Map1[row][col] = {
-            ground: SpriteList.Sand1,
+            ground: SpriteList.gras1,
             behind: null,
             infront: null,
         };
     }
 }
 
-// Gräs övre delen
-for (let row = 0; row < 90; row++) {
-    for (let col = 0; col < MAP_WIDTH; col++) {
-        Map1[row][col].ground = SpriteList.Dottgras1;
+// Kullersten vägar -
+for (let row = 18; row < 22; row++) {
+    for (let col = 2; col < 38; col++) {
+        Map1[row][col].ground = SpriteList.Kullersten1;
+    }
+}
+for (let row = 35; row < 37; row++) {
+    for (let col = 6; col < 18; col++) {
+        Map1[row][col].ground = SpriteList.Kullersten1;
+    }
+}
+for (let row = 2; row < 5; row++) {
+    for (let col = 3; col < 22; col++) {
+        Map1[row][col].ground = SpriteList.Kullersten1;
+    }
+}
+// Kullersten väg |
+for (let row = 2; row < 37; row++) {
+    for (let col = 18; col < 22; col++) {
+        Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
 
-// Kullersten vägar
-for (let row = 15; row < 18; row++) {
-    for (let col = 15; col < 100; col++) {
-        Map1[row][col].ground = SpriteList.Kullersten1;
-    }
-}
-    
-for (let row = 18; row < 100; row++) {
-    // Första | vägen
-    for (let col = 50; col < 53; col++) {
-        Map1[row][col].ground = SpriteList.Kullersten1;
-    }
-    // Andra | vägen
-    for (let col = 65; col < 68; col++) {
-        Map1[row][col].ground = SpriteList.Kullersten1;
-    }
-}
-    // Nedre vägen ----
-for (let row = 59; row < 62; row++) {
-    for (let col = 4; col < 100; col++) {
-        Map1[row][col].ground = SpriteList.Kullersten1;
-    }
-}
+
 
 // Hus
     //Prefab hus funktion
@@ -129,23 +147,31 @@ for (let row = 59; row < 62; row++) {
             } 
         };
     }
+// Hus
+PlaceStandardHouse(Map1, 7, 13, Houses.StandardHouse)
+PlaceStandardHouse(Map1, 13, 25, Houses.StandardHouse)
+PlaceStandardHouse(Map1, 21, 13, Houses.StandardHouse)
+PlaceStandardHouse(Map1, 30, 5, Houses.StandardHouse)
 
-const houseWidth = 5;
-const houseHeight = 5;
-const spacing = 0;
+//Morot
+PlaceStandardHouse(Map1, 26, 17, MorotFaltMed)
+PlaceStandardHouse(Map1, 26, 16, MorotFaltMed)
+PlaceStandardHouse(Map1, 26, 14, MorotFaltMed)
+PlaceStandardHouse(Map1, 26, 13, MorotFaltMed)
 
-// Hus på rad/column
-for (let col = 25; col < 50; col += houseWidth + spacing) {
-    for (let row = 10; row < 15; row += houseHeight + spacing) {
-        PlaceStandardHouse(Map1, row, col, Houses.StandardHouse);
-    }
-    for (let row = 54; row < 59; row += houseHeight + spacing) {
-        PlaceStandardHouse(Map1, row, col, Houses.StandardHouse);
-    }
+// Water
+for (let row = 35; row < 40; row++) {
+    for (let col = 0; col < 5; col++) {
+        Map1[row][col].ground = SpriteList.Water1;
+    } 
 }
 
-// Dirt med månbit
-Map1[19][25].behind = InteractableSprites.DirtWithMoon;
+// Quest interactable thingys
+Map1[5][16].behind = InteractableSprites.DirtWithMoon;
+Map1[14][13].behind = InteractableSprites.BlaBlomma;
+Map1[13][8].behind = InteractableSprites.RodBlomma;
+Map1[11][2].behind = InteractableSprites.VitBlomma;
+
 
 
 console.log(Map1);
