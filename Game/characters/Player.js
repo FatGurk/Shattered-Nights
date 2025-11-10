@@ -143,6 +143,7 @@ export class Player extends Character {
         let dx = 0
         let dy = 0
 
+        // Movement
         if (keys["ArrowUp"] || keys["w"]|| keys["W"]) { 
             dy -= speed; 
             this.facing = "up"; 
@@ -160,9 +161,11 @@ export class Player extends Character {
             this.facing = "right"; 
         }
 
+        //Colition för tiles
         const willHitTileX = this.Collision(this.x + dx, this.y, this.moveHitbox().width, this.moveHitbox().height);
         const willHitTileY = this.Collision(this.x, this.y + dy, this.moveHitbox().width, this.moveHitbox().height);
 
+        // Colition för npc
         let willHitNpcX = false, willHitNpcY = false;
 
         for (const npc of CharacterList) {
