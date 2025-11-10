@@ -2,11 +2,13 @@ import { Character } from "./SuperClass.js";
 import { Npc } from "./Npc.js";
 import { CharacterList } from "../ObjectLists.js";
 import { ctx } from "../CanvasCtx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites} from "../Map/Map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields} from "../Map/Map.js";
 import { Camera } from "../Camera.js";
 const keys = {};
 
 export let equippedItem1 = "Spade";
+export let equippedItem2 = "";
+export let equippedItem3 = ""
 export let canInteract = true;
 
 export class Player extends Character {
@@ -104,7 +106,7 @@ export class Player extends Character {
             }
         }
 
-        // Interact med tiles
+        // Interact med Dirt With Moon
         for (let row = 0; row < MAP_HEIGHT; row++) {
             for (let col = 0; col < MAP_WIDTH; col++) {
                 const tile = Map1[row][col].behind;
@@ -124,6 +126,34 @@ export class Player extends Character {
                             console.log("You dug the dirt!");
                         }
                     }
+                }
+            }
+        }
+        // Interact med morofält
+        for (const falt of CarrotFields) {
+            const tileRectangle = {
+                x: falt.startCol * TILE_SIZE,
+                y: falt.startRow * TILE_SIZE,
+                width: TILE_SIZE,
+                height: TILE_SIZE
+            };
+
+            if (rectOverlap(this.intHitbox(), tileRectangle)) {
+                // Plantera
+                if (!falt.planted && equippedItem1 === "spade") {
+                    falt.planted = true;
+                    falt.growTimer = 0;
+                    falt.fullyGrown = false;
+                    console.log("Planterat morot");
+                    PlaceStandardHouse(Map1, field.startRow, field.startCol, MorotFaltMed)
+                }
+                // Harvesta
+                if (falt.planted && falt.fullyGrown && equippedItem1 === "spade") {
+                    falt.planted = false;
+                    falt.growTimer = 0;
+                    falt.fullyGrown = false;
+                    console.log("Tog morot");
+                    PlaceStandardHouse(Map1, field.startRow, field.startCol, MorotFaltUtan)
                 }
             }
         }

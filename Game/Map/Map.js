@@ -86,6 +86,13 @@ export const MorotFaltUtan = [
     [InteractableSprites.MorotUtan3]
 ];
 
+export const CarrotFields = [
+    { startRow: 26, startCol: 17, planted: false, growthTimer: 0, fullyGrown: false },
+    { startRow: 26, startCol: 16, planted: false, growthTimer: 0, fullyGrown: false },
+    { startRow: 26, startCol: 14, planted: false, growthTimer: 0, fullyGrown: false },
+    { startRow: 26, startCol: 13, planted: false, growthTimer: 0, fullyGrown: false },
+];
+
 export const MAP_WIDTH = 40;
 export const MAP_HEIGHT = 40;
 export const TILE_SIZE = 128;
@@ -154,10 +161,9 @@ PlaceStandardHouse(Map1, 21, 13, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 30, 5, Houses.StandardHouse)
 
 //Morot
-PlaceStandardHouse(Map1, 26, 17, MorotFaltMed)
-PlaceStandardHouse(Map1, 26, 16, MorotFaltMed)
-PlaceStandardHouse(Map1, 26, 14, MorotFaltMed)
-PlaceStandardHouse(Map1, 26, 13, MorotFaltMed)
+for (const falt of CarrotFields) {
+    PlaceStandardHouse(Map1, falt.startRow, falt.startCol, MorotFaltUtan);
+}
 
 // Water
 for (let row = 35; row < 40; row++) {

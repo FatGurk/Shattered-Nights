@@ -35,8 +35,6 @@ export class Npc extends Character {
 
     onInteract() {
         this.talking = true;
-
-
     }
 
     draw(ctx, CameraMan) {
