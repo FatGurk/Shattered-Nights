@@ -1,13 +1,13 @@
 // Scene
-import { Scene } from "./MenuToGame/MenuButtons.js";
+import { Scene } from "./menutogame/menubuttons.js";
 // World
-import { CarrotFields, drawMap, MorotFaltUtan, MorotFaltMed, PlaceStandardHouse, Map1, PlacePlot } from "./Map/Map.js";
+import { CarrotFields, drawMap, MorotFaltUtan, MorotFaltMed, PlaceStandardHouse, Map1, PlacePlot } from "./map/map.js";
 // Skit från ObjectLists
-import { CharacterList, MenuButtonList, CameraMan } from "./ObjectLists.js";
+import { CharacterList, MenuButtonList, CameraMan } from "./objectlists.js";
 // Title screen
-import { DrawMenuScreen } from "./MenuToGame/Screen.js";
+import { DrawMenuScreen } from "./menutogame/screen.js";
 
-import { Canvas, ctx } from "./CanvasCtx.js";
+import { Canvas, ctx } from "./canvasctx.js";
 
 export let player;
 

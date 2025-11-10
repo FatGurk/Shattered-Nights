@@ -1,10 +1,12 @@
-import { Character } from "./SuperClass.js";
-import { Npc } from "./Npc.js";
-import { CharacterList, questList } from "../ObjectLists.js";
-import { ctx } from "../CanvasCtx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../Map/Map.js";
-import { Camera } from "../Camera.js";
+import { Character } from "./superclass.js";
+import { Npc } from "./npc.js";
+import { CharacterList, questList } from "../objectlists.js";
+import { ctx } from "../canvasctx.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../map/map.js";
+import { Camera } from "../camera.js";
 const keys = {};
+
+let ActiveQuests = quetsList[0];
 
 export let equippedItem1 = "Spade";
 export let equippedItem2 = "";
