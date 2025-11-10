@@ -1,7 +1,7 @@
 // Scene
 import { Scene } from "./MenuToGame/MenuButtons.js";
 // World
-import { drawMap, MAP_HEIGHT, MAP_WIDTH, TILE_SIZE } from "./Map/Map.js";
+import { drawMap } from "./Map/Map.js";
 // Skit från ObjectLists
 import { CharacterList, MenuButtonList, CameraMan } from "./ObjectLists.js";
 // Title screen
@@ -37,9 +37,6 @@ function MenuScene() {
 function GameScene() {
     const player = CharacterList[0];
     CameraMan.follow(player);
-
-    const WORLD_HEIGHT = MAP_HEIGHT * TILE_SIZE
-    const WORLD_WIDTH = MAP_WIDTH * TILE_SIZE
     
     //Ground och behind tiles
     drawMap(ctx, CameraMan, "ground");
@@ -54,6 +51,10 @@ function GameScene() {
 
     //Infront tiles
     drawMap(ctx, CameraMan, "infront");
+
+    CharacterList.forEach(e => {
+        if (e.talking && e.sentence) e.drawBubble(ctx);
+    });
 }
 
 function gameLoop() {

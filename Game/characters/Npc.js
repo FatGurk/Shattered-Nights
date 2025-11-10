@@ -1,4 +1,10 @@
-import { Character } from "./SuperClass.js";
+import { Character } from "./SuperClass.js"
+
+import { ctx } from "../CanvasCtx.js"
+
+const TalkBubble = new Image()
+TalkBubble.src = "./Game/Pictures/Interact/TalkBubble.png"
+
 export class Npc extends Character {
     constructor(x, y, name, imgSrc, sentence, talking) {
         super(x, y, name, imgSrc);
@@ -35,9 +41,23 @@ export class Npc extends Character {
 
     draw(ctx, CameraMan) {
         ctx.drawImage(this.img, this.x - CameraMan.x, this.y - CameraMan.y);
+    }
 
+    drawBubble() {
         if (this.talking && this.sentence) {
+            // Rita bubblan
+            const bubbleWidth = 600;
+            const bubbleHeight = 400;
+            const bubbleX = ctx.canvas.width - bubbleWidth;
+            const bubbleY = ctx.canvas.height - bubbleHeight;
+
+            ctx.drawImage(TalkBubble, bubbleX, bubbleY, bubbleWidth, bubbleHeight);
             
+            // Rita(skriv) ut texten aka sentence
+            ctx.font = "20px Arial";
+            ctx.fillStyle = "White";
+            ctx.textBaseline = "middle";
+            ctx.fillText(this.sentence, bubbleX + 50, bubbleY + bubbleHeight / 2);
         }
     }
 }
