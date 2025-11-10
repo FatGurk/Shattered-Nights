@@ -93,6 +93,14 @@ export const MorotFaltUtan = [
     [InteractableSprites.MorotUtan2],
     [InteractableSprites.MorotUtan3]
 ];
+
+export const CarrotFields = [
+    { startRow: 26, startCol: 17, planted: false, growthTimer: 0, fullyGrown: false },
+    { startRow: 26, startCol: 16, planted: false, growthTimer: 0, fullyGrown: false },
+    { startRow: 26, startCol: 14, planted: false, growthTimer: 0, fullyGrown: false },
+    { startRow: 26, startCol: 13, planted: false, growthTimer: 0, fullyGrown: false },
+];
+
 export const RedPillar1 = [
     [InteractableSprites.colorless2],
     [InteractableSprites.colorless1],
@@ -115,6 +123,7 @@ export const pillar = [
     [InteractableSprites.redcolorless]
 
 ]
+
 export const MAP_WIDTH = 40;
 export const MAP_HEIGHT = 40;
 export const TILE_SIZE = 128;
@@ -176,6 +185,19 @@ for (let row = 2; row < 37; row++) {
             } 
         };
     }
+        
+    //Prefab för morot
+    export function PlacePlot(map, StartRow, StartCol, tileBehind) {
+        for (let row = 0; row < tileBehind.length; row++) {
+            for (let col = 0; col < tileBehind[row].length; col++) {
+                const tile = tileBehind[row][col];
+                if (!tile) continue; // skip empty tiles
+                
+                // Ritar tile baserat på lager
+                map[StartRow + row][StartCol + col].behind = tile;
+            } 
+        };
+    }
 // Hus
 PlaceStandardHouse(Map1, 7, 13, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 13, 25, Houses.StandardHouse)
@@ -183,10 +205,9 @@ PlaceStandardHouse(Map1, 21, 13, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 30, 5, Houses.StandardHouse)
 
 //Morot
-PlaceStandardHouse(Map1, 26, 17, MorotFaltMed)
-PlaceStandardHouse(Map1, 26, 16, MorotFaltMed)
-PlaceStandardHouse(Map1, 26, 14, MorotFaltMed)
-PlaceStandardHouse(Map1, 26, 13, MorotFaltMed)
+for (const falt of CarrotFields) {
+    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan);
+}
 
 // Water
 for (let row = 35; row < 40; row++) {

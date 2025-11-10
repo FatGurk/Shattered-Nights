@@ -1,7 +1,7 @@
 // Scene
 import { Scene } from "./MenuToGame/MenuButtons.js";
 // World
-import { drawMap } from "./Map/Map.js";
+import { CarrotFields, drawMap, MorotFaltUtan, MorotFaltMed, PlaceStandardHouse, Map1, PlacePlot } from "./Map/Map.js";
 // Skit från ObjectLists
 import { CharacterList, MenuButtonList, CameraMan } from "./ObjectLists.js";
 // Title screen
@@ -37,6 +37,18 @@ function MenuScene() {
 function GameScene() {
     const player = CharacterList[0];
     CameraMan.follow(player);
+
+    // Timer/growthchecker för morot
+    for (const falt of CarrotFields) {
+        if (!falt.planted) continue;
+
+        let growTimer = falt.growthTimer += 1/2;
+
+        if (falt.growthTimer >= growTimer && !falt.fullyGrown) {
+            PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed)
+            falt.fullyGrown = true;
+        }
+    }
     
     //Ground och behind tiles
     drawMap(ctx, CameraMan, "ground");
