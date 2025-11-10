@@ -2,7 +2,7 @@ import { Character } from "./SuperClass.js";
 import { Npc } from "./Npc.js";
 import { CharacterList } from "../ObjectLists.js";
 import { ctx } from "../CanvasCtx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields} from "../Map/Map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlaceStandardHouse} from "../Map/Map.js";
 import { Camera } from "../Camera.js";
 const keys = {};
 
@@ -140,20 +140,20 @@ export class Player extends Character {
 
             if (rectOverlap(this.intHitbox(), tileRectangle)) {
                 // Plantera
-                if (!falt.planted && equippedItem1 === "spade") {
+                if (!falt.planted && equippedItem1 === "Spade") {
                     falt.planted = true;
-                    falt.growTimer = 0;
+                    falt.growthTimer = 0;
                     falt.fullyGrown = false;
                     console.log("Planterat morot");
-                    PlaceStandardHouse(Map1, field.startRow, field.startCol, MorotFaltMed)
+                    PlaceStandardHouse(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
                 }
                 // Harvesta
-                if (falt.planted && falt.fullyGrown && equippedItem1 === "spade") {
+                if (falt.planted && falt.fullyGrown && equippedItem1 === "Spade") {
                     falt.planted = false;
-                    falt.growTimer = 0;
+                    falt.growthTimer = 0;
                     falt.fullyGrown = false;
                     console.log("Tog morot");
-                    PlaceStandardHouse(Map1, field.startRow, field.startCol, MorotFaltUtan)
+                    PlaceStandardHouse(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
                 }
             }
         }

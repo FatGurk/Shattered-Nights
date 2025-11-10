@@ -1,7 +1,7 @@
 // Scene
 import { Scene } from "./MenuToGame/MenuButtons.js";
 // World
-import { CarrotFields, drawMap, MorotFaltUtan, PlaceStandardHouse } from "./Map/Map.js";
+import { CarrotFields, drawMap, MorotFaltUtan, MorotFaltMed, PlaceStandardHouse, Map1 } from "./Map/Map.js";
 // Skit från ObjectLists
 import { CharacterList, MenuButtonList, CameraMan } from "./ObjectLists.js";
 // Title screen
@@ -44,10 +44,8 @@ function GameScene() {
 
         falt.growthTimer += 1/60;
 
-        if (falt.growthTime < 60) { 
-            PlaceStandardHouse(Map1, field.startRow, field.startCol, MorotFaltUtan)
-        } else if (falt.growthTimer = 60) {
-            PlaceStandardHouse(Map1, field.startRow, field.startCol, MorotFaltMed)
+        if (falt.growthTimer >= 60 && !falt.fullyGrown) {
+            PlaceStandardHouse(Map1, falt.startRow, falt.startCol, MorotFaltMed)
             falt.fullyGrown = true;
         }
     }
