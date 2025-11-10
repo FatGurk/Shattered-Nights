@@ -1,7 +1,7 @@
 import { Character } from "./superclass.js";
 import { Npc } from "./npc.js";
 import { CharacterList } from "../objectlists.js";
-import { ctx } from "../canvasctx.js";
+import { ctx, Canvas } from "../canvasctx.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../map/map.js";
 import { Camera } from "../camera.js";
 const keys = {};
@@ -13,7 +13,7 @@ export let canInteract = true;
 
 
 const TalkBubble = new Image();
-TalkBubble.src = "./game/pictures/interact/talkbubble.png"
+TalkBubble.src = "./game/pictures/interact/ebutton.png"
 
 export class Player extends Character {
     constructor(x, y, name, imgscr) {
@@ -26,6 +26,7 @@ export class Player extends Character {
         }
         this.facing = "down";
         this.showBubble = false;
+        this.minigameOpen = false;
     }
 
     moveHitbox() {
@@ -164,6 +165,28 @@ export class Player extends Character {
             }
         }
 
+        for (let row = 0; row < MAP_HEIGHT; row++) {
+            for (let col = 0; col < MAP_WIDTH; col++) {
+                const tile = Map1[row][col].behind;
+                if (!tile) continue;
+
+                if (tile === InteractableSprites.redcolorless) {
+                    const tileRectangle = {
+                    x: col * TILE_SIZE,
+                    y: row * TILE_SIZE,
+                    width: TILE_SIZE,
+                    height: TILE_SIZE
+                    };
+
+                if (rectOverlap(this.intHitbox(), tileRectangle)) {
+                    this.minigameOpen = true;
+                    console.log("MINIGAME OPENED");
+                    return;
+                }
+            }
+        }
+    }
+
         function rectOverlap(a, b) {
             return (
                 a.x < b.x + b.width &&
@@ -268,18 +291,22 @@ export class Player extends Character {
     const img = this.pojk[this.facing];
     if (!img.complete) return;
 
-    // draw player
     ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
 
-    // draw talk bubble if active
     if (this.showBubble) {
         const bubbleWidth = 200;
         const bubbleHeight = 120;
         const bubbleX = (this.x - CameraMan.x) - 50;
         const bubbleY = (this.y - CameraMan.y) - 100;
-        ctx.drawImage(TalkBubble, bubbleX, bubbleY, bubbleWidth, bubbleHeight);
+        ctx.drawImage(TalkBubble, bubbleX + 40, bubbleY, 104, 80);
     }
+
+    if (this.minigameOpen) {
+
+    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillRect(Canvas.width/2-500, Canvas.height/2-400, Canvas.width/2, Canvas.height/2+300);
     }
+}
 }
 document.addEventListener("keydown", e => {
     keys[e.key] = true;
