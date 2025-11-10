@@ -6,6 +6,8 @@ import { acceptQuest, activeQuest } from "../ui/quest.js";
 const TalkBubble = new Image()
 TalkBubble.src = "./game/pictures/interact/talkbubble.png"
 
+//Kan inte merga
+
 export class Npc extends Character {
     constructor(x, y, name, imgSrc, sentence, quest) {
         super(x, y, name, imgSrc);
