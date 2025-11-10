@@ -9,6 +9,9 @@ import { DrawMenuScreen } from "./menutogame/screen.js";
 
 import { Canvas, ctx } from "./canvasctx.js";
 
+// Quest box
+import { activeQuest } from "./ui/quest.js";
+
 export let player;
 
 export function canvasResize() {
@@ -42,9 +45,9 @@ function GameScene() {
     for (const falt of CarrotFields) {
         if (!falt.planted) continue;
 
-        let growTimer = falt.growthTimer += 1/2;
+        falt.growthTimer += 1/60;
 
-        if (falt.growthTimer >= growTimer && !falt.fullyGrown) {
+        if (falt.growthTimer >= 60 && !falt.fullyGrown) {
             PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed)
             falt.fullyGrown = true;
         }
@@ -67,6 +70,10 @@ function GameScene() {
     CharacterList.forEach(e => {
         if (e.talking && e.sentence) e.drawBubble(ctx);
     });
+
+    if (activeQuest) {
+        activeQuest.drawQuestBox(ctx);
+    }
 }
 
 function gameLoop() {

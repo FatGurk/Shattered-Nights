@@ -14,36 +14,36 @@ export class Tile {
 export const SpriteList = {
 
     // Ground Tiles
-    gras1: new Tile("gras1", "./Game/Pictures/Tiles/gras.png", false),
-    Kullersten1: new Tile("Kullersten1", "./Game/Pictures/Tiles/Kullersten1.png", false),
-    Water1: new Tile("Water1", "./Game/Pictures/Tiles/Water.png", true),
+    gras1: new Tile("gras1", "./game/pictures/tiles/gras.png", false),
+    Kullersten1: new Tile("Kullersten1", "./game/pictures/tiles/kullersten1.png", false),
+    Water1: new Tile("Water1", "./game/pictures/tiles/water.png", true),
 
     //House Tiles
-    StandardHouse1: new Tile("StandardHouse1", "./Game/Pictures/House/standard1.png", false),
-    StandardHouse2: new Tile("StandardHouse2", "./Game/Pictures/House/standard2.png", false),
-    StandardHouse3: new Tile("StandardHouse3", "./Game/Pictures/House/standard3.png", false),
-    StandardHouse4: new Tile("StandardHouse4", "./Game/Pictures/House/standard4.png", false),
-    StandardHouse5: new Tile("StandardHouse5", "./Game/Pictures/House/standard5.png", false),
-    StandardHouse6: new Tile("StandardHouse6", "./Game/Pictures/House/standard6.png", true),
-    StandardHouse7: new Tile("StandardHouse7", "./Game/Pictures/House/standard7.png", true),
-    StandardHouse8: new Tile("StandardHouse8", "./Game/Pictures/House/standard8.png", true),
-    StandardHouse9: new Tile("StandardHouse9", "./Game/Pictures/House/standard9.png", true),
-    StandardHouse10: new Tile("StandardHouse10", "./Game/Pictures/House/standard10.png", true),
-    StandardHouse11: new Tile("StandardHouse11", "./Game/Pictures/House/standard11.png", true),
-    StandardHouse12: new Tile("StandardHouse12", "./Game/Pictures/House/standard12.png", true),
-    StandardHouse13: new Tile("StandardHouse13", "./Game/Pictures/House/standard13.png", true),
-    StandardHouse14: new Tile("StandardHouse14", "./Game/Pictures/House/standard14.png", true),
-    StandardHouse15: new Tile("StandardHouse15", "./Game/Pictures/House/standard15.png", true),
-    StandardHouse16: new Tile("StandardHouse16", "./Game/Pictures/House/standard16.png", true),
-    StandardHouse17: new Tile("StandardHouse17", "./Game/Pictures/House/standard17.png", true),
-    StandardHouse18: new Tile("StandardHouse18", "./Game/Pictures/House/standard18.png", true),
-    StandardHouse19: new Tile("StandardHouse19", "./Game/Pictures/House/standard19.png", true),
-    StandardHouse20: new Tile("StandardHouse20", "./Game/Pictures/House/standard20.png", true),
-    StandardHouse21: new Tile("StandardHouse21", "./Game/Pictures/House/standard21.png", false),
-    StandardHouse22: new Tile("StandardHouse22", "./Game/Pictures/House/standard22.png", false),
-    StandardHouse23: new Tile("StandardHouse23", "./Game/Pictures/House/standard23.png", false),
-    StandardHouse24: new Tile("StandardHouse24", "./Game/Pictures/House/standard24.png", false),
-    StandardHouse25: new Tile("StandardHouse25", "./Game/Pictures/House/standard25.png", false),
+    StandardHouse1: new Tile("StandardHouse1", "./game/pictures/House/standard1.png", false),
+    StandardHouse2: new Tile("StandardHouse2", "./game/pictures/House/standard2.png", false),
+    StandardHouse3: new Tile("StandardHouse3", "./game/pictures/House/standard3.png", false),
+    StandardHouse4: new Tile("StandardHouse4", "./game/pictures/House/standard4.png", false),
+    StandardHouse5: new Tile("StandardHouse5", "./game/pictures/House/standard5.png", false),
+    StandardHouse6: new Tile("StandardHouse6", "./game/pictures/House/standard6.png", true),
+    StandardHouse7: new Tile("StandardHouse7", "./game/pictures/House/standard7.png", true),
+    StandardHouse8: new Tile("StandardHouse8", "./game/pictures/House/standard8.png", true),
+    StandardHouse9: new Tile("StandardHouse9", "./game/pictures/House/standard9.png", true),
+    StandardHouse10: new Tile("StandardHouse10", "./game/pictures/House/standard10.png", true),
+    StandardHouse11: new Tile("StandardHouse11", "./game/pictures/House/standard11.png", true),
+    StandardHouse12: new Tile("StandardHouse12", "./game/pictures/House/standard12.png", true),
+    StandardHouse13: new Tile("StandardHouse13", "./game/pictures/House/standard13.png", true),
+    StandardHouse14: new Tile("StandardHouse14", "./game/pictures/House/standard14.png", true),
+    StandardHouse15: new Tile("StandardHouse15", "./game/pictures/House/standard15.png", true),
+    StandardHouse16: new Tile("StandardHouse16", "./game/pictures/House/standard16.png", true),
+    StandardHouse17: new Tile("StandardHouse17", "./game/pictures/House/standard17.png", true),
+    StandardHouse18: new Tile("StandardHouse18", "./game/pictures/House/standard18.png", true),
+    StandardHouse19: new Tile("StandardHouse19", "./game/pictures/House/standard19.png", true),
+    StandardHouse20: new Tile("StandardHouse20", "./game/pictures/House/standard20.png", true),
+    StandardHouse21: new Tile("StandardHouse21", "./game/pictures/House/standard21.png", false),
+    StandardHouse22: new Tile("StandardHouse22", "./game/pictures/House/standard22.png", false),
+    StandardHouse23: new Tile("StandardHouse23", "./game/pictures/House/standard23.png", false),
+    StandardHouse24: new Tile("StandardHouse24", "./game/pictures/House/standard24.png", false),
+    StandardHouse25: new Tile("StandardHouse25", "./game/pictures/House/standard25.png", false),
 }
 
 export const Houses = {
@@ -58,28 +58,28 @@ export const Houses = {
 
 export const InteractableSprites = {
     // Dirt Tile
-    DirtWithMoon: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Dirtwithmoon.png", true),
+    DirtWithMoon: new Tile("DirtWithMoon1", "./game/pictures/interact/dirtwithmoon.png", true),
 
     // Morot
-    MorotMed1: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/fullplottupp.png", true),
-    MorotMed2: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/fullcenterplott.png", true),
-    MorotMed3: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/fullplottbotten.png", true),
+    MorotMed1: new Tile("DirtWithMoon1", "./game/pictures/interact/fullplottupp.png", true),
+    MorotMed2: new Tile("DirtWithMoon1", "./game/pictures/interact/fullcenterplott.png", true),
+    MorotMed3: new Tile("DirtWithMoon1", "./game/pictures/interact/fullplottbotten.png", true),
 
-    MorotUtan1: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/tomplottupp.png", true),
-    MorotUtan2: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/tomcenterplott.png", true),
-    MorotUtan3: new Tile("DirtWithMoon1", "./Game/Pictures/Interact/tomplottbotten.png", true),
+    MorotUtan1: new Tile("DirtWithMoon1", "./game/pictures/interact/tomplottupp.png", true),
+    MorotUtan2: new Tile("DirtWithMoon1", "./game/pictures/interact/tomcenterplott.png", true),
+    MorotUtan3: new Tile("DirtWithMoon1", "./game/pictures/interact/tomplottbotten.png", true),
 
     // Blommor
-    RodBlomma:  new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Rodblomma.png", false),
-    BlaBlomma:  new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Blablomma.png", false),
-    VitBlomma:   new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Vitblomma.png", false),
+    RodBlomma:  new Tile("DirtWithMoon1", "./game/pictures/interact/rodblomma.png", false),
+    BlaBlomma:  new Tile("DirtWithMoon1", "./game/pictures/interact/blablomma.png", false),
+    VitBlomma:   new Tile("DirtWithMoon1", "./game/pictures/interact/vitblomma.png", false),
 
     // puzzel2
-    redcolorless: new Tile("redcolorlessbase", "./Game/Pictures/Puzzle/NoColor/31f.png", true),
-    bluecolorless: new Tile("bluecolorlessbase", "./Game/Pictures/Puzzle/NoColor/32f.png", true),
-    yellowcolorless: new Tile("yellowcolorlessbase", "./Game/Pictures/Puzzle/NoColor/33f.png", true),
-    colorless1: new Tile("colorless1", "./Game/Pictures/Puzzle/NoColor/2f.png", false),
-    colorless2: new Tile("colorless2", "./Game/Pictures/Puzzle/NoColor/1f.png", false),
+    redcolorless: new Tile("redcolorlessbase", "./game/pictures/puzzle/nocolor/31f.png", true),
+    bluecolorless: new Tile("bluecolorlessbase", "./game/pictures/puzzle/nocolor/32f.png", true),
+    yellowcolorless: new Tile("yellowcolorlessbase", "./game/pictures/puzzle/nocolor/33f.png", true),
+    colorless1: new Tile("colorless1", "./game/pictures/puzzle/nocolor/2f.png", false),
+    colorless2: new Tile("colorless2", "./game/pictures/puzzle/nocolor/1f.png", false),
 
 }
 
@@ -121,7 +121,6 @@ export const pillar = [
     [InteractableSprites.yellowcolorless],
     [InteractableSprites.bluecolorless],
     [InteractableSprites.redcolorless]
-
 ]
 
 export const MAP_WIDTH = 40;

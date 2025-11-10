@@ -1,37 +1,51 @@
-import { questList } from "../objectlists";
+export let activeQuest = null; 
+
+export function acceptQuest(quest) {
+    activeQuest = quest;
+}
 
 export class Quest {
     constructor(questTitle, description, completed = false, reward) {
         this.questTitle = questTitle
         this.description = description;
         this.completed = completed;
-        this.rewrd = reward
+        this.reward = reward
     }
 
-    drawQuestBox() {
-        if () {
-            // Rita bubblan
-            const bubbleWidth = 600;
-            const bubbleHeight = 300;
-            const bubbleX = ctx.canvas.width - bubbleWidth;
-            const bubbleY = ctx.canvas.height - bubbleHeight;
+    drawQuestBox(ctx) {
+        if (!activeQuest) return;
+        // Ritaboxen
+        const boxWidth = 400;
+        const boxHeight = 200;
+        const boxX = ctx.canvas.width - boxWidth - 10;
+        const boxY = 10;
 
-            ctx.drawImage(TalkBubble, bubbleX, bubbleY, bubbleWidth, bubbleHeight);
-            
-            // Rita(skriv) ut texten aka sentence
-            ctx.font = "24px 'Copperplate gotich bold', regular";
-            ctx.fillStyle = "White";
-            ctx.textBaseline = "top";
-            
-            const lines = this.sentence.split("\n");
-            const lineHeight = 40;
-            const textX =  bubbleX + 50;
-            const textY = bubbleY + 50;
+         // Draw box background
+        ctx.fillStyle = "rgba(159, 17, 142, 0.7)";
+        ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
 
-            // Rad för rad
-            lines.forEach((line, i) => {
-                ctx.fillText(line, textX, textY + i * lineHeight);
-            });
-        }
+        // Draw border
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+        
+        // Rita(skriv) ut texten aka sentence
+        ctx.font = "24px 'Copperplate Gothic', sans-serif";
+        ctx.fillStyle = "white";
+        ctx.textBaseline = "top";
+        // Titel
+        const titleX = boxX + 16;
+        const titleY = boxY + 12;
+        ctx.fillText(this.questTitle, titleX, titleY);
+            
+        const lines = this.description.split("\n");
+        const lineHeight = 40;
+        const textX =  boxX + 16;
+        const textY = boxY + 48;
+
+        // Rad för rad
+        lines.forEach((line, i) => {
+            ctx.fillText(line, textX, textY + i * lineHeight);
+        });
     }
 }

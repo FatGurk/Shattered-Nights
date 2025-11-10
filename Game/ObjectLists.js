@@ -12,8 +12,14 @@ Canvas.height = window.innerHeight;
 
 export const CameraMan = new Camera(0, 0, 800, 600);
 
-export const menuButtonList = [
-    new playbutton(Canvas.width / 2, Canvas.height / 2, "./game/pictures/menu/Newgame.png")
+export const MenuButtonList = [
+    new playbutton(Canvas.width / 2, Canvas.height / 2, "./game/pictures/menu/newgame.png")
+]
+
+export const questList = [
+    new Quest("Get all the moon pices", "Mabye the villagers could help you find some of them.", "moonPice"),
+    new Quest("Help Anton with carrots", "Grow carrots for Anton to \nget his key.", "moonPice"),
+    new Quest("Give flowers to Mad Scientist Gw", "Help Sten with finding flowers and give them to Mad Scientist Gw"),
 ]
 
 export const CharacterList = [
@@ -26,12 +32,6 @@ export const CharacterList = [
     new Npc(3000,1800, "Mad scientist GW", "./game/pictures/characters/gw.png", "Jag heta GW"),
     new Npc (9 * TILE_SIZE, 0.5 * TILE_SIZE, "Sten Med Spade","./game/pictures/characters/stenspade.png", "Jag heta Sten"),
     new Npc(6 * TILE_SIZE, 33.5 * TILE_SIZE, "Stefan", "./game/pictures/characters/stefan.png", "Jag heta Stefan"),
-    new Npc(14 * TILE_SIZE, 28.5 * TILE_SIZE, "Anton", "./game/pictures/characters/anton.png", "Hello, my rabbit have eaten the key to my house. \nI need to give him carrots so he can shit the key out. \nCan you grow some carrots for me? I lost my spade."),
+    new Npc(14 * TILE_SIZE, 28.5 * TILE_SIZE, "Anton", "./game/pictures/characters/anton.png", "Hello, my rabbit have eaten the key to my house. \nI need to give him carrots so he can shit the key out. \nCan you grow some carrots for me? I lost my spade.", questList[1]),
 
-]
-
-export const questList = [
-    new Quest("Get all the moon pices", "Mabye the villagers could help you find some of them."),
-    new Quest("Help Anton with carrots", "Grow carrots for Anton to get his key."),
-    new Quest("Give flowers to Mad Scientist Gw", "Help Sten with finding flowers and give them to Mad Scientist Gw"),
 ]
