@@ -2,7 +2,7 @@ import { Character } from "./SuperClass.js";
 import { Npc } from "./Npc.js";
 import { CharacterList, questList } from "../ObjectLists.js";
 import { ctx } from "../CanvasCtx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../Map/Map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot, RedPillar1} from "../Map/Map.js";
 import { Camera } from "../Camera.js";
 const keys = {};
 
@@ -10,6 +10,10 @@ export let equippedItem1 = "Spade";
 export let equippedItem2 = "";
 export let equippedItem3 = ""
 export let canInteract = true;
+
+
+const TalkBubble = new Image();
+TalkBubble.src = "./Game/Pictures/Interact/TalkBubble.png"
 
 export class Player extends Character {
     constructor(x, y, name, imgscr) {
@@ -21,6 +25,7 @@ export class Player extends Character {
             this.pojk[dir] = img;
         }
         this.facing = "down";
+        this.showBubble = false;
     }
 
     moveHitbox() {
@@ -61,7 +66,7 @@ export class Player extends Character {
         }
         return false;
     }
-    
+
     // Collision
     NpcCollision(other) {
         if (!other) return false;
@@ -129,6 +134,7 @@ export class Player extends Character {
                 }
             }
         }
+
         // Interact med morofält
         for (const falt of CarrotFields) {
             const tileRectangle = {
@@ -232,12 +238,47 @@ export class Player extends Character {
                 npc.talking = false;
             }
         }
+
+        for (let row = 0; row < MAP_HEIGHT; row++) {
+            for (let col = 0; col < MAP_WIDTH; col++) {
+                const tile = Map1[row][col].behind;
+                if (!tile) continue;
+
+                if (tile === InteractableSprites.redcolorless) {
+                    const tileRectangle = {
+                        x: col * TILE_SIZE,
+                        y: row * TILE_SIZE,
+                        width: TILE_SIZE,
+                        height: TILE_SIZE
+                    };
+
+                if (rectOverlap(this.intHitbox(), tileRectangle)) {
+                    console.log("Player interacts with tile:", tile.type);
+                    this.showBubble = true;
+                    }
+                else 
+                    this.showBubble = false;
+                
+                }
+            }
+        }
     } 
 
     draw(ctx, CameraMan) {
-        const img = this.pojk[this.facing];
-        if (!img.complete) return;
-        ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
+    const img = this.pojk[this.facing];
+    if (!img.complete) return;
+
+    // draw player
+    ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
+
+    // draw talk bubble if active
+    if (this.showBubble) {
+        const bubbleWidth = 200;
+        const bubbleHeight = 120;
+        const bubbleX = (this.x - CameraMan.x) - 50;
+        const bubbleY = (this.y - CameraMan.y) - 100;
+        ctx.drawImage(TalkBubble, bubbleX, bubbleY, bubbleWidth, bubbleHeight);
+    }
     }
 }
 document.addEventListener("keydown", e => {
