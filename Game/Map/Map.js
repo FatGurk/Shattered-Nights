@@ -73,6 +73,14 @@ export const InteractableSprites = {
     RodBlomma:  new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Rodblomma.png", false),
     BlaBlomma:  new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Blablomma.png", false),
     VitBlomma:   new Tile("DirtWithMoon1", "./Game/Pictures/Interact/Vitblomma.png", false),
+
+    // puzzel2
+    redcolorless: new Tile("redcolorlessbase", "./Game/Pictures/Puzzle/NoColor/31f.png", true),
+    bluecolorless: new Tile("bluecolorlessbase", "./Game/Pictures/Puzzle/NoColor/32f.png", true),
+    yellowcolorless: new Tile("yellowcolorlessbase", "./Game/Pictures/Puzzle/NoColor/33f.png", true),
+    colorless1: new Tile("colorless1", "./Game/Pictures/Puzzle/NoColor/2f.png", false),
+    colorless2: new Tile("colorless2", "./Game/Pictures/Puzzle/NoColor/1f.png", false),
+
 }
 
 export const MorotFaltMed = [
@@ -92,6 +100,29 @@ export const CarrotFields = [
     { startRow: 26, startCol: 14, planted: false, growthTimer: 0, fullyGrown: false },
     { startRow: 26, startCol: 13, planted: false, growthTimer: 0, fullyGrown: false },
 ];
+
+export const RedPillar1 = [
+    [InteractableSprites.colorless2],
+    [InteractableSprites.colorless1],
+    [InteractableSprites.redcolorless]
+]
+export const BluePillar2 = [
+    [InteractableSprites.colorless2],
+    [InteractableSprites.colorless1],
+    [InteractableSprites.bluecolorless]
+]
+export const YellowPillar3 = [
+    [InteractableSprites.colorless2],
+    [InteractableSprites.colorless1],
+    [InteractableSprites.yellowcolorless]
+]
+
+export const pillar = [
+    [InteractableSprites.yellowcolorless],
+    [InteractableSprites.bluecolorless],
+    [InteractableSprites.redcolorless]
+
+]
 
 export const MAP_WIDTH = 40;
 export const MAP_HEIGHT = 40;
@@ -192,6 +223,10 @@ Map1[13][8].behind = InteractableSprites.RodBlomma;
 Map1[11][2].behind = InteractableSprites.VitBlomma;
 
 
+// Andra pyssel
+PlaceStandardHouse(Map1, 10, 30, RedPillar1);
+PlaceStandardHouse(Map1, 20, 30, BluePillar2);
+PlaceStandardHouse(Map1, 30, 30, YellowPillar3);
 
 console.log(Map1);
 
