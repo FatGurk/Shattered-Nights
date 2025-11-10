@@ -1,17 +1,21 @@
 import { Character } from "./superclass.js"
 
 import { ctx } from "../canvasctx.js"
+import { acceptQuest, activeQuest } from "../ui/quest.js";
 
 const TalkBubble = new Image()
 TalkBubble.src = "./game/pictures/interact/talkbubble.png"
 
+//Kan inte merga
+
 export class Npc extends Character {
-    constructor(x, y, name, imgSrc, sentence, talking) {
+    constructor(x, y, name, imgSrc, sentence, quest) {
         super(x, y, name, imgSrc);
         this.sentence = sentence;
         this.talking = false;
         const img = new Image();
-        img.src = imgSrc
+        img.src = imgSrc;
+        this.quest = quest
     }
 
     
@@ -35,6 +39,11 @@ export class Npc extends Character {
 
     onInteract() {
         this.talking = true;
+
+        if (this.quest || !this.quest.completed || activeQuest !== this.quest) {
+            acceptQuest(this.quest);
+            console.log(`Quest accepted: ${this.quest.questTitle}`)
+        }
     }
 
     draw(ctx, CameraMan) {

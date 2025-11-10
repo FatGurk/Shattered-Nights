@@ -1,8 +1,8 @@
 import { Character } from "./superclass.js";
 import { Npc } from "./npc.js";
-import { CharacterList, questList } from "../objectLists.js";
+import { CharacterList } from "../objectlists.js";
 import { ctx } from "../canvasctx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, interactableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../map/map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../map/map.js";
 import { Camera } from "../camera.js";
 const keys = {};
 

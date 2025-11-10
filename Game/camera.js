@@ -1,4 +1,4 @@
-import { MAP_WIDTH, MAP_HEIGHT, TILE_SIZE } from './Map/Map.js';
+import { MAP_WIDTH, MAP_HEIGHT, TILE_SIZE } from './map/map.js';
 export class Camera {
     constructor(x, y, width, height) {
         this.x = x;
