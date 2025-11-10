@@ -154,6 +154,19 @@ for (let row = 2; row < 37; row++) {
             } 
         };
     }
+        
+    //Prefab för morot
+    export function PlacePlot(map, StartRow, StartCol, tileBehind) {
+        for (let row = 0; row < tileBehind.length; row++) {
+            for (let col = 0; col < tileBehind[row].length; col++) {
+                const tile = tileBehind[row][col];
+                if (!tile) continue; // skip empty tiles
+                
+                // Ritar tile baserat på lager
+                map[StartRow + row][StartCol + col].behind = tile;
+            } 
+        };
+    }
 // Hus
 PlaceStandardHouse(Map1, 7, 13, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 13, 25, Houses.StandardHouse)
@@ -162,7 +175,7 @@ PlaceStandardHouse(Map1, 30, 5, Houses.StandardHouse)
 
 //Morot
 for (const falt of CarrotFields) {
-    PlaceStandardHouse(Map1, falt.startRow, falt.startCol, MorotFaltUtan);
+    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan);
 }
 
 // Water

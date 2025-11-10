@@ -45,14 +45,14 @@ export class Npc extends Character {
         if (this.talking && this.sentence) {
             // Rita bubblan
             const bubbleWidth = 600;
-            const bubbleHeight = 400;
+            const bubbleHeight = 300;
             const bubbleX = ctx.canvas.width - bubbleWidth;
             const bubbleY = ctx.canvas.height - bubbleHeight;
 
             ctx.drawImage(TalkBubble, bubbleX, bubbleY, bubbleWidth, bubbleHeight);
             
             // Rita(skriv) ut texten aka sentence
-            ctx.font = "20px Arial";
+            ctx.font = "20px Copperplate gotich bold regular";
             ctx.fillStyle = "White";
             ctx.textBaseline = "middle";
             ctx.fillText(this.sentence, bubbleX + 50, bubbleY + bubbleHeight / 2);

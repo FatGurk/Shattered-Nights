@@ -25,6 +25,6 @@ export const CharacterList = [
     new Npc(3000,1800, "Mad scientist GW", "./Game/Pictures/Characters/GW.png", "Jag heta GW"),
     new Npc (9 * TILE_SIZE, 0.5 * TILE_SIZE, "Sten Med Spade","./Game/Pictures/Characters/StenSpade.png", "Jag heta Sten"),
     new Npc(6 * TILE_SIZE, 33.5 * TILE_SIZE, "Stefan", "./Game/Pictures/Characters/Stefan.png", "Jag heta Stefan"),
-    new Npc(15 * TILE_SIZE, 24.5 * TILE_SIZE, "Anton", "./Game/Pictures/Characters/Anton.png", "Jag heta Anton"),
+    new Npc(14 * TILE_SIZE, 28.5 * TILE_SIZE, "Anton", "./Game/Pictures/Characters/Anton.png", "Hello, my rabbit have eaten the key to my house. I need to give him carrots so he can shit the key out. Can you grow some carrots for me. I lost my spade?"),
 
 ]
