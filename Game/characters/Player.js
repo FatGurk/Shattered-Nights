@@ -65,13 +65,13 @@ export class Player extends Character {
         if (!other) return false;
 
         const playerCenter = {
-            x: this.x + 64,  // half of 128 width
-            y: this.y + 64   // half of 128 height
+            x: this.x + 64,
+            y: this.y + 64
         };
 
-        const npcBox = other.hitbox(); // full NPC hitbox
+        const npcBox = other.hitbox(); // npc hitbox
 
-        // Check if player center is inside NPC hitbox
+        // Kolla player i npc
         return (
             playerCenter.x >= npcBox.x &&
             playerCenter.x <= npcBox.x + npcBox.width &&
@@ -81,18 +81,30 @@ export class Player extends Character {
     }
 
     interact() {
-            for (const npc of CharacterList) {
+
+        let TalkingTo = false;
+
+        // Interact med npcs
+        for (const npc of CharacterList) {
             if (npc === this) continue;
 
             const playerBox = this.intHitbox();
             const npcBox = npc.intHitbox();
 
             if (rectOverlap(playerBox, npcBox)) {
+
+                npc.talking = true;
+                TalkingTo = true;
+
                 console.log(`Du pratar med ${npc.name}`);
                 if (typeof npc.onInteract === "function") npc.onInteract();
+            } else {
+                // Remove bubble om utanför intArea
+                npc.talking = false;
             }
         }
 
+        // Interact med tiles
         for (let row = 0; row < MAP_HEIGHT; row++) {
             for (let col = 0; col < MAP_WIDTH; col++) {
                 const tile = Map1[row][col].behind;
@@ -131,6 +143,7 @@ export class Player extends Character {
         let dx = 0
         let dy = 0
 
+        // Movement
         if (keys["ArrowUp"] || keys["w"]|| keys["W"]) { 
             dy -= speed; 
             this.facing = "up"; 
@@ -148,9 +161,11 @@ export class Player extends Character {
             this.facing = "right"; 
         }
 
+        //Colition för tiles
         const willHitTileX = this.Collision(this.x + dx, this.y, this.moveHitbox().width, this.moveHitbox().height);
         const willHitTileY = this.Collision(this.x, this.y + dy, this.moveHitbox().width, this.moveHitbox().height);
 
+        // Colition för npc
         let willHitNpcX = false, willHitNpcY = false;
 
         for (const npc of CharacterList) {
@@ -174,6 +189,18 @@ export class Player extends Character {
                 a.y < b.y + b.height &&
                 a.y + a.height > b.y
             );
+        }
+
+        // Kollar ifall om spelare är brevid npc eller om talkbubble ska försvinna 
+        for (const npc of CharacterList) {
+            if (npc === this) continue;
+
+            const playerBox = this.intHitbox();
+            const npcBox = npc.intHitbox();
+
+            if (!rectOverlap(playerBox, npcBox)) {
+                npc.talking = false;
+            }
         }
     } 
 
