@@ -38,9 +38,6 @@ export class Npc extends Character {
     onInteract() {
         this.talking = true;
 
-        // Debug: log when onInteract is invoked and current quest state
-        console.log("Npc.onInteract() ->", this.name, "quest:", this.quest, "activeQuest:", activeQuest);
-
         if (this.quest || !this.quest.completed || activeQuest !== this.quest) {
             acceptQuest(this.quest);
             console.log(`Quest accepted: ${this.quest.questTitle}`)
