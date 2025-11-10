@@ -1,9 +1,9 @@
-import { Character } from "./SuperClass.js"
+import { Character } from "./superclass.js"
 
-import { ctx } from "../CanvasCtx.js"
+import { ctx } from "../canvasctx.js"
 
 const TalkBubble = new Image()
-TalkBubble.src = "./Game/Pictures/Interact/TalkBubble.png"
+TalkBubble.src = "./game/pictures/interact/talkbubble.png"
 
 export class Npc extends Character {
     constructor(x, y, name, imgSrc, sentence, talking) {

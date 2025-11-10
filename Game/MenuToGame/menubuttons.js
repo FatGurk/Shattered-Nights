@@ -1,5 +1,5 @@
 export let Scene = { value: "Menu" };
-import { Canvas } from "../CanvasCtx.js";
+import { Canvas } from "../canvasctx.js";
 
 class Button {
     constructor(centerX, centerY, imgSrc) {
