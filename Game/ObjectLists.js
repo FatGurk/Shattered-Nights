@@ -28,3 +28,9 @@ export const CharacterList = [
     new Npc(14 * TILE_SIZE, 28.5 * TILE_SIZE, "Anton", "./Game/Pictures/Characters/Anton.png", "Hello, my rabbit have eaten the key to my house. \nI need to give him carrots so he can shit the key out. \nCan you grow some carrots for me. I lost my spade?"),
 
 ]
+
+export const questList = {
+    AntonQuest: false,
+    StefanQuest: false,
+    StenGw: false,
+}

@@ -1,6 +1,6 @@
 import { Character } from "./SuperClass.js";
 import { Npc } from "./Npc.js";
-import { CharacterList } from "../ObjectLists.js";
+import { CharacterList, questList } from "../ObjectLists.js";
 import { ctx } from "../CanvasCtx.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../Map/Map.js";
 import { Camera } from "../Camera.js";
