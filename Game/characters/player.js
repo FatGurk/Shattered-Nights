@@ -298,8 +298,6 @@ export class Player extends Character {
     ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
 
     if (this.showBubble) {
-        const bubbleWidth = 200;
-        const bubbleHeight = 120;
         const bubbleX = (this.x - CameraMan.x) - 50;
         const bubbleY = (this.y - CameraMan.y) - 100;
         ctx.drawImage(TalkBubble, bubbleX + 40, bubbleY, 104, 80);
