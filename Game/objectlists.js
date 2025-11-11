@@ -17,10 +17,10 @@ export const MenuButtonList = [
 ]
 
 export const questList = [
-    new Quest("Get all the moon pices", "Mabye the villagers could help you find some of them.", "gamefinish"),
-    new Quest("Help Anton with carrots", "Grow carrots for Anton to \nget his key.", "MoonPice"),
-    new Quest("Get Flowers", "Help Sten with finding \nflowers and give them to \nMad Scientist Gw.", "MoonPice"),
-    new Quest("Fishing bait for Stefan", "Help Stefan with getting some fishing bait.", "MoonPice"),
+    new Quest("Get all the moon pices", "Mabye the villagers could help you find some of them.", null),
+    new Quest("Help Anton with carrots", "Grow carrots for Anton to \nget his key.", "MoonPice1"),
+    new Quest("Get Flowers", "Help Sten with finding \nflowers and give them to \nMad Scientist Gw.", "MoonPice2"),
+    new Quest("Fishing bait for Stefan", "Help Stefan with getting some fishing bait.", "MoonPice3"),
 ]
 
 export const CharacterList = [

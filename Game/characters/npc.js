@@ -2,7 +2,8 @@ import { Character } from "./superclass.js"
 
 import { ctx } from "../canvasctx.js"
 import { acceptQuest, activeQuest } from "../ui/quest.js";
-import { inventory } from "./player.js";
+import { inventory, Player } from "./player.js";
+import { CharacterList } from "../objectlists.js";
 
 const TalkBubble = new Image()
 TalkBubble.src = "./game/pictures/interact/talkbubble.png"
@@ -76,6 +77,13 @@ export class Npc extends Character {
                 inventory[slot] = "";
                 this.quest.completed = true;
                 console.log(`Quest completed: ${this.quest.questTitle}`);
+
+                // Ge moonPice för quest
+                if (this.quest.reward) {
+                    const player = CharacterList.find(p => p instanceof Player);
+                    player.moonPices += 1;
+                    console.log(player.moonPices)
+                }
 
                 // tabort quest ifrån activeQuest
                 const index = activeQuest.indexOf(this.quest);
