@@ -4,6 +4,7 @@ import { CharacterList } from "../objectlists.js";
 import { ctx, Canvas } from "../canvasctx.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
 import { Camera } from "../camera.js";
+import { sounds } from "../sounds.js";
 
 const keys = {};
 
@@ -32,6 +33,7 @@ export class Player extends Character {
         this.minigameOpen = false;
         this.moonPices = 0;
         this.countBlomma = 0;
+        this.CorrectGuesses = 0;
     }
 
     moveHitbox() {
@@ -143,10 +145,17 @@ export class Player extends Character {
                             this.moonPices += 1;
                             Map1[row][col].behind = null;
                             console.log(this.moonPices)
+
+                            // Spela upp ljudet
+                            sounds.aquieredMoonPice.play()
+
+                            // Trigger world event aka byta state
                             livingState = true;
-                            triggerFirstStage(() =>{
-                                console.log("Du kan nu farma jorden")
-                            })
+                            setTimeout(() => {
+                                triggerFirstStage(() =>{
+                                    console.log("Du kan nu farma jorden")
+                                })
+                            }, 2000);
                         }
                     }
                 }
@@ -330,6 +339,7 @@ export class Player extends Character {
             }
         }
 
+        // Visa E runt ett object
         this.showBubble = false;
         for (let row = 0; row < MAP_HEIGHT; row++) {
             for (let col = 0; col < MAP_WIDTH; col++) {
@@ -338,7 +348,18 @@ export class Player extends Character {
 
                 if (tile === InteractableSprites.redcolorless || 
                     tile === InteractableSprites.bluecolorless || 
-                    tile === InteractableSprites.yellowcolorless) {
+                    tile === InteractableSprites.yellowcolorless ||
+                    tile === InteractableSprites.MorotUtan1 ||
+                    tile === InteractableSprites.MorotUtan2 ||
+                    tile === InteractableSprites.MorotUtan3 ||
+                    tile === InteractableSprites.MorotMed1 ||
+                    tile === InteractableSprites.MorotMed2 ||
+                    tile === InteractableSprites.MorotMed3 ||
+                    tile === InteractableSprites.DirtWithMoon ||
+                    tile === InteractableSprites.BlaBlomma ||
+                    tile === InteractableSprites.RodBlomma ||
+                    tile === InteractableSprites.VitBlomma
+                ) {
                     const tileRectangle = {
                         x: col * TILE_SIZE,
                         y: row * TILE_SIZE,
@@ -353,6 +374,18 @@ export class Player extends Character {
                 }
             }
             if (this.showBubble) break;
+            
+        }
+
+        // Visa E vid Npcs
+        if (!this.showBubble) {
+            for (const npc of CharacterList) {
+                if (npc === this) continue;
+                if (rectOverlap((this.intHitbox()), npc.intHitbox())) {
+                    this.showBubble = true;
+                    break;
+                }
+            }
         }
     } 
 
