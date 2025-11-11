@@ -2,7 +2,7 @@ import { Character } from "./superclass.js";
 import { Npc } from "./npc.js";
 import { CharacterList } from "../objectlists.js";
 import { ctx, Canvas } from "../canvasctx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../map/map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
 import { Camera } from "../camera.js";
 
 const keys = {};
@@ -13,7 +13,7 @@ export const inventory = {
     equippedItem3: "",
 }
 export let canInteract = true;
-
+export let livingState = false;
 
 const TalkBubble = new Image();
 TalkBubble.src = "./game/pictures/interact/ebutton.png"
@@ -30,7 +30,8 @@ export class Player extends Character {
         this.facing = "down";
         this.showBubble = false;
         this.minigameOpen = false;
-        this.moonPices = 0
+        this.moonPices = 0;
+        this.countBlomma = 0;
     }
 
     moveHitbox() {
@@ -92,6 +93,9 @@ export class Player extends Character {
         );
     }
 
+    //==========
+    // Interact
+    //==========
     interact() {
 
         let TalkingTo = false;
@@ -116,7 +120,9 @@ export class Player extends Character {
             }
         }
 
+        //============================
         // Interact med Dirt With Moon
+        //============================
         for (let row = 0; row < MAP_HEIGHT; row++) {
             for (let col = 0; col < MAP_WIDTH; col++) {
                 const tile = Map1[row][col].behind;
@@ -135,15 +141,55 @@ export class Player extends Character {
                         if (inventory.equippedItem1 === "Spade") {
                             console.log("You dug the dirt!");
                             this.moonPices += 1;
+                            Map1[row][col].behind = null;
                             console.log(this.moonPices)
+                            livingState = true;
+                            triggerFirstStage(() =>{
+                                console.log("Du kan nu farma jorden")
+                            })
                         }
                     }
                 }
             }
         }
 
+        //=====================
+        // Interact med blommor
+        //=====================
+        for (let row = 0; row < MAP_HEIGHT; row++) {
+            for (let col = 0; col < MAP_WIDTH; col++) {
+                const tile = Map1[row][col].behind;
+                if (!tile) continue;
+
+                const is = InteractableSprites;
+
+                if (tile === is.RodBlomma ||  tile === is.VitBlomma || tile === is.BlaBlomma) {
+                    const tileRectangle = {
+                        x: col * TILE_SIZE,
+                        y: row * TILE_SIZE,
+                        width: TILE_SIZE,
+                        height: TILE_SIZE
+                    };
+
+                    if (rectOverlap(this.intHitbox(), tileRectangle)) {
+                        console.log("Player interacts with tile:", tile.type);
+                        if (inventory.equippedItem1 === "Spade") {
+                            console.log("You dug up blomma!");
+                            this.countBlomma += 1;
+                            Map1[row][col].behind = null;
+                            console.log(this.countBlomma)
+                        }
+                    }
+                }
+            }
+        }
+
+        //=======================
         // Interact med morofält
+        //=======================
         for (const falt of CarrotFields) {
+            if (!livingState) continue
+
             const tileRectangle = {
                 x: falt.startCol * TILE_SIZE,
                 y: falt.startRow * TILE_SIZE,
