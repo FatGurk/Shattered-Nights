@@ -12,6 +12,8 @@ import { Canvas, ctx } from "./canvasctx.js";
 import { minigame1 } from "./ui/connectcolor.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
+import { minigame2 } from "./ui/connectcolormed.js";
+import { minigame3 } from "./ui/connectcolorhard.js";
 
 export function canvasResize() {
     Canvas.width = window.innerWidth;

@@ -34,7 +34,7 @@ export const minigame1 = {
     },
 
     activeColor: null,
-    onComplete: null, // Add callback function
+    onComplete: null,
 
     getCell(mx, my) {
         const x = mx - this.offsetX
@@ -60,11 +60,9 @@ export const minigame1 = {
         const path = this.paths[this.activeColor]
         const last = path[path.length - 1]
 
-        // must be adjacent
         const dist = Math.abs(cell.col - last.col) + Math.abs(cell.row - last.row)
         if (dist !== 1) return
 
-        // prevent drawing over existing paths
         for (const color in this.paths) {
             if (this.paths[color].some(p => p.row === cell.row && p.col === cell.col)) return
         }
@@ -77,7 +75,7 @@ export const minigame1 = {
         if (this.checkWin() == true) {
             console.log("PUZZLE COMPLETE!")
             if (this.onComplete) {
-                this.onComplete(); // Call the callback
+                this.onComplete();
             }
         }
     },
