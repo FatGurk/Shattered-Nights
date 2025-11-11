@@ -265,12 +265,15 @@ export class Player extends Character {
             }
         }
 
+        this.showBubble = false;
         for (let row = 0; row < MAP_HEIGHT; row++) {
             for (let col = 0; col < MAP_WIDTH; col++) {
                 const tile = Map1[row][col].behind;
                 if (!tile) continue;
 
-                if (tile === InteractableSprites.redcolorless) {
+                if (tile === InteractableSprites.redcolorless || 
+                    tile === InteractableSprites.bluecolorless || 
+                    tile === InteractableSprites.yellowcolorless) {
                     const tileRectangle = {
                         x: col * TILE_SIZE,
                         y: row * TILE_SIZE,
@@ -278,13 +281,13 @@ export class Player extends Character {
                         height: TILE_SIZE
                     };
 
-                if (rectOverlap(this.intHitbox(), tileRectangle))
+                if (rectOverlap(this.intHitbox(), tileRectangle)) {
                     this.showBubble = true
-                else 
-                    this.showBubble = false
-                
+                    break
+                }
                 }
             }
+            if (this.showBubble) break;
         }
     } 
 
