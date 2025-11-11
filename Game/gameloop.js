@@ -8,11 +8,10 @@ import { CharacterList, MenuButtonList, CameraMan } from "./objectlists.js";
 import { DrawMenuScreen } from "./menutogame/screen.js";
 
 import { Canvas, ctx } from "./canvasctx.js";
-
+// mini game
+import { minigame1 } from "./ui/connectcolor.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
-
-export let player;
 
 export function canvasResize() {
     Canvas.width = window.innerWidth;
@@ -28,6 +27,9 @@ export function canvasResize() {
 
 canvasResize();
 
+export let player;
+let mouseDown = false;
+
 function MenuScene() {
     DrawMenuScreen();
 
@@ -38,7 +40,7 @@ function MenuScene() {
 
 
 function GameScene() {
-    const player = CharacterList[0];
+    player = CharacterList[0];
     CameraMan.follow(player);
 
     // Timer/growthchecker för morot
@@ -74,6 +76,9 @@ function GameScene() {
     if (activeQuest) {
         activeQuest.drawQuestBox(ctx);
     }
+
+    if (player.minigameOpen) 
+        minigame1.draw(ctx);
 }
 
 function gameLoop() {
@@ -87,3 +92,17 @@ function gameLoop() {
 gameLoop();
 
 window.addEventListener("resize", canvasResize);
+
+Canvas.addEventListener("mousedown", (e)=>{
+    const cell = minigame1.getCell(e.offsetX, e.offsetY);
+    if (cell) minigame1.startDrag(cell);
+});
+
+Canvas.addEventListener("mousemove", (e)=>{
+    const cell = minigame1.getCell(e.offsetX, e.offsetY);
+    if (cell) minigame1.drag(cell);
+});
+
+Canvas.addEventListener("mouseup", ()=>{
+    minigame1.endDrag();
+});

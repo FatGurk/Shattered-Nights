@@ -4,6 +4,7 @@ import { CharacterList } from "../objectlists.js";
 import { ctx, Canvas } from "../canvasctx.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot} from "../map/map.js";
 import { Camera } from "../camera.js";
+
 const keys = {};
 
 export let equippedItem1 = "Spade";
@@ -180,7 +181,6 @@ export class Player extends Character {
 
                 if (rectOverlap(this.intHitbox(), tileRectangle)) {
                     this.minigameOpen = true;
-                    console.log("MINIGAME OPENED");
                     return;
                 }
             }
@@ -198,6 +198,9 @@ export class Player extends Character {
     }
 
     update() {
+        if (this.minigameOpen) 
+            return;
+    
         const speed = 20;
         let dx = 0
         let dy = 0
@@ -275,12 +278,10 @@ export class Player extends Character {
                         height: TILE_SIZE
                     };
 
-                if (rectOverlap(this.intHitbox(), tileRectangle)) {
-                    console.log("Player interacts with tile:", tile.type);
-                    this.showBubble = true;
-                    }
+                if (rectOverlap(this.intHitbox(), tileRectangle))
+                    this.showBubble = true
                 else 
-                    this.showBubble = false;
+                    this.showBubble = false
                 
                 }
             }
@@ -301,13 +302,9 @@ export class Player extends Character {
         ctx.drawImage(TalkBubble, bubbleX + 40, bubbleY, 104, 80);
     }
 
-    if (this.minigameOpen) {
-
-    ctx.fillStyle = "rgb(0,0,0)";
-    ctx.fillRect(Canvas.width/2-500, Canvas.height/2-400, Canvas.width/2, Canvas.height/2+300);
     }
 }
-}
+
 document.addEventListener("keydown", e => {
     keys[e.key] = true;
 
