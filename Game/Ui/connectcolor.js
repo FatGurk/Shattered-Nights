@@ -90,9 +90,9 @@ export const minigame1 = {
 
         const connects =
             (first.row === start.row && first.col === start.col &&
-             last.row === end.row && last.col === end.col) ||
+            last.row === end.row && last.col === end.col) ||
             (first.row === end.row && first.col === end.col &&
-             last.row === start.row && last.col === start.col)
+            last.row === start.row && last.col === start.col)
 
         if (!connects) return false
     }

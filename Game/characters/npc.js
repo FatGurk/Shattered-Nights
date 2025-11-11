@@ -2,20 +2,21 @@ import { Character } from "./superclass.js"
 
 import { ctx } from "../canvasctx.js"
 import { acceptQuest, activeQuest } from "../ui/quest.js";
+import { inventory } from "./player.js";
 
 const TalkBubble = new Image()
 TalkBubble.src = "./game/pictures/interact/talkbubble.png"
 
-//Kan inte merga
-
 export class Npc extends Character {
-    constructor(x, y, name, imgSrc, sentence, quest) {
+    constructor(x, y, name, imgSrc, sentence, quest = null, itemtogive = null, itemrequired = null) {
         super(x, y, name, imgSrc);
         this.sentence = sentence;
         this.talking = false;
         const img = new Image();
         img.src = imgSrc;
         this.quest = quest
+        this.itemtogive = itemtogive
+        this.itemrequired = itemrequired
     }
 
     
@@ -40,9 +41,47 @@ export class Npc extends Character {
     onInteract() {
         this.talking = true;
 
-        if (this.quest || !this.quest.completed || !activeQuest.includes(this.quest)) {
-            acceptQuest(this.quest);
-            console.log(`Quest accepted: ${this.quest.questTitle}`)
+        // Ta quest
+        if (this.quest && !this.quest.completed) {
+            const added = acceptQuest(this.quest);
+            if (added) {
+                console.log(`Quest accepted: ${this.quest.questTitle}`);
+            } else {
+                console.log(`Quest already active: ${this.quest.questTitle}`);
+            }
+        }
+
+        // Give item
+        if (this.itemtogive) {
+            if (!inventory.equippedItem1) {
+                inventory.equippedItem1 = this.itemtogive;
+                console.log(inventory.equippedItem1);
+            } else if (!inventory.equippedItem2) {
+                inventory.equippedItem2 = this.itemtogive;
+            } else if (!inventory.equippedItem3) {
+                inventory.equippedItem3 = this.itemtogive;
+            }
+
+            console.log(`${this.name} gave you a ${this.itemtogive}`);
+            this.itemtogive = null;
+        }
+
+        // Complete quests
+        if (this.quest && this.itemrequired) {
+            // inv check
+            const slot = ["equippedItem1", "equippedItem2", "equippedItem3"].find(s => inventory[s] === this.itemrequired);
+
+            if (slot) {
+                // tabort ifrån inv
+                inventory[slot] = "";
+                this.quest.completed = true;
+                console.log(`Quest completed: ${this.quest.questTitle}`);
+
+                // tabort quest ifrån activeQuest
+                const index = activeQuest.indexOf(this.quest);
+                // Splice kan ändra i arrays, man lär sig något med GameOn, jippi(index, hur många saker som ska bort)
+                if (index >- 1) activeQuest.splice(index, 1);
+            }
         }
     }
 

@@ -73,11 +73,9 @@ function GameScene() {
         if (e.talking && e.sentence) e.drawBubble(ctx);
     });
 
-    //Visa quests
+    //Visa quests (draw once — Quest.drawQuestBox reads the shared activeQuest array)
     if (activeQuest.length > 0) {
-        activeQuest.forEach((quest, id) => {
-            quest.drawQuestBox(ctx);
-        });
+        activeQuest[0].drawQuestBox(ctx);
     }
     // Pussel minigame
     if (player.minigameOpen) 
