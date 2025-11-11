@@ -57,8 +57,8 @@ export const Houses = {
 }
 
 export const InteractableSprites = {
-    // Dirt Tile
-    DirtWithMoon: new Tile("DirtWithMoon1", "./game/pictures/interact/dirtwithmoon.png", true),
+    // Dirt W moon
+    DirtWithMoon: new Tile("DirtWithMoon1", "./game/pictures/interact/manbitar/manbitmarkgras.png", true),
 
     // Morot
     MorotMed1: new Tile("DirtWithMoon1", "./game/pictures/interact/fullplottupp.png", true),
