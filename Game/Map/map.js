@@ -158,8 +158,8 @@ for (let row = 18; row < 22; row++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
-for (let row = 35; row < 37; row++) {
-    for (let col = 6; col < 18; col++) {
+for (let row = 31; row < 33; row++) {
+    for (let col = 22; col < 39; col++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
@@ -169,7 +169,7 @@ for (let row = 2; row < 5; row++) {
     }
 }
 // Kullersten väg |
-for (let row = 2; row < 37; row++) {
+for (let row = 2; row < 33; row++) {
     for (let col = 18; col < 22; col++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
     }
@@ -209,7 +209,7 @@ for (let row = 2; row < 37; row++) {
 PlaceStandardHouse(Map1, 7, 13, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 13, 25, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 21, 13, Houses.StandardHouse)
-PlaceStandardHouse(Map1, 30, 5, Houses.StandardHouse)
+PlaceStandardHouse(Map1, 26, 34, Houses.StandardHouse)
 
 //Morot
 for (const falt of CarrotFields) {
@@ -217,8 +217,8 @@ for (const falt of CarrotFields) {
 }
 
 // Water
-for (let row = 35; row < 40; row++) {
-    for (let col = 0; col < 5; col++) {
+for (let row = 37; row < 40; row++) {
+    for (let col = 0; col < 40; col++) {
         Map1[row][col].ground = SpriteList.Water1;
     } 
 }
@@ -247,7 +247,7 @@ export function triggerFirstStage(callback) {
     fadeAlpha = 0;
     fadeCallback = callback;
 
-    const fadeDuration = 2000;
+    const fadeDuration = 1000;
     const fadeSteps = 16 / fadeDuration;
 
     const fadeInterval = setInterval(() => {

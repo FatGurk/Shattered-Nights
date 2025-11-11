@@ -4,22 +4,42 @@ import { ctx } from "../canvasctx.js"
 import { acceptQuest, activeQuest } from "../ui/quest.js";
 import { inventory, Player } from "./player.js";
 import { CharacterList } from "../objectlists.js";
+import { sounds } from "../sounds.js";
 
 const TalkBubble = new Image()
 TalkBubble.src = "./game/pictures/interact/talkbubble.png"
 
 export class Npc extends Character {
-    constructor(x, y, name, imgSrc, sentence, quest = null, itemtogive = null, itemrequired = null) {
+    constructor(x, y, name, imgSrc, sentenceBefore, sentenceAfter = null, quest = null, itemtogive = null, itemrequired = null) {
         super(x, y, name, imgSrc);
-        this.sentence = sentence;
         this.talking = false;
         const img = new Image();
         img.src = imgSrc;
-        this.quest = quest
-        this.itemtogive = itemtogive
-        this.itemrequired = itemrequired
+        this.sentenceBefore = sentenceBefore;
+        this.sentenceAfter = sentenceAfter;
+        this.quest = quest;
+        this.itemtogive = itemtogive;
+        this.itemrequired = itemrequired;
     }
 
+    // Konvo beronde på quest gjord eller inte
+    getKonvo() {
+        if (this.quest) {
+            let hasRequired = false;
+            if (typeof this.itemrequired === "function") {
+                const player = CharacterList.find(p => p instanceof Player);
+                hasRequired = this.itemrequired(player);
+            } else if (this.itemrequired) {
+                const slot = ["equippedItem1","equippedItem2","equippedItem3"].find(s => inventory[s] === this.itemrequired);
+                hasRequired = !!slot;
+            }
+
+            if (this.quest.completed || hasRequired) {
+                return this.sentenceAfter || this.sentenceBefore;
+            }
+        }
+        return this.sentenceBefore;
+    }
     
     moveHitbox() {
         return {
@@ -32,15 +52,50 @@ export class Npc extends Character {
 
     intHitbox() {
         return {
-            x: this.x - 30,
-            y: this.y -50, 
-            width: 188,
-            height: 336
+            x: this.x - 70,
+            y: this.y - 100, 
+            width: 338,
+            height: 486
         }
     }
 
     onInteract() {
         this.talking = true;
+        const player = CharacterList.find(p => p instanceof Player)
+
+        // La speciale el Stefano
+        
+
+        // Kolla efter requierments
+        if (this.quest && this.itemrequired) {
+            let hasRequired = false;
+
+            if (typeof this.itemrequired === "function") {
+                hasRequired = this.itemrequired(player);
+            } else {
+                // inv check
+                const slot = ["equippedItem1", "equippedItem2", "equippedItem3"].find(s => inventory[s] === this.itemrequired);
+                hasRequired = !!slot;
+                if (hasRequired) {
+                    //töm inv slot
+                    inventory[slot] = "";
+                }
+            }
+
+            if (hasRequired) {
+                this.quest.completed = true;
+                console.log(`Quest completed: ${this.quest.questTitle}`);
+
+                if (this.quest.reward) {
+                    player.moonPices += 1;
+                    sounds.aquieredMoonPice.play();
+                    console.log(player.moonPices);
+                }
+
+                const index = activeQuest.indexOf(this.quest);
+                if (index > -1) activeQuest.splice(index, 1);
+            }
+        }
 
         // Ta quest
         if (this.quest && !this.quest.completed) {
@@ -67,30 +122,8 @@ export class Npc extends Character {
             this.itemtogive = null;
         }
 
-        // Complete quests
-        if (this.quest && this.itemrequired) {
-            // inv check
-            const slot = ["equippedItem1", "equippedItem2", "equippedItem3"].find(s => inventory[s] === this.itemrequired);
-
-            if (slot) {
-                // tabort ifrån inv
-                inventory[slot] = "";
-                this.quest.completed = true;
-                console.log(`Quest completed: ${this.quest.questTitle}`);
-
-                // Ge moonPice för quest
-                if (this.quest.reward) {
-                    const player = CharacterList.find(p => p instanceof Player);
-                    player.moonPices += 1;
-                    console.log(player.moonPices)
-                }
-
-                // tabort quest ifrån activeQuest
-                const index = activeQuest.indexOf(this.quest);
-                // Splice kan ändra i arrays, man lär sig något med GameOn, jippi(index, hur många saker som ska bort)
-                if (index >- 1) activeQuest.splice(index, 1);
-            }
-        }
+        // Få efter complition text om quest var klar
+        this.sentence = this.getKonvo()
     }
 
     draw(ctx, CameraMan) {
