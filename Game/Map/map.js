@@ -14,6 +14,7 @@ export class Tile {
 export const SpriteList = {
 
     // Ground Tiles
+    DottGras1: new Tile("gras1", "./game/pictures/tiles/dottgras.png", false),
     gras1: new Tile("gras1", "./game/pictures/tiles/gras.png", false),
     Kullersten1: new Tile("Kullersten1", "./game/pictures/tiles/kullersten1.png", false),
     Water1: new Tile("Water1", "./game/pictures/tiles/water.png", true),
@@ -58,21 +59,25 @@ export const Houses = {
 
 export const InteractableSprites = {
     // Dirt W moon
-    DirtWithMoon: new Tile("DirtWithMoon1", "./game/pictures/interact/manbitar/manbitmarkgras.png", true),
+    DirtWithMoon: new Tile("DirtWithMoon1", "./game/pictures/interact/manbitar/manbitmarkdottgras.png", true),
 
     // Morot
-    MorotMed1: new Tile("DirtWithMoon1", "./game/pictures/interact/fullplottupp.png", true),
-    MorotMed2: new Tile("DirtWithMoon1", "./game/pictures/interact/fullcenterplott.png", true),
-    MorotMed3: new Tile("DirtWithMoon1", "./game/pictures/interact/fullplottbotten.png", true),
+    MorotMed1: new Tile("MorotMed1", "./game/pictures/interact/fullplottupp.png", true),
+    MorotMed2: new Tile("MorotMed2", "./game/pictures/interact/fullcenterplott.png", true),
+    MorotMed3: new Tile("MorotMed3", "./game/pictures/interact/fullplottbotten.png", true),
 
-    MorotUtan1: new Tile("DirtWithMoon1", "./game/pictures/interact/tomplottupp.png", true),
-    MorotUtan2: new Tile("DirtWithMoon1", "./game/pictures/interact/tomcenterplott.png", true),
-    MorotUtan3: new Tile("DirtWithMoon1", "./game/pictures/interact/tomplottbotten.png", true),
+    MorotUtan1: new Tile("MorotUtan1", "./game/pictures/interact/tomplottupp.png", true),
+    MorotUtan2: new Tile("MorotUtan2", "./game/pictures/interact/tomcenterplott.png", true),
+    MorotUtan3: new Tile("MorotUtan3", "./game/pictures/interact/tomplottbotten.png", true),
+
+    DottMorotUtan1: new Tile("DottMorotUtan1", "./game/pictures/interact/dottmorotplatstopp.png", true),
+    DottMorotUtan2: new Tile("DottMorotUtan2", "./game/pictures/interact/dottmorotplatscentrum.png", true),
+    DottMorotUtan3: new Tile("DottMorotUtan3", "./game/pictures/interact/dottmorotplatsbotten.png", true),
 
     // Blommor
-    RodBlomma:  new Tile("DirtWithMoon1", "./game/pictures/interact/rodblomma.png", false),
-    BlaBlomma:  new Tile("DirtWithMoon1", "./game/pictures/interact/blablomma.png", false),
-    VitBlomma:   new Tile("DirtWithMoon1", "./game/pictures/interact/vitblomma.png", false),
+    RodBlomma:  new Tile("RodBlomma", "./game/pictures/interact/rodblomma.png", false),
+    BlaBlomma:  new Tile("BlaBlomma", "./game/pictures/interact/blablomma.png", false),
+    VitBlomma:   new Tile("VitBlomma", "./game/pictures/interact/vitblomma.png", false),
 
     // puzzel2
     redcolorless: new Tile("redcolorlessbase", "./game/pictures/puzzle/nocolor/31f.png", true),
@@ -92,6 +97,11 @@ export const MorotFaltUtan = [
     [InteractableSprites.MorotUtan1],
     [InteractableSprites.MorotUtan2],
     [InteractableSprites.MorotUtan3]
+];
+export const DottMorotFaltUtan = [
+    [InteractableSprites.DottMorotUtan1],
+    [InteractableSprites.DottMorotUtan2],
+    [InteractableSprites.DottMorotUtan3]
 ];
 
 export const CarrotFields = [
@@ -135,7 +145,7 @@ for (let row = 0; row < MAP_HEIGHT; row++) {
     Map1[row] = [];
     for (let col = 0; col < MAP_WIDTH; col++) {
         Map1[row][col] = {
-            ground: SpriteList.gras1,
+            ground: SpriteList.DottGras1,
             behind: null,
             infront: null,
         };
@@ -165,8 +175,6 @@ for (let row = 2; row < 37; row++) {
     }
 }
 
-
-
 // Hus
     //Prefab hus funktion
     export function PlaceStandardHouse(map, StartRow, StartCol, House) {
@@ -190,7 +198,7 @@ for (let row = 2; row < 37; row++) {
         for (let row = 0; row < tileBehind.length; row++) {
             for (let col = 0; col < tileBehind[row].length; col++) {
                 const tile = tileBehind[row][col];
-                if (!tile) continue; // skip empty tiles
+                if (!tile) continue;
                 
                 // Ritar tile baserat på lager
                 map[StartRow + row][StartCol + col].behind = tile;
@@ -205,7 +213,7 @@ PlaceStandardHouse(Map1, 30, 5, Houses.StandardHouse)
 
 //Morot
 for (const falt of CarrotFields) {
-    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan);
+    PlacePlot(Map1, falt.startRow, falt.startCol, DottMorotFaltUtan);
 }
 
 // Water
@@ -217,15 +225,69 @@ for (let row = 35; row < 40; row++) {
 
 // Quest interactable thingys
 Map1[5][16].behind = InteractableSprites.DirtWithMoon;
-Map1[14][13].behind = InteractableSprites.BlaBlomma;
-Map1[13][8].behind = InteractableSprites.RodBlomma;
-Map1[11][2].behind = InteractableSprites.VitBlomma;
 
 
-// Andra pyssel
+// Andra pussel
 PlaceStandardHouse(Map1, 10, 30, RedPillar1);
 PlaceStandardHouse(Map1, 20, 30, BluePillar2);
 PlaceStandardHouse(Map1, 30, 30, YellowPillar3);
+
+// ==========================
+// Fade logic för FirstStage
+// ==========================
+
+let fadeAlpha = 0;
+let fading = false;
+let fadeCallback = null;
+
+export function triggerFirstStage(callback) {
+    if (fading) return;
+
+    fading = true;
+    fadeAlpha = 0;
+    fadeCallback = callback;
+
+    const fadeDuration = 2000;
+    const fadeSteps = 16 / fadeDuration;
+
+    const fadeInterval = setInterval(() => {
+        fadeAlpha += fadeSteps;
+
+        if (fadeAlpha >= 1) {
+            fadeAlpha = 1;
+
+            // Ändra gräset
+            for (let row = 0; row < MAP_HEIGHT; row++) {
+                for (let col = 0; col < MAP_WIDTH; col++) {
+                    if (Map1[row][col].ground === SpriteList.DottGras1) {
+                        Map1[row][col].ground = SpriteList.gras1;
+                    }
+                }
+            }
+
+            // Ändra MorotFällt
+            for (const falt of CarrotFields) {
+                PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan);
+            }
+
+            // Blommorna
+            Map1[14][13].behind = InteractableSprites.BlaBlomma;
+            Map1[13][8].behind = InteractableSprites.RodBlomma;
+            Map1[11][2].behind = InteractableSprites.VitBlomma;
+
+            //Fade tbaks
+            const fadeBackInterval = setInterval(() => {
+                fadeAlpha -= fadeSteps;
+                if (fadeAlpha <= 0) {
+                    fadeAlpha = 0;
+                    fading = false;
+                    clearInterval(fadeBackInterval);
+                }
+            }, 16);
+            clearInterval(fadeInterval);
+        }
+    }, 16);
+}
 
 console.log(Map1);
 
@@ -256,6 +318,11 @@ function drawMap(ctx, camera, layer = "base") {
                 tile.infront.draw(ctx, col, row, TILE_SIZE, camera);
             }
 
+            // Rita Fading
+            if (fading) {
+                ctx.fillStyle = `rgba(0,0,0,${fadeAlpha})`;
+                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            }
         }
     }
 }
