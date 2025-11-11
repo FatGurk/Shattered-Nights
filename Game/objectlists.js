@@ -25,10 +25,10 @@ export const questList = [
 
 export const CharacterList = [
     new Player(5 * TILE_SIZE, 3 * TILE_SIZE, "Simon", {
-        up: "./game/pictures/characters/pojkup.png",
-        down: "./game/pictures/characters/pojkdown.png",
-        left: "./game/pictures/characters/pojkleft.png",
-        right: "./game/pictures/characters/pojkright.png",
+        up: "./game/pictures/characters/player/pojkup.png",
+        down: "./game/pictures/characters/player/pojkdown.png",
+        left: "./game/pictures/characters/player/pojkleft.png",
+        right: "./game/pictures/characters/player/pojkright.png",
     }),
     new Npc(3000,1800, "Mad scientist GW", "./game/pictures/characters/gw.png", "Jag heta GW", null),
     new Npc (9 * TILE_SIZE, 0.5 * TILE_SIZE, "Sten Med Spade","./game/pictures/characters/stenspade.png", "Jag heta Sten", questList[2]),
