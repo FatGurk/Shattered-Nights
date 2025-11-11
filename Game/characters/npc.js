@@ -40,7 +40,7 @@ export class Npc extends Character {
     onInteract() {
         this.talking = true;
 
-        if (this.quest || !this.quest.completed || activeQuest !== this.quest) {
+        if (this.quest || !this.quest.completed || !activeQuest.includes(this.quest)) {
             acceptQuest(this.quest);
             console.log(`Quest accepted: ${this.quest.questTitle}`)
         }

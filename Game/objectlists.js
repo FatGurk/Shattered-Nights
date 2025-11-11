@@ -19,7 +19,8 @@ export const MenuButtonList = [
 export const questList = [
     new Quest("Get all the moon pices", "Mabye the villagers could help you find some of them.", "moonPice"),
     new Quest("Help Anton with carrots", "Grow carrots for Anton to \nget his key.", "moonPice"),
-    new Quest("Give flowers to Mad Scientist Gw", "Help Sten with finding flowers and give them to Mad Scientist Gw"),
+    new Quest("Get Flowers", "Help Sten with finding \nflowers and give them to \nMad Scientist Gw.", "MoonPice"),
+    new Quest("Fishing bait for Stefan", "Help Stefan with getting some fishing bait.", "MoonPice"),
 ]
 
 export const CharacterList = [
@@ -29,9 +30,9 @@ export const CharacterList = [
         left: "./game/pictures/characters/pojkleft.png",
         right: "./game/pictures/characters/pojkright.png",
     }),
-    new Npc(3000,1800, "Mad scientist GW", "./game/pictures/characters/gw.png", "Jag heta GW"),
-    new Npc (9 * TILE_SIZE, 0.5 * TILE_SIZE, "Sten Med Spade","./game/pictures/characters/stenspade.png", "Jag heta Sten"),
-    new Npc(6 * TILE_SIZE, 33.5 * TILE_SIZE, "Stefan", "./game/pictures/characters/stefan.png", "Jag heta Stefan"),
+    new Npc(3000,1800, "Mad scientist GW", "./game/pictures/characters/gw.png", "Jag heta GW", null),
+    new Npc (9 * TILE_SIZE, 0.5 * TILE_SIZE, "Sten Med Spade","./game/pictures/characters/stenspade.png", "Jag heta Sten", questList[2]),
+    new Npc(6 * TILE_SIZE, 33.5 * TILE_SIZE, "Stefan", "./game/pictures/characters/stefan.png", "Jag heta Stefan", questList[3]),
     new Npc(14 * TILE_SIZE, 28.5 * TILE_SIZE, "Anton", "./game/pictures/characters/anton.png", "Hello, my rabbit have eaten the key to my house. \nI need to give him carrots so he can shit the key out. \nCan you grow some carrots for me? I lost my spade.", questList[1]),
 
 ]

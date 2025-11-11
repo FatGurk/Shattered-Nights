@@ -1,7 +1,10 @@
-export let activeQuest = null; 
-
+// Quest Lista
+export let activeQuest = []; 
+// Kunna "stacka" quests
 export function acceptQuest(quest) {
-    activeQuest = quest;
+    if (!activeQuest.includes(quest)) {
+        activeQuest.push(quest);
+    }
 }
 
 export class Quest {
@@ -13,10 +16,10 @@ export class Quest {
     }
 
     drawQuestBox(ctx) {
-        if (!activeQuest) return;
+        if (activeQuest.length === 0) return;
         // Ritaboxen
         const boxWidth = 400;
-        const boxHeight = 200;
+        const boxHeight = 20 + activeQuest.length * 40;
         const boxX = ctx.canvas.width - boxWidth - 10;
         const boxY = 10;
 
@@ -33,19 +36,10 @@ export class Quest {
         ctx.font = "24px 'Copperplate Gothic', sans-serif";
         ctx.fillStyle = "white";
         ctx.textBaseline = "top";
-        // Titel
-        const titleX = boxX + 16;
-        const titleY = boxY + 12;
-        ctx.fillText(this.questTitle, titleX, titleY);
-            
-        const lines = this.description.split("\n");
-        const lineHeight = 40;
-        const textX =  boxX + 16;
-        const textY = boxY + 48;
 
         // Rad för rad
-        lines.forEach((line, i) => {
-            ctx.fillText(line, textX, textY + i * lineHeight);
+        activeQuest.forEach((quest, i) => {
+            ctx.fillText(`${i + 1}. ${quest.questTitle}`, boxX + 12, boxY + 12 + i * 40);
         });
     }
 }

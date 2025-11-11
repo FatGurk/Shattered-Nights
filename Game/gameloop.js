@@ -73,10 +73,13 @@ function GameScene() {
         if (e.talking && e.sentence) e.drawBubble(ctx);
     });
 
-    if (activeQuest) {
-        activeQuest.drawQuestBox(ctx);
+    //Visa quests
+    if (activeQuest.length > 0) {
+        activeQuest.forEach((quest, id) => {
+            quest.drawQuestBox(ctx);
+        });
     }
-
+    // Pussel minigame
     if (player.minigameOpen) 
         minigame1.draw(ctx);
 }
