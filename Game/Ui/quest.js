@@ -4,15 +4,22 @@ export let activeQuest = [];
 export function acceptQuest(quest) {
     if (!activeQuest.includes(quest)) {
         activeQuest.push(quest);
+        return true;
     }
+    return false;
 }
 
 export class Quest {
-    constructor(questTitle, description, completed = false, reward) {
-        this.questTitle = questTitle
+    constructor(questTitle, description, completed = false, reward = null) {
+        if (typeof completed !== "boolean") {
+            reward = completed;
+            completed = false;
+        }
+
+        this.questTitle = questTitle;
         this.description = description;
         this.completed = completed;
-        this.reward = reward
+        this.reward = reward;
     }
 
     drawQuestBox(ctx) {

@@ -7,9 +7,14 @@ import { Camera } from "../camera.js";
 
 const keys = {};
 
-export let equippedItem1 = "Spade";
-export let equippedItem2 = "";
-export let equippedItem3 = ""
+export const inventory = {
+    equippedItem1: "",
+    equippedItem2: "",
+    equippedItem3: "",
+}
+export const moonPices = {
+    
+}
 export let canInteract = true;
 
 
@@ -129,7 +134,7 @@ export class Player extends Character {
 
                     if (rectOverlap(this.intHitbox(), tileRectangle)) {
                         console.log("Player interacts with tile:", tile.type);
-                        if (equippedItem1 === "Spade") {
+                        if (inventory.equippedItem1 === "Spade") {
                             console.log("You dug the dirt!");
                         }
                     }
@@ -148,7 +153,7 @@ export class Player extends Character {
 
             if (rectOverlap(this.intHitbox(), tileRectangle)) {
                 // Plantera
-                if (!falt.planted && equippedItem1 === "Spade") {
+                if (!falt.planted && inventory.equippedItem1 === "Spade") {
                     falt.planted = true;
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
@@ -156,12 +161,26 @@ export class Player extends Character {
                     PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
                 }
                 // Harvesta
-                if (falt.planted && falt.fullyGrown && equippedItem1 === "Spade") {
+                if (falt.planted && falt.fullyGrown && inventory.equippedItem1 === "Spade") {
                     falt.planted = false;
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
                     console.log("Tog morot");
                     PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
+
+                    const farmadMorot = "Carrot";
+                    
+                    if (!inventory.equippedItem1) {
+                        inventory.equippedItem1 = farmadMorot;
+                        console.log(inventory.equippedItem1)
+                    } else if (!inventory.equippedItem2) {
+                        inventory.equippedItem2 = farmadMorot;
+                        console.log(inventory.equippedItem2)
+                    } else if (!inventory.equippedItem3) {
+                        inventory.equippedItem3 = farmadMorot;
+                    } else {
+                        console.log("No space for carrot");
+                    }
                 }
             }
         }
