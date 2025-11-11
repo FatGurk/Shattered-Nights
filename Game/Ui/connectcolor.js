@@ -34,6 +34,7 @@ export const minigame1 = {
     },
 
     activeColor: null,
+    onComplete: null, // Add callback function
 
     getCell(mx, my) {
         const x = mx - this.offsetX
@@ -74,7 +75,10 @@ export const minigame1 = {
     endDrag() {
         this.activeColor = null
         if (this.checkWin() == true) {
-            this.minigameOpen = false
+            console.log("PUZZLE COMPLETE!")
+            if (this.onComplete) {
+                this.onComplete(); // Call the callback
+            }
         }
     },
 

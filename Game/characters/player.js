@@ -300,7 +300,7 @@ export class Player extends Character {
     if (this.showBubble) {
         const bubbleX = (this.x - CameraMan.x) - 50;
         const bubbleY = (this.y - CameraMan.y) - 100;
-        ctx.drawImage(TalkBubble, bubbleX + 40, bubbleY, 104, 80);
+        ctx.drawImage(TalkBubble, bubbleX + 40, bubbleY);
     }
 
     }
@@ -310,14 +310,25 @@ document.addEventListener("keydown", e => {
     keys[e.key] = true;
 
     if (e.key === "e" || e.key === "E") {
-        for(const p in CharacterList) {
-            if (CharacterList[p] instanceof Player && canInteract){
-                CharacterList[p].interact();
-                canInteract = false;
+        const player = CharacterList.find(c => c instanceof Player);
+        
+        if (player && player.minigameOpen) {
+            player.minigameOpen = false;
+            console.log("Minigame closed by player");
+            return;
+        }
+        
+        if (canInteract) {
+            for(const p in CharacterList) {
+                if (CharacterList[p] instanceof Player && canInteract){
+                    CharacterList[p].interact();
+                    canInteract = false;
+                }
             }
         }
     }
 });
+
 document.addEventListener("keyup", e => {
     keys[e.key] = false;
 

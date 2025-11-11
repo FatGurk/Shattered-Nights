@@ -39,6 +39,12 @@ function MenuScene() {
 }
 
 
+// Set up minigame completion callback
+minigame1.onComplete = () => {
+    player.minigameOpen = false;
+    console.log("Minigame closed!");
+};
+
 function GameScene() {
     player = CharacterList[0];
     CameraMan.follow(player);
