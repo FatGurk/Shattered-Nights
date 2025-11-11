@@ -12,9 +12,6 @@ export const inventory = {
     equippedItem2: "",
     equippedItem3: "",
 }
-export const moonPices = {
-    
-}
 export let canInteract = true;
 
 
@@ -33,6 +30,7 @@ export class Player extends Character {
         this.facing = "down";
         this.showBubble = false;
         this.minigameOpen = false;
+        this.moonPices = 0
     }
 
     moveHitbox() {
@@ -136,6 +134,8 @@ export class Player extends Character {
                         console.log("Player interacts with tile:", tile.type);
                         if (inventory.equippedItem1 === "Spade") {
                             console.log("You dug the dirt!");
+                            this.moonPices += 1;
+                            console.log(this.moonPices)
                         }
                     }
                 }
