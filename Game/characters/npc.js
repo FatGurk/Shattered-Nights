@@ -63,7 +63,21 @@ export class Npc extends Character {
         this.talking = true;
         const player = CharacterList.find(p => p instanceof Player)
 
-        // La speciale el Stefano
+        // La speciale el Stefano guessing game
+        if (this.name === "Stefan") {
+            // För att starta
+            if (!player.stefanMinigame) {
+                player.stefanMinigame = true;
+                player.CorrectGuesses = 0;
+                player.stefanNumber = Math.floor(Math.random() * 3) + 1;
+                this.sentence = "I fished up something of interest in the sea. \nGuess the number I'm thinking of (1-3). \nGuess right three times in a row to win.";
+                return;
+            } else {
+                // Om spelare int när man redan spelar
+                this.sentence = "You're already playing, press 1-3 to guess a number.";
+                return;
+            }
+        }
         
 
         // Kolla efter requierments
@@ -124,6 +138,43 @@ export class Npc extends Character {
 
         // Få efter complition text om quest var klar
         this.sentence = this.getKonvo()
+    }
+
+    stefanGuessGameUpdate() {
+        const player = CharacterList.find(p => p instanceof Player)
+        if (this.name !== "Stefan" || !player.stefanMinigame) return;
+
+            //input ifrån e.keys i player.js
+            const guessedNumber = player.numberInput;
+
+            // Skippa if ingen input vald
+            if (guessedNumber === null) return;
+
+            // Kolla if input === med stefans nummer
+            if (player.stefanNumber === guessedNumber) {
+                player.CorrectGuesses += 1;
+                this.sentence = "You were correct";
+                if (player.CorrectGuesses >= 2) {
+                    // Reward the player
+                    player.moonPices += 1;
+                    console.log(player.moonPices)
+                    sounds.aquieredMoonPice.play();
+                    player.CorrectGuesses = 0;
+                    player.stefanMinigame = false;
+                    this.sentence = "Impossible!!! Only one person has done this before \nand that's the Mad Scientist!!! \nWell, a promise is a promise, here you go.";
+                } else {
+                    // Continue the game with a new number
+                    player.stefanNumber = Math.floor(Math.random() * 3) + 1;
+                    this.sentence = `You have ${player.CorrectGuesses} in a row`;
+                }
+            } else {
+                // Wrong guess — reset and exit minigame
+                player.CorrectGuesses = 0;
+                player.stefanMinigame = false;
+                this.sentence = "You were wrong! Press E to restart.";
+            }
+
+        player.numberInput = null;
     }
 
     draw(ctx, CameraMan) {
