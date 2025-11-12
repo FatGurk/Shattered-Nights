@@ -34,6 +34,9 @@ export class Player extends Character {
         this.moonPices = 0;
         this.countBlomma = 0;
         this.CorrectGuesses = 0;
+        this.stefanNumber = null;
+        this.stefanMinigame = false;
+        this.numberInput = null;
     }
 
     moveHitbox() {
@@ -406,10 +409,10 @@ export class Player extends Character {
 
 document.addEventListener("keydown", e => {
     keys[e.key] = true;
+    const player = CharacterList.find(c => c instanceof Player);
 
+    // E för interact
     if (e.key === "e" || e.key === "E") {
-        const player = CharacterList.find(c => c instanceof Player);
-        
         if (player && player.minigameOpen) {
             player.minigameOpen = false;
             console.log("Minigame closed by player");
@@ -417,12 +420,27 @@ document.addEventListener("keydown", e => {
         }
         
         if (canInteract) {
+            // Indentifierar player instance ifrån Player class
             for(const p in CharacterList) {
                 if (CharacterList[p] instanceof Player && canInteract){
                     CharacterList[p].interact();
                     canInteract = false;
                 }
             }
+        }
+    }
+
+    // Input för stefan guessing game
+        // If minigame = startat och if input är mellan knapp 1-5
+    if (player.stefanMinigame && ["1","2","3"].includes(e.key)) {
+        //Gör om strängen till ett nummer 
+        player.numberInput = parseInt(e.key);
+
+        // Hitta stefan namn property i characterlist för att kunna kalla på stefanGuessGameUpdate
+    const stefan = CharacterList.find(c => c.name === "Stefan");
+        //if stefan hittades
+        if (stefan) {
+            stefan.stefanGuessGameUpdate(player);
         }
     }
 });
