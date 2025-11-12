@@ -12,6 +12,8 @@ import { Canvas, ctx } from "./canvasctx.js";
 import { minigame1 } from "./ui/connectalla.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
+// Inventory box
+import { drawInventoryBox } from "./Ui/inventory.js";
 
 import { Pillars } from "./ui/pillars.js";
 
@@ -90,6 +92,8 @@ function GameScene() {
     if (activeQuest.length > 0) {
         activeQuest[0].drawQuestBox(ctx);
     }
+    //Visa inventory
+    drawInventoryBox();
 
     // Pussel minigame
     if (player.minigameOpen && player.activeMinigame) {

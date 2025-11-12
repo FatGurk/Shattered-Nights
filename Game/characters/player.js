@@ -377,22 +377,18 @@ export class Player extends Character {
 
         // Visa E runt ett object
         this.showBubble = false;
+        const allCarrotFields = MorotFaltMed.flat(2);
         for (let row = 0; row < MAP_HEIGHT; row++) {
             for (let col = 0; col < MAP_WIDTH; col++) {
                 const tile = Map1[row][col].behind;
                 if (!tile) continue;
 
                 if (tile === InteractableSprites.bot || 
-                    tile === InteractableSprites.MorotUtan1 ||
-                    tile === InteractableSprites.MorotUtan2 ||
-                    tile === InteractableSprites.MorotUtan3 ||
-                    tile === InteractableSprites.MorotMed1 ||
-                    tile === InteractableSprites.MorotMed2 ||
-                    tile === InteractableSprites.MorotMed3 ||
                     tile === InteractableSprites.DirtWithMoon ||
                     tile === InteractableSprites.BlaBlomma ||
                     tile === InteractableSprites.RodBlomma ||
-                    tile === InteractableSprites.VitBlomma
+                    tile === InteractableSprites.VitBlomma ||
+                    allCarrotFields.includes(tile)
                 ) {
                     const tileRectangle = {
                         x: col * TILE_SIZE,
