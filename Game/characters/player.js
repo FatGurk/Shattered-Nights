@@ -2,7 +2,7 @@ import { Character } from "./superclass.js";
 import { Npc } from "./npc.js";
 import { CharacterList } from "../objectlists.js";
 import { ctx, Canvas } from "../canvasctx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
 import { Camera } from "../camera.js";
 import { sounds } from "../sounds.js";
 import { Pillars } from "../ui/pillars.js";
@@ -38,6 +38,22 @@ export class Player extends Character {
         this.stefanNumber = null;
         this.stefanMinigame = false;
         this.numberInput = null;
+        this.animationFrame = 0;
+        this.animationSpeed = 0.15
+        this.moving = false;
+        this.framesNoShowel = {
+            up: [this.pojk.up1, this.pojk.up2],
+            down: [this.pojk.down1, this.pojk.down2],
+            left: [this.pojk.left1, this.pojk.left2],
+            right: [this.pojk.right1, this.pojk.right2]
+        };
+
+        this.idleNoShowel = {
+            up: this.pojk.up,
+            down: this.pojk.down,
+            left: this.pojk.left,
+            right: this.pojk.right
+        };
     }
 
     moveHitbox() {
@@ -217,7 +233,7 @@ export class Player extends Character {
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
                     console.log("Planterat morot");
-                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
+                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0])
                 }
                 // Harvesta
                 if (falt.planted && falt.fullyGrown && inventory.equippedItem1 === "Spade") {
@@ -225,7 +241,7 @@ export class Player extends Character {
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
                     console.log("Tog morot");
-                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
+                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0])
 
                     const farmadMorot = "Carrot";
                     
@@ -303,12 +319,16 @@ export class Player extends Character {
             this.facing = "right"; 
         }
 
+        // Moving = true if dx eller dy har hastighet annat än 0
+        this.moving = dx !== 0 || dy !== 0;
+
         //Colition för tiles
         const willHitTileX = this.Collision(this.x + dx, this.y, this.moveHitbox().width, this.moveHitbox().height);
         const willHitTileY = this.Collision(this.x, this.y + dy, this.moveHitbox().width, this.moveHitbox().height);
 
         // Colition för npc
         let willHitNpcX = false, willHitNpcY = false;
+
 
         for (const npc of CharacterList) {
             if (npc === this) continue;
@@ -323,6 +343,17 @@ export class Player extends Character {
 
         if (!willHitTileX && !willHitNpcX) this.x += dx;
         if (!willHitTileY && !willHitNpcY) this.y += dy;
+
+        // Kör animation om this.moving = true
+        if (this.moving) {
+            this.animationFrame += this.animationSpeed;
+            const framesArray = this.framesNoShowel[this.facing];
+            if (this.animFrame >= framesArray.length) {
+                this.animationFrame = 0;
+            }
+        } else {
+            this.animationFrame = 0;
+        }
 
         function rectOverlap(a, b) {
             return (
@@ -394,8 +425,14 @@ export class Player extends Character {
     } 
 
     draw(ctx, CameraMan) {
-    const img = this.pojk[this.facing];
-    if (!img.complete) return;
+    let img;
+    if (this.moving) {
+        const framesArray = this.framesNoShowel[this.facing];
+        const frameIndex = Math.floor(this.animationFrame) % framesArray.length;
+        img = framesArray[frameIndex]
+    } else {
+        img = this.idleNoShowel[this.facing];
+    }
 
     ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
 
