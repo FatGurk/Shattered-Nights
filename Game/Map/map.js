@@ -83,9 +83,9 @@ export const InteractableSprites = {
     bot: new Tile("bot", "./game/pictures/puzzle/nocolor/bot.png", true),
     mid: new Tile("mid", "./game/pictures/puzzle/nocolor/mid.png", false),
     top: new Tile("top", "./game/pictures/puzzle/nocolor/top.png", false),
-    botclear: new Tile("klar", "./game/pictures/puzzle/clear/botclear.png", true),
-    midclear: new Tile("klar1", "./game/pictures/puzzle/clear/midclear.png", false),
-    topclear: new Tile("klar2", "./game/pictures/puzzle/clear/topclear.png", false),
+    botclear: new Tile("klar", "./game/pictures/puzzle/color/botclear.png", true),
+    midclear: new Tile("klar1", "./game/pictures/puzzle/color/midclear.png", false),
+    topclear: new Tile("klar2", "./game/pictures/puzzle/color/topclear.png", false),
 
 }
 
@@ -118,7 +118,7 @@ export const Pillar = [
     [InteractableSprites.bot]
 ]
 
-export const pillarcleared = [
+export const Pillarcleared = [
     [InteractableSprites.topclear],
     [InteractableSprites.midclear],
     [InteractableSprites.botclear]
@@ -216,10 +216,6 @@ for (let row = 37; row < 40; row++) {
 
 // Quest interactable thingys
 Map1[5][16].behind = InteractableSprites.DirtWithMoon;
-
-
-// Andra pussel
-PlaceStandardHouse(Map1, 5, 5, Pillar);
 
 // ==========================
 // Fade logic för FirstStage

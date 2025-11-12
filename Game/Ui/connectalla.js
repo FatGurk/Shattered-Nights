@@ -6,8 +6,8 @@ export const minigame1 = new connection({
     offsetX: 250,
     offsetY: 140,
     pairs: {
-        red:  [{row:0,col:0},{row:3,col:3}],
-        gul:  [{row:0,col:3},{row:3,col:0}],
+        red:  [{row:0,col:0},{row:0,col:3}],
+        gul:  [{row:1,col:3},{row:2,col:0}],
         blue: [{row:1,col:2},{row:2,col:1}],
     }
 });

@@ -1,13 +1,13 @@
 const rodblock = new Image();
-rodblock.src = "../pictures/puzzle/color/rodblock.png";
+rodblock.src = "./game/pictures/puzzle/color/rodblock.png";
 const gulblock = new Image();
-gulblock.src = "../pictures/puzzle/color/gulblock.png";
-const blaflock = new Image();
-blaflock.src = "../pictures/puzzle/color/blaflock.png";
-const rosflock = new Image();
-rosflock.src = "../pictures/puzzle/color/rosflock.png";
-const greflock = new Image();
-greflock.src = "../pictures/puzzle/color/greflock.png";
+gulblock.src = "./game/pictures/puzzle/color/gulblock.png";
+const blablock = new Image();
+blablock.src = "./game/pictures/puzzle/color/blablock.png";
+const rosblock = new Image();
+rosblock.src = "./game/pictures/puzzle/color/rosblock.png";
+const greblock = new Image();
+greblock.src = "./game/pictures/puzzle/color/greblock.png";
 
 export class connection {
     constructor({ gridSize, cellSize, offsetX, offsetY, pairs }) {
@@ -81,11 +81,11 @@ export class connection {
 
     draw(ctx) {
         const blockImg = {
-            red: rodfarg,
-            gul: gulfarg,
-            blue: blafarg,
-            ros: rosfarg,
-            gre: grefarg
+            red: rodblock,
+            gul: gulblock,
+            blue: blablock,
+            ros: rosblock,
+            gre: greblock
         };
 
         ctx.fillStyle = "rgba(0,0,0,0.85)";
@@ -112,8 +112,16 @@ export class connection {
         for (const color in this.pairs) {
             const [a, b] = this.pairs[color];
             const img = blockImg[color];
-            ctx.drawImage(img, this.offsetX + a.col * this.cellSize + 10, this.offsetY + a.row * this.cellSize + 10, this.cellSize - 20, this.cellSize - 20);
-            ctx.drawImage(img, this.offsetX + b.col * this.cellSize + 10, this.offsetY + b.row * this.cellSize + 10, this.cellSize - 20, this.cellSize - 20);
+            ctx.drawImage(img, 
+                this.offsetX + a.col * this.cellSize + 10, 
+                this.offsetY + a.row * this.cellSize + 10, 
+                this.cellSize - 20, 
+                this.cellSize - 20);
+            ctx.drawImage(img, 
+                this.offsetX + b.col * this.cellSize + 10, 
+                this.offsetY + b.row * this.cellSize + 10, 
+                this.cellSize - 20, 
+                this.cellSize - 20);
         }
 
         for (const color in this.paths) {

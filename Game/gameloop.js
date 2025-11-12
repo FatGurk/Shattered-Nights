@@ -13,6 +13,9 @@ import { minigame1 } from "./ui/connectalla.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
 
+import { Pillars } from "./ui/pillars.js";
+
+
 export function canvasResize() {
     Canvas.width = window.innerWidth;
     Canvas.height = window.innerHeight;
@@ -77,17 +80,13 @@ function GameScene() {
         if (e.talking && e.sentence) e.drawBubble(ctx);
     });
 
-    //Visa quests (draw once — Quest.drawQuestBox reads the shared activeQuest array)
+    //Visa quests
     if (activeQuest.length > 0) {
         activeQuest[0].drawQuestBox(ctx);
     }
     // Pussel minigame
-    if (player.minigameOpen) {
-        ctx.save();
-        minigame1.draw(ctx);
-        ctx.restore();
-}
-
+    if (player.minigameOpen && player.activeMinigame)
+        player.activeMinigame.draw(ctx);
 }
 
 function gameLoop() {
