@@ -21,8 +21,9 @@ export class connection {
         this.onComplete = null;
         this.instructions = instructions || 
         "1. hold down left mouse button on a color and drag to connect matching colors.\n" +
-        "2. release left mouse button to finish the connection.\n" +
-        "3. if you make a mistake while the color is completed then click on a color to reset that color's path."
+        "2. make sure that you release the left mouse button to finish the connection.\n" +
+        "3. if you make a mistake while the color is completed then click on a color to reset that color's path.\n" +
+        "4. complete all color connections to win the game.";
 
         this.completed = {};
 

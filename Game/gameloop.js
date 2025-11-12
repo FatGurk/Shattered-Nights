@@ -33,7 +33,6 @@ export function canvasResize() {
 
 canvasResize();
 
-let mouseDown = false;
 let player = CharacterList.find(c => c instanceof Player);
 
 function MenuScene() {
@@ -147,7 +146,6 @@ gameLoop();
 
 window.addEventListener("resize", canvasResize);
 
-// Update mouse event listeners to work with player's active minigame
 Canvas.addEventListener("mousedown", (e)=>{
     if (player && player.minigameOpen && player.activeMinigame) {
         const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);
