@@ -72,8 +72,7 @@ export const minigame1 = {
 
     endDrag() {
         this.activeColor = null
-        if (this.checkWin() == true) {
-            console.log("PUZZLE COMPLETE!")
+        if (this.checkWin() == true) {  
             if (this.onComplete) {
                 this.onComplete();
             }
