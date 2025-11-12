@@ -153,7 +153,7 @@ for (let row = 0; row < MAP_HEIGHT; row++) {
     }
 }
 
-// Kullersten vägar -
+// Kullersten vägar
 for (let row = 18; row < 22; row++) {
     for (let col = 2; col < 38; col++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
@@ -169,7 +169,7 @@ for (let row = 2; row < 5; row++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
-// Kullersten väg |
+// Kullersten väg
 for (let row = 2; row < 33; row++) {
     for (let col = 18; col < 22; col++) {
         Map1[row][col].ground = SpriteList.Kullersten1;

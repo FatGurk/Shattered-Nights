@@ -10,7 +10,7 @@ const greblock = new Image();
 greblock.src = "./game/pictures/puzzle/color/greblock.png";
 
 export class connection {
-    constructor({ gridSize, cellSize, offsetX, offsetY, pairs }) {
+    constructor({ gridSize, cellSize, offsetX, offsetY, pairs, instructions = "" }) {
         this.gridSize = gridSize;
         this.cellSize = cellSize;
         this.offsetX = offsetX;
@@ -19,6 +19,10 @@ export class connection {
         this.paths = {};
         this.activeColor = null;
         this.onComplete = null;
+        this.instructions = instructions || 
+        "1. hold down left mouse button on a color and drag to connect matching colors.\n" +
+        "2. release mouse button to finish the connection.\n" +
+        "3. if you make a mistake, click on a color to reset that color's path."
 
         this.completed = {};
 
@@ -26,6 +30,10 @@ export class connection {
             this.paths[color] = [];
             this.completed[color] = false;
         }
+    }
+
+    setInstructions(text) {
+        this.instructions = String(text || "");
     }
 
     getCell(mx, my) {
@@ -40,10 +48,15 @@ export class connection {
 
     startDrag(cell) {
         for (const color in this.pairs) {
-            if (this.completed[color]) continue;
             if (this.pairs[color].some(p => p.row === cell.row && p.col === cell.col)) {
+                if (this.completed[color]) {
+                    this.completed[color] = false;
+                    this.paths[color] = [cell];
+                } else {
+                    this.paths[color] = [cell];
+                }
                 this.activeColor = color;
-                this.paths[color] = [cell];
+                break;
             }
         }
     }
@@ -94,10 +107,21 @@ export class connection {
     }
 
     endDrag() {
+        if (this.activeColor && !this.completed[this.activeColor]) {
+            this.paths[this.activeColor] = [];
+        }
+
         this.activeColor = null;
         if (this.checkWin() && typeof this.onComplete === "function") {
             this.onComplete();
         }
+    }
+
+    resetColor(color) {
+        if (!(color in this.pairs)) return;
+        this.paths[color] = [];
+        this.completed[color] = false;
+        if (this.activeColor === color) this.activeColor = null;
     }
 
     checkWin() {
@@ -173,5 +197,69 @@ export class connection {
                 );
             }
         }
+
+        this.drawInstructions(ctx);
+    }
+
+    drawInstructions(ctx) {
+        const padding = 12;
+        const boxX = this.offsetX + this.gridSize * this.cellSize + 40;
+        const boxY = this.offsetY - 10;
+        const boxW = 260;
+        const boxH = Math.max(120, this.gridSize * this.cellSize);
+
+        ctx.fillStyle = "rgba(255,255,255,0.95)";
+        ctx.fillRect(boxX, boxY, boxW, boxH);
+
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+    ctx.fillStyle = "#222";
+    ctx.font = "bold 16px sans-serif";
+    ctx.fillText("How to play", boxX + padding, boxY + padding + 12);
+
+        ctx.font = "14px sans-serif";
+        ctx.fillStyle = "#111";
+        const textX = boxX + padding;
+        const textY = boxY + padding + 34;
+        const maxWidth = boxW - padding * 2;
+
+        const lines = this.wrapText(this.instructions, ctx, maxWidth);
+        for (let i = 0; i < lines.length; i++) {
+            ctx.fillText(lines[i], textX, textY + i * 18);
+        }
+    }
+
+    wrapText(text, ctx, maxWidth) {
+        if (!text) return [];
+        const paragraphs = text.split(/\r?\n/);
+        const lines = [];
+
+        for (let p = 0; p < paragraphs.length; p++) {
+            const para = paragraphs[p].trim();
+            if (para === "") {
+                lines.push("");
+                continue;
+            }
+
+            const words = para.split(/\s+/);
+            let cur = words[0] || "";
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = ctx.measureText(cur + " " + word).width;
+                if (width < maxWidth) {
+                    cur += " " + word;
+                } else {
+                    lines.push(cur);
+                    cur = word;
+                }
+            }
+            if (cur) lines.push(cur);
+
+            if (p < paragraphs.length - 1) lines.push("");
+        }
+
+        return lines;
     }
 }
