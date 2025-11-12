@@ -41,17 +41,18 @@ export class Player extends Character {
         this.animationSpeed = 0.15
         this.moving = false;
         this.framesNoShowel = {
-            up: [ imgscr.up, imgscr.up1, imgscr.up2],
-            down: [ imgscr.down, imgscr.down1, imgscr.down2],
-            left: [ imgscr.left, imgscr.left1, imgscr.left2],
-            right: [ imgscr.right, imgscr.right1, imgscr.right2]
+            up: [this.pojk.up1, this.pojk.up2],
+            down: [this.pojk.down1, this.pojk.down2],
+            left: [this.pojk.left1, this.pojk.left2],
+            right: [this.pojk.right1, this.pojk.right2]
         };
+
         this.idleNoShowel = {
-            up: imgscr.up,
-            down: imgscr.down,
-            left: imgscr.left,
-            right: imgscr.right
-        }
+            up: this.pojk.up,
+            down: this.pojk.down,
+            left: this.pojk.left,
+            right: this.pojk.right
+        };
     }
 
     moveHitbox() {
@@ -296,8 +297,6 @@ export class Player extends Character {
         const speed = 20;
         let dx = 0
         let dy = 0
-        // Moving = true if dx eller dy har hastighet annat än 0
-        this.moving = dx !== 0 || dy !== 0;
 
         // Movement
         if (keys["ArrowUp"] || keys["w"]|| keys["W"]) { 
@@ -316,6 +315,9 @@ export class Player extends Character {
             dx += speed; 
             this.facing = "right"; 
         }
+
+        // Moving = true if dx eller dy har hastighet annat än 0
+        this.moving = dx !== 0 || dy !== 0;
 
         //Colition för tiles
         const willHitTileX = this.Collision(this.x + dx, this.y, this.moveHitbox().width, this.moveHitbox().height);
@@ -342,7 +344,8 @@ export class Player extends Character {
         // Kör animation om this.moving = true
         if (this.moving) {
             this.animationFrame += this.animationSpeed;
-            if (this.animationFrame >= this.framesNoShowel[this.facing].length) {
+            const framesArray = this.framesNoShowel[this.facing];
+            if (this.animFrame >= framesArray.length) {
                 this.animationFrame = 0;
             }
         } else {
@@ -421,11 +424,14 @@ export class Player extends Character {
     } 
 
     draw(ctx, CameraMan) {
-    if (!this.framesNoShowel[this.facing][0].complete) return;
-
-    const frameIndex = Math.floor(this.animationFrame);
-    const img = this.framesNoShowel[this.facing][frameIndex];
-
+    let img;
+    if (this.moving) {
+        const framesArray = this.framesNoShowel[this.facing];
+        const frameIndex = Math.floor(this.animationFrame) % framesArray.length;
+        img = framesArray[frameIndex]
+    } else {
+        img = this.idleNoShowel[this.facing];
+    }
 
     ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
 
