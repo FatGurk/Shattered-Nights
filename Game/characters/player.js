@@ -163,11 +163,10 @@ export class Player extends Character {
                         if (inventory.equippedItem1 === "Spade") {
                             console.log("You dug the dirt!");
                             this.moonPices += 1;
-                            Map1[row][col].behind = null;
-                            console.log(this.moonPices)
-
                             // Spela upp ljudet
                             sounds.aquieredMoonPice.play()
+                            Map1[row][col].behind = null;
+                            console.log(this.moonPices)
 
                             // Trigger world event aka byta state
                             livingState = true;

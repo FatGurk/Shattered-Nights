@@ -77,6 +77,10 @@ function GameScene() {
     //Infront tiles
     drawMap(ctx, CameraMan, "infront");
 
+    CharacterList.forEach(e => {
+        if (e.talking && e.sentence) e.drawBubble(ctx);
+    });
+
     if (player.minigameOpen && player.activeMinigame) {
         player.activeMinigame.draw(ctx);
     }
