@@ -1,9 +1,6 @@
 import { Character } from "./superclass.js";
-import { Npc } from "./npc.js";
 import { CharacterList } from "../objectlists.js";
-import { ctx, Canvas } from "../canvasctx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
-import { Camera } from "../camera.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, InteractableSprites, CarrotFields, MorotFaltMed, PlacePlot, triggerFirstStage} from "../map/map.js";
 import { sounds } from "../sounds.js";
 import { Pillars } from "../ui/pillars.js";
 
