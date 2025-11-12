@@ -89,11 +89,12 @@ export const InteractableSprites = {
     VitBlomma:   new Tile("VitBlomma", "./game/pictures/interact/vitblomma.png", false),
 
     // puzzel2
-    //redcolorless: new Tile("redcolorlessbase", "./game/pictures/puzzle/nocolor/31f.png", true),
-    //bluecolorless: new Tile("bluecolorlessbase", "./game/pictures/puzzle/nocolor/32f.png", true),
-    //yellowcolorless: new Tile("yellowcolorlessbase", "./game/pictures/puzzle/nocolor/33f.png", true),
-    colorless1: new Tile("colorless1", "./game/pictures/puzzle/nocolor/2f.png", false),
-    colorless2: new Tile("colorless2", "./game/pictures/puzzle/nocolor/1f.png", false),
+    bot: new Tile("bot", "./game/pictures/puzzle/nocolor/bot.png", true),
+    mid: new Tile("mid", "./game/pictures/puzzle/nocolor/mid.png", false),
+    top: new Tile("top", "./game/pictures/puzzle/nocolor/top.png", false),
+    botclear: new Tile("klar", "./game/pictures/puzzle/color/botclear.png", true),
+    midclear: new Tile("klar1", "./game/pictures/puzzle/color/midclear.png", false),
+    topclear: new Tile("klar2", "./game/pictures/puzzle/color/topclear.png", false),
 
 }
 
@@ -121,26 +122,16 @@ export const CarrotFields = [
     { startRow: 26, startCol: 13, planted: false, growthTimer: 0, fullyGrown: false },
 ];
 
-export const RedPillar1 = [
-    [InteractableSprites.colorless2],
-    [InteractableSprites.colorless1],
-    [InteractableSprites.redcolorless]
-]
-export const BluePillar2 = [
-    [InteractableSprites.colorless2],
-    [InteractableSprites.colorless1],
-    [InteractableSprites.bluecolorless]
-]
-export const YellowPillar3 = [
-    [InteractableSprites.colorless2],
-    [InteractableSprites.colorless1],
-    [InteractableSprites.yellowcolorless]
+export const Pillar = [
+    [InteractableSprites.top],
+    [InteractableSprites.mid],
+    [InteractableSprites.bot]
 ]
 
-export const pillar = [
-    [InteractableSprites.yellowcolorless],
-    [InteractableSprites.bluecolorless],
-    [InteractableSprites.redcolorless]
+export const Pillarcleared = [
+    [InteractableSprites.topclear],
+    [InteractableSprites.midclear],
+    [InteractableSprites.botclear]
 ]
 
 export const MAP_WIDTH = 40;
@@ -235,12 +226,6 @@ for (let row = 37; row < 40; row++) {
 
 // Quest interactable thingys
 Map1[5][16].behind = InteractableSprites.DirtWithMoon;
-
-
-// Andra pussel
-PlaceStandardHouse(Map1, 10, 30, RedPillar1);
-PlaceStandardHouse(Map1, 20, 30, BluePillar2);
-PlaceStandardHouse(Map1, 30, 30, YellowPillar3);
 
 // ==========================
 // Fade logic för FirstStage

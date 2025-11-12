@@ -5,6 +5,7 @@ import { ctx, Canvas } from "../canvasctx.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
 import { Camera } from "../camera.js";
 import { sounds } from "../sounds.js";
+import { Pillars } from "../ui/pillars.js";
 
 const keys = {};
 
@@ -264,7 +265,7 @@ export class Player extends Character {
                 const tile = Map1[row][col].behind;
                 if (!tile) continue;
 
-                if (tile === InteractableSprites.redcolorless) {
+                if (tile === InteractableSprites.bot) {
                     const tileRectangle = {
                     x: col * TILE_SIZE,
                     y: row * TILE_SIZE,
@@ -273,7 +274,9 @@ export class Player extends Character {
                     };
 
                 if (rectOverlap(this.intHitbox(), tileRectangle)) {
-                    this.minigameOpen = true;
+                    if (!Pillars.interact(this)) {
+                        this.minigameOpen = true;
+                    }
                     return;
                 }
             }
@@ -380,9 +383,7 @@ export class Player extends Character {
                 const tile = Map1[row][col].behind;
                 if (!tile) continue;
 
-                if (tile === InteractableSprites.redcolorless || 
-                    tile === InteractableSprites.bluecolorless || 
-                    tile === InteractableSprites.yellowcolorless ||
+                if (tile === InteractableSprites.bot || 
                     tile === InteractableSprites.MorotUtan1 ||
                     tile === InteractableSprites.MorotUtan2 ||
                     tile === InteractableSprites.MorotUtan3 ||

@@ -9,11 +9,12 @@ import { DrawMenuScreen } from "./menutogame/screen.js";
 
 import { Canvas, ctx } from "./canvasctx.js";
 // mini game
-import { minigame1 } from "./ui/connectcolor.js";
+import { minigame1 } from "./ui/connectalla.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
-import { minigame2 } from "./ui/connectcolormed.js";
-import { minigame3 } from "./ui/connectcolorhard.js";
+
+import { Pillars } from "./ui/pillars.js";
+
 
 export function canvasResize() {
     Canvas.width = window.innerWidth;
@@ -40,13 +41,6 @@ function MenuScene() {
     });
 }
 
-
-// Set up minigame completion callback
-minigame1.onComplete = () => {
-    player.minigameOpen = false;
-    console.log("Minigame closed!");
-};
-
 function GameScene() {
     player = CharacterList[0];
     CameraMan.follow(player);
@@ -54,7 +48,6 @@ function GameScene() {
     // Timer/growthchecker för morot
     for (const falt of CarrotFields) {
         if (!falt.planted) continue;
-
         falt.growthTimer += 1/60;
         if (falt.growthTimer >= 0 && !falt.fullyGrown) {
             PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[1])
@@ -84,17 +77,20 @@ function GameScene() {
     //Infront tiles
     drawMap(ctx, CameraMan, "infront");
 
-    CharacterList.forEach(e => {
-        if (e.talking && e.sentence) e.drawBubble(ctx);
-    });
+    if (player.minigameOpen && player.activeMinigame) {
+        player.activeMinigame.draw(ctx);
+    }
 
-    //Visa quests (draw once — Quest.drawQuestBox reads the shared activeQuest array)
+
+    //Visa quests
     if (activeQuest.length > 0) {
         activeQuest[0].drawQuestBox(ctx);
     }
+
     // Pussel minigame
-    if (player.minigameOpen) 
-        minigame1.draw(ctx);
+    if (player.minigameOpen && player.activeMinigame) {
+        player.activeMinigame.draw(ctx);
+    }
 }
 
 function gameLoop() {
@@ -109,16 +105,23 @@ gameLoop();
 
 window.addEventListener("resize", canvasResize);
 
+// Update mouse event listeners to work with player's active minigame
 Canvas.addEventListener("mousedown", (e)=>{
-    const cell = minigame1.getCell(e.offsetX, e.offsetY);
-    if (cell) minigame1.startDrag(cell);
+    if (player && player.minigameOpen && player.activeMinigame) {
+        const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);
+        if (cell) player.activeMinigame.startDrag(cell);
+    }
 });
 
 Canvas.addEventListener("mousemove", (e)=>{
-    const cell = minigame1.getCell(e.offsetX, e.offsetY);
-    if (cell) minigame1.drag(cell);
+    if (player && player.minigameOpen && player.activeMinigame) {
+        const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);
+        if (cell) player.activeMinigame.drag(cell);
+    }
 });
 
 Canvas.addEventListener("mouseup", ()=>{
-    minigame1.endDrag();
+    if (player && player.minigameOpen && player.activeMinigame) {
+        player.activeMinigame.endDrag();
+    }
 });
