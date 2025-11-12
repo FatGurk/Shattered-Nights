@@ -20,14 +20,6 @@ export const MinigameManager = {
         this.current.onComplete = () => this.next();
     },
 
-    next() {
-        if (this.index < this.puzzles.length - 1) {
-            this.start(this.index + 1);
-        } else {
-            console.log("🎉 All puzzles done!");
-        }
-    },
-
     draw() {
         if (this.current) this.current.draw(this.ctx, this.blockImg);
     },

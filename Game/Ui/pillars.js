@@ -1,5 +1,6 @@
 import { PlaceStandardHouse, Map1, Pillar, Pillarcleared } from "../map/map.js";
 import { minigame1, minigame2, minigame3 } from "./connectalla.js";
+import { CharacterList } from "../objectlists.js";
 
 export class PillarManager {
     constructor() {
@@ -18,19 +19,42 @@ export class PillarManager {
     completePillar(pillar) {
         pillar.cleared = true;
         PlaceStandardHouse(Map1, pillar.row, pillar.col, Pillarcleared);
-        console.log(`✅ Pillar ${pillar.id} completed!`);
+
+        CharacterList.forEach(char => {
+            if (char && char.activeMinigame === pillar.minigame) {
+                char.minigameOpen = false;
+                char.activeMinigame = null;
+            }
+        });
+
+        console.log(`Pillar ${pillar.id} completed and minigame closed.`);
+    }
+
+    checkNearby(player) {
+        for (const pillar of this.pillars) {
+            const TILE_SIZE = 128;
+            const playerCol = Math.floor(player.x / TILE_SIZE);
+            const playerRow = Math.floor(player.y / TILE_SIZE);
+            
+            const dx = Math.abs(playerCol - pillar.col);
+            const dy = Math.abs(playerRow - pillar.row);
+            
+            
+            if (dx < 3 && dy < 3 && !pillar.cleared) {
+                return pillar;
+            }
+        }
+        return null;
     }
 
     interact(player) {
-        for (const pillar of this.pillars) {
-            const dx = Math.abs(player.col - pillar.col);
-            const dy = Math.abs(player.row - pillar.row);
-            if (dx < 2 && dy < 2 && !pillar.cleared) {
-                player.minigameOpen = true;
-                player.activeMinigame = pillar.minigame;
-                break;
-            }
+        const pillar = this.checkNearby(player);
+        if (pillar) {
+            player.minigameOpen = true;
+            player.activeMinigame = pillar.minigame;
+            return true;
         }
+        return false;
     }
 }
 

@@ -20,7 +20,12 @@ export class connection {
         this.activeColor = null;
         this.onComplete = null;
 
-        for (const color in pairs) this.paths[color] = [];
+        this.completed = {};
+
+        for (const color in pairs) {
+            this.paths[color] = [];
+            this.completed[color] = false;
+        }
     }
 
     getCell(mx, my) {
@@ -35,6 +40,7 @@ export class connection {
 
     startDrag(cell) {
         for (const color in this.pairs) {
+            if (this.completed[color]) continue;
             if (this.pairs[color].some(p => p.row === cell.row && p.col === cell.col)) {
                 this.activeColor = color;
                 this.paths[color] = [cell];
@@ -42,18 +48,49 @@ export class connection {
         }
     }
 
+    isEndpoint(cell) {
+        for (const color in this.pairs) {
+            if (this.pairs[color].some(p => p.row === cell.row && p.col === cell.col)) return color;
+        }
+        return null;
+    }
+
     drag(cell) {
         if (!this.activeColor) return;
+        if (this.completed[this.activeColor]) {
+            this.activeColor = null;
+            return;
+        }
+
         const path = this.paths[this.activeColor];
         const last = path[path.length - 1];
+
         const dist = Math.abs(cell.col - last.col) + Math.abs(cell.row - last.row);
         if (dist !== 1) return;
+
+        const epColor = this.isEndpoint(cell);
+        if (epColor) {
+            if (epColor !== this.activeColor) return;
+
+            const [a, b] = this.pairs[this.activeColor];
+            const startedAtA = (path[0].row === a.row && path[0].col === a.col);
+            const otherEndpoint = startedAtA ? b : a;
+            if (!(cell.row === otherEndpoint.row && cell.col === otherEndpoint.col)) return;
+        }
 
         for (const c in this.paths) {
             if (this.paths[c].some(p => p.row === cell.row && p.col === cell.col)) return;
         }
 
         path.push(cell);
+
+        if (epColor === this.activeColor) {
+            this.completed[this.activeColor] = true;
+            this.activeColor = null;
+            if (this.checkWin() && typeof this.onComplete === "function") {
+                this.onComplete();
+            }
+        }
     }
 
     endDrag() {

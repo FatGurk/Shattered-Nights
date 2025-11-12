@@ -41,11 +41,6 @@ function MenuScene() {
     });
 }
 
-minigame1.onComplete = () => {
-    player.minigameOpen = false;
-    console.log("Minigame closed!");
-};
-
 function GameScene() {
     player = CharacterList[0];
     CameraMan.follow(player);
@@ -53,9 +48,7 @@ function GameScene() {
     // Timer/growthchecker för morot
     for (const falt of CarrotFields) {
         if (!falt.planted) continue;
-
         falt.growthTimer += 1/60;
-
         if (falt.growthTimer >= 60 && !falt.fullyGrown) {
             PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed)
             falt.fullyGrown = true;
@@ -76,17 +69,20 @@ function GameScene() {
     //Infront tiles
     drawMap(ctx, CameraMan, "infront");
 
-    CharacterList.forEach(e => {
-        if (e.talking && e.sentence) e.drawBubble(ctx);
-    });
+    if (player.minigameOpen && player.activeMinigame) {
+        player.activeMinigame.draw(ctx);
+    }
+
 
     //Visa quests
     if (activeQuest.length > 0) {
         activeQuest[0].drawQuestBox(ctx);
     }
+
     // Pussel minigame
-    if (player.minigameOpen && player.activeMinigame)
+    if (player.minigameOpen && player.activeMinigame) {
         player.activeMinigame.draw(ctx);
+    }
 }
 
 function gameLoop() {
@@ -101,16 +97,23 @@ gameLoop();
 
 window.addEventListener("resize", canvasResize);
 
+// Update mouse event listeners to work with player's active minigame
 Canvas.addEventListener("mousedown", (e)=>{
-    const cell = minigame1.getCell(e.offsetX, e.offsetY);
-    if (cell) minigame1.startDrag(cell);
+    if (player && player.minigameOpen && player.activeMinigame) {
+        const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);
+        if (cell) player.activeMinigame.startDrag(cell);
+    }
 });
 
 Canvas.addEventListener("mousemove", (e)=>{
-    const cell = minigame1.getCell(e.offsetX, e.offsetY);
-    if (cell) minigame1.drag(cell);
+    if (player && player.minigameOpen && player.activeMinigame) {
+        const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);
+        if (cell) player.activeMinigame.drag(cell);
+    }
 });
 
 Canvas.addEventListener("mouseup", ()=>{
-    minigame1.endDrag();
+    if (player && player.minigameOpen && player.activeMinigame) {
+        player.activeMinigame.endDrag();
+    }
 });

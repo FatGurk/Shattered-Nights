@@ -6,9 +6,9 @@ export const minigame1 = new connection({
     offsetX: 250,
     offsetY: 140,
     pairs: {
-        red:  [{row:0,col:0},{row:0,col:3}],
-        gul:  [{row:1,col:3},{row:2,col:0}],
-        blue: [{row:1,col:2},{row:2,col:1}],
+        red:  [{row:2,col:1},{row:0,col:3}],
+        gul:  [{row:0,col:0},{row:1,col:2}],
+        blue: [{row:1,col:3},{row:3,col:3}],
     }
 });
 
@@ -18,10 +18,10 @@ export const minigame2 = new connection({
     offsetX: 220,
     offsetY: 120,
     pairs: {
-        red:  [{row:0,col:0},{row:4,col:4}],
-        gul:  [{row:0,col:4},{row:4,col:0}],
-        blue: [{row:1,col:2},{row:3,col:2}],
-        ros:  [{row:2,col:0},{row:2,col:4}]
+        red:  [{row:0,col:0},{row:3,col:1}],
+        gul:  [{row:0,col:2},{row:4,col:4}],
+        blue: [{row:0,col:4},{row:3,col:4}],
+        ros:  [{row:1,col:0},{row:1,col:2}]
     }
 });
 
@@ -31,10 +31,10 @@ export const minigame3 = new connection({
     offsetX: 180,
     offsetY: 100,
     pairs: {
-        red:  [{row:0,col:0},{row:5,col:5}],
-        gul:  [{row:0,col:5},{row:5,col:0}],
-        blue: [{row:1,col:3},{row:4,col:2}],
-        ros:  [{row:2,col:0},{row:3,col:5}],
-        gre:  [{row:5,col:2},{row:0,col:2}]
+        red:  [{row:0,col:0},{row:3,col:3}],
+        gul:  [{row:1,col:3},{row:5,col:0}],
+        blue: [{row:1,col:2},{row:4,col:2}],
+        ros:  [{row:1,col:0},{row:4,col:1}],
+        gre:  [{row:0,col:5},{row:0,col:2}]
     }
 });

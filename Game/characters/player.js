@@ -5,6 +5,7 @@ import { ctx, Canvas } from "../canvasctx.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
 import { Camera } from "../camera.js";
 import { sounds } from "../sounds.js";
+import { Pillars } from "../ui/pillars.js";
 
 const keys = {};
 
@@ -257,7 +258,9 @@ export class Player extends Character {
                     };
 
                 if (rectOverlap(this.intHitbox(), tileRectangle)) {
-                    this.minigameOpen = true;
+                    if (!Pillars.interact(this)) {
+                        this.minigameOpen = true;
+                    }
                     return;
                 }
             }
