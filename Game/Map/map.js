@@ -62,17 +62,26 @@ export const InteractableSprites = {
     DirtWithMoon: new Tile("DirtWithMoon1", "./game/pictures/interact/manbitar/manbitmarkdottgras.png", true),
 
     // Morot
-    MorotMed1: new Tile("MorotMed1", "./game/pictures/interact/fullplottupp.png", true),
-    MorotMed2: new Tile("MorotMed2", "./game/pictures/interact/fullcenterplott.png", true),
-    MorotMed3: new Tile("MorotMed3", "./game/pictures/interact/fullplottbotten.png", true),
+        // x = växt nivå y = placering
+    MorotMed11: new Tile("MorotUtan1", "./game/pictures/interact/morotfalt/morotlevandegrasupp1.png", true),
+    MorotMed12: new Tile("MorotUtan2", "./game/pictures/interact/morotfalt/morotlevandegrascentrum1.png", true),
+    MorotMed13: new Tile("MorotUtan3", "./game/pictures/interact/morotfalt/morotlevandegrasner1.png", true),
 
-    MorotUtan1: new Tile("MorotUtan1", "./game/pictures/interact/tomplottupp.png", true),
-    MorotUtan2: new Tile("MorotUtan2", "./game/pictures/interact/tomcenterplott.png", true),
-    MorotUtan3: new Tile("MorotUtan3", "./game/pictures/interact/tomplottbotten.png", true),
+    MorotMed21: new Tile("MorotUtan1", "./game/pictures/interact/morotfalt/morotlevandegrasupp2.png", true),
+    MorotMed22: new Tile("MorotUtan2", "./game/pictures/interact/morotfalt/morotlevandegrascentrum2.png", true),
+    MorotMed23: new Tile("MorotUtan3", "./game/pictures/interact/morotfalt/morotlevandegrasner2.png", true),
 
-    DottMorotUtan1: new Tile("DottMorotUtan1", "./game/pictures/interact/dottmorotplatstopp.png", true),
-    DottMorotUtan2: new Tile("DottMorotUtan2", "./game/pictures/interact/dottmorotplatscentrum.png", true),
-    DottMorotUtan3: new Tile("DottMorotUtan3", "./game/pictures/interact/dottmorotplatsbotten.png", true),
+    MorotMed31: new Tile("MorotUtan1", "./game/pictures/interact/morotfalt/morotlevandegrasupp3.png", true),
+    MorotMed32: new Tile("MorotUtan2", "./game/pictures/interact/morotfalt/morotlevandegrascentrum3.png", true),
+    MorotMed33: new Tile("MorotUtan3", "./game/pictures/interact/morotfalt/morotlevandegrasner3.png", true),
+
+    MorotMed41: new Tile("MorotUtan1", "./game/pictures/interact/morotfalt/morotlevandegrasupp4.png", true),
+    MorotMed42: new Tile("MorotUtan2", "./game/pictures/interact/morotfalt/morotlevandegrascentrum4.png", true),
+    MorotMed43: new Tile("MorotUtan3", "./game/pictures/interact/morotfalt/morotlevandegrasner4.png", true),
+
+    DottMorotUtan1: new Tile("DottMorotUtan1", "./game/pictures/interact/morotfalt/morotdottgrasupp.png", true),
+    DottMorotUtan2: new Tile("DottMorotUtan2", "./game/pictures/interact/morotfalt/morotdottgrascentrum.png", true),
+    DottMorotUtan3: new Tile("DottMorotUtan3", "./game/pictures/interact/morotfalt/morotdottgrasner.png", true),
 
     // Blommor
     RodBlomma:  new Tile("RodBlomma", "./game/pictures/interact/rodblomma.png", false),
@@ -88,16 +97,17 @@ export const InteractableSprites = {
 
 }
 
-export const MorotFaltMed = [
-    [InteractableSprites.MorotMed1],
-    [InteractableSprites.MorotMed2],
-    [InteractableSprites.MorotMed3]
-];
-export const MorotFaltUtan = [
-    [InteractableSprites.MorotUtan1],
-    [InteractableSprites.MorotUtan2],
-    [InteractableSprites.MorotUtan3]
-];
+export const MorotFaltMed = [];
+
+for (let stage = 1; stage <= 4; stage++ ) {
+    const stageArray = [
+        [InteractableSprites[`MorotMed${stage}1`]],
+        [InteractableSprites[`MorotMed${stage}2`]],
+        [InteractableSprites[`MorotMed${stage}3`]],
+    ]
+    MorotFaltMed.push(stageArray);
+}
+
 export const DottMorotFaltUtan = [
     [InteractableSprites.DottMorotUtan1],
     [InteractableSprites.DottMorotUtan2],
@@ -267,7 +277,7 @@ export function triggerFirstStage(callback) {
 
             // Ändra MorotFällt
             for (const falt of CarrotFields) {
-                PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan);
+                PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0]);
             }
 
             // Blommorna

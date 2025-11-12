@@ -2,7 +2,7 @@ import { Character } from "./superclass.js";
 import { Npc } from "./npc.js";
 import { CharacterList } from "../objectlists.js";
 import { ctx, Canvas } from "../canvasctx.js";
-import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, MorotFaltUtan, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
+import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, Tile, InteractableSprites, CarrotFields, MorotFaltMed, PlacePlot, SpriteList, triggerFirstStage} from "../map/map.js";
 import { Camera } from "../camera.js";
 import { sounds } from "../sounds.js";
 
@@ -216,7 +216,7 @@ export class Player extends Character {
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
                     console.log("Planterat morot");
-                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
+                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0])
                 }
                 // Harvesta
                 if (falt.planted && falt.fullyGrown && inventory.equippedItem1 === "Spade") {
@@ -224,7 +224,7 @@ export class Player extends Character {
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
                     console.log("Tog morot");
-                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltUtan)
+                    PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0])
 
                     const farmadMorot = "Carrot";
                     

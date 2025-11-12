@@ -155,7 +155,6 @@ export class Npc extends Character {
                 player.CorrectGuesses += 1;
                 this.sentence = "You were correct";
                 if (player.CorrectGuesses >= 2) {
-                    // Reward the player
                     player.moonPices += 1;
                     console.log(player.moonPices)
                     sounds.aquieredMoonPice.play();
@@ -163,12 +162,12 @@ export class Npc extends Character {
                     player.stefanMinigame = false;
                     this.sentence = "Impossible!!! Only one person has done this before \nand that's the Mad Scientist!!! \nWell, a promise is a promise, here you go.";
                 } else {
-                    // Continue the game with a new number
+                    // Nytt nummer
                     player.stefanNumber = Math.floor(Math.random() * 3) + 1;
                     this.sentence = `You have ${player.CorrectGuesses} in a row`;
                 }
             } else {
-                // Wrong guess — reset and exit minigame
+                // Gissat fel
                 player.CorrectGuesses = 0;
                 player.stefanMinigame = false;
                 this.sentence = "You were wrong! Press E to restart.";
