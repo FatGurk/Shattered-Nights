@@ -21,8 +21,8 @@ export class connection {
         this.onComplete = null;
         this.instructions = instructions || 
         "1. hold down left mouse button on a color and drag to connect matching colors.\n" +
-        "2. release mouse button to finish the connection.\n" +
-        "3. if you make a mistake, click on a color to reset that color's path."
+        "2. release left mouse button to finish the connection.\n" +
+        "3. if you make a mistake while the color is completed then click on a color to reset that color's path."
 
         this.completed = {};
 
@@ -208,19 +208,19 @@ export class connection {
         const boxW = 260;
         const boxH = Math.max(120, this.gridSize * this.cellSize);
 
-        ctx.fillStyle = "rgba(255,255,255,0.95)";
+        ctx.fillStyle = "rgba(159, 17, 142, 0.7)";
         ctx.fillRect(boxX, boxY, boxW, boxH);
 
         ctx.strokeStyle = "#333";
         ctx.lineWidth = 2;
         ctx.strokeRect(boxX, boxY, boxW, boxH);
 
-    ctx.fillStyle = "#222";
-    ctx.font = "bold 16px sans-serif";
-    ctx.fillText("How to play", boxX + padding, boxY + padding + 12);
+        ctx.fillStyle = "#ffffffff";
+        ctx.font = "bold 16px sans-serif";
+        ctx.fillText("How to play", boxX + padding, boxY + padding + 12);
 
         ctx.font = "14px sans-serif";
-        ctx.fillStyle = "#111";
+        ctx.fillStyle = "#ffffffff";
         const textX = boxX + padding;
         const textY = boxY + padding + 34;
         const maxWidth = boxW - padding * 2;
