@@ -25,9 +25,17 @@ export const questList = [
 export const CharacterList = [
     new Player(5 * TILE_SIZE, 3 * TILE_SIZE, "Simon", {
         up: "./game/pictures/characters/player/pojkeutanspade/pojkupp.png",
+        up1:"./game/pictures/characters/player/pojkeutanspade/pojkupp1.png",
+        up2:"./game/pictures/characters/player/pojkeutanspade/pojkupp2.png",
         down: "./game/pictures/characters/player/pojkeutanspade/pojkener.png",
+        down1: "./game/pictures/characters/player/pojkeutanspade/pojkener1.png",
+        down2: "./game/pictures/characters/player/pojkeutanspade/pojkener2.png",
         left: "./game/pictures/characters/player/pojkeutanspade/pojkevanster.png",
+        left1: "./game/pictures/characters/player/pojkeutanspade/pojkevanster1.png",
+        left2: "./game/pictures/characters/player/pojkeutanspade/pojkevanster2.png",
         right: "./game/pictures/characters/player/pojkeutanspade/pojkehoger.png",
+        right1: "./game/pictures/characters/player/pojkeutanspade/pojkehoger1.png",
+        right2: "./game/pictures/characters/player/pojkeutanspade/pojkehoger2.png",
     }),
     new Npc(3000,1800, "Mad scientist GW", "./game/pictures/characters/gw.png", "Who sent you here and do you have anything for me?", "Ohh are those flowers for me? \nThank you! \nHere, take this as a thank you for saving me." , questList[2], "MoonPice", (player) => player.countBlomma >= 3),
     new Npc (9 * TILE_SIZE, 0.5 * TILE_SIZE, "Sten Med Spade","./game/pictures/characters/stenspade.png", "I was going to get some flowers for my friend Gw, \nbut then the moon exploded and all flowers died. \nI hate this stupid sun, ugh here take this stupid showel, \nI dont have a need for it anylonger.", null , questList[2], "Spade"),

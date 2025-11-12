@@ -37,6 +37,21 @@ export class Player extends Character {
         this.stefanNumber = null;
         this.stefanMinigame = false;
         this.numberInput = null;
+        this.animationFrame = 0;
+        this.animationSpeed = 0.15
+        this.moving = false;
+        this.framesNoShowel = {
+            up: [ imgscr.up, imgscr.up1, imgscr.up2],
+            down: [ imgscr.down, imgscr.down1, imgscr.down2],
+            left: [ imgscr.left, imgscr.left1, imgscr.left2],
+            right: [ imgscr.right, imgscr.right1, imgscr.right2]
+        };
+        this.idleNoShowel = {
+            up: imgscr.up,
+            down: imgscr.down,
+            left: imgscr.left,
+            right: imgscr.right
+        }
     }
 
     moveHitbox() {
@@ -281,6 +296,8 @@ export class Player extends Character {
         const speed = 20;
         let dx = 0
         let dy = 0
+        // Moving = true if dx eller dy har hastighet annat än 0
+        this.moving = dx !== 0 || dy !== 0;
 
         // Movement
         if (keys["ArrowUp"] || keys["w"]|| keys["W"]) { 
@@ -307,6 +324,7 @@ export class Player extends Character {
         // Colition för npc
         let willHitNpcX = false, willHitNpcY = false;
 
+
         for (const npc of CharacterList) {
             if (npc === this) continue;
 
@@ -320,6 +338,16 @@ export class Player extends Character {
 
         if (!willHitTileX && !willHitNpcX) this.x += dx;
         if (!willHitTileY && !willHitNpcY) this.y += dy;
+
+        // Kör animation om this.moving = true
+        if (this.moving) {
+            this.animationFrame += this.animationSpeed;
+            if (this.animationFrame >= this.framesNoShowel[this.facing].length) {
+                this.animationFrame = 0;
+            }
+        } else {
+            this.animationFrame = 0;
+        }
 
         function rectOverlap(a, b) {
             return (
@@ -393,8 +421,11 @@ export class Player extends Character {
     } 
 
     draw(ctx, CameraMan) {
-    const img = this.pojk[this.facing];
-    if (!img.complete) return;
+    if (!this.framesNoShowel[this.facing][0].complete) return;
+
+    const frameIndex = Math.floor(this.animationFrame);
+    const img = this.framesNoShowel[this.facing][frameIndex];
+
 
     ctx.drawImage(img, this.x - CameraMan.x, this.y - CameraMan.y);
 
