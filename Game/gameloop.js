@@ -9,11 +9,9 @@ import { DrawMenuScreen } from "./menutogame/screen.js";
 
 import { Canvas, ctx } from "./canvasctx.js";
 // mini game
-import { minigame1 } from "./ui/connectcolor.js";
+import { minigame1 } from "./ui/connectalla.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
-import { minigame2 } from "./ui/connectcolormed.js";
-import { minigame3 } from "./ui/connectcolorhard.js";
 
 export function canvasResize() {
     Canvas.width = window.innerWidth;
@@ -40,8 +38,6 @@ function MenuScene() {
     });
 }
 
-
-// Set up minigame completion callback
 minigame1.onComplete = () => {
     player.minigameOpen = false;
     console.log("Minigame closed!");
@@ -86,8 +82,12 @@ function GameScene() {
         activeQuest[0].drawQuestBox(ctx);
     }
     // Pussel minigame
-    if (player.minigameOpen) 
+    if (player.minigameOpen) {
+        ctx.save();
         minigame1.draw(ctx);
+        ctx.restore();
+}
+
 }
 
 function gameLoop() {

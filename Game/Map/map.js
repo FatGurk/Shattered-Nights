@@ -118,6 +118,12 @@ export const Pillar = [
     [InteractableSprites.bot]
 ]
 
+export const pillarcleared = [
+    [InteractableSprites.topclear],
+    [InteractableSprites.midclear],
+    [InteractableSprites.botclear]
+]
+
 export const MAP_WIDTH = 40;
 export const MAP_HEIGHT = 40;
 export const TILE_SIZE = 128;
