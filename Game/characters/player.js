@@ -245,7 +245,7 @@ export class Player extends Character {
                 const tile = Map1[row][col].behind;
                 if (!tile) continue;
 
-                if (tile === InteractableSprites.redcolorless) {
+                if (tile === InteractableSprites.bot) {
                     const tileRectangle = {
                     x: col * TILE_SIZE,
                     y: row * TILE_SIZE,
@@ -346,9 +346,7 @@ export class Player extends Character {
                 const tile = Map1[row][col].behind;
                 if (!tile) continue;
 
-                if (tile === InteractableSprites.redcolorless || 
-                    tile === InteractableSprites.bluecolorless || 
-                    tile === InteractableSprites.yellowcolorless ||
+                if (tile === InteractableSprites.bot || 
                     tile === InteractableSprites.MorotUtan1 ||
                     tile === InteractableSprites.MorotUtan2 ||
                     tile === InteractableSprites.MorotUtan3 ||
