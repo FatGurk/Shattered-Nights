@@ -160,11 +160,14 @@ export class Player extends Character {
 
                     if (rectOverlap(this.intHitbox(), tileRectangle)) {
                         console.log("Player interacts with tile:", tile.type);
-                        if (inventory.equippedItem1 === "Spade") {
+                        if (inventory.equippedItem1 === "Showel") {
                             console.log("You dug the dirt!");
                             this.moonPices += 1;
                             // Spela upp ljudet
-                            sounds.aquieredMoonPice.play()
+                            sounds.planting.play();
+                            sounds.planting.addEventListener("ended", () => {
+                                sounds.aquieredMoonPice.play();
+                            }, {once: true});
                             Map1[row][col].behind = null;
                             console.log(this.moonPices)
 
@@ -201,9 +204,10 @@ export class Player extends Character {
 
                     if (rectOverlap(this.intHitbox(), tileRectangle)) {
                         console.log("Player interacts with tile:", tile.type);
-                        if (inventory.equippedItem1 === "Spade") {
+                        if (inventory.equippedItem1 === "Showel") {
                             console.log("You dug up blomma!");
                             this.countBlomma += 1;
+                            sounds.planting.play();
                             Map1[row][col].behind = null;
                             console.log(this.countBlomma)
                         }
@@ -227,18 +231,20 @@ export class Player extends Character {
 
             if (rectOverlap(this.intHitbox(), tileRectangle)) {
                 // Plantera
-                if (!falt.planted && inventory.equippedItem1 === "Spade") {
+                if (!falt.planted && inventory.equippedItem1 === "Showel") {
                     falt.planted = true;
                     falt.growthTimer = 0;
+                    sounds.planting.play();
                     falt.fullyGrown = false;
                     console.log("Planterat morot");
                     PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0])
                 }
                 // Harvesta
-                if (falt.planted && falt.fullyGrown && inventory.equippedItem1 === "Spade") {
+                if (falt.planted && falt.fullyGrown && inventory.equippedItem1 === "Showel") {
                     falt.planted = false;
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
+                    sounds.planting.play();
                     console.log("Tog morot");
                     PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0])
 

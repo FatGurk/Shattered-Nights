@@ -13,13 +13,14 @@ import { minigame1 } from "./ui/connectalla.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
 // Inventory box
-import { drawInventoryBox } from "./Ui/inventory.js";
+import { drawInventoryBox } from "./ui/inventory.js";
 
 import { Pillars } from "./ui/pillars.js";
 
 import { Player } from "./characters/player.js";
 
 import { introVideoPlayer } from "./video.js"
+import { drawCredits, startCredits } from "./ui/credits.js";
 
 
 export function canvasResize() {
@@ -40,6 +41,10 @@ let mouseDown = false;
 let player = CharacterList.find(c => c instanceof Player);
 
 function MenuScene() {
+    introStarted = false;
+    endStarted = false;
+    creditsStarted = false;
+
     DrawMenuScreen();
 
     MenuButtonList.forEach(Button => {
@@ -63,7 +68,7 @@ function GameScene() {
     player = CharacterList[0];
     CameraMan.follow(player);
 
-    // Check if player has all 4 moon pieces to trigger end scene
+    // Check moonPices end scene
     if (player.moonPices >= 4) {
         Scene.value = "End";
         return;
@@ -125,14 +130,24 @@ function GameScene() {
 
 
 let endStarted = false;
+let creditsStarted = false;
 
 function endScene() {
     if (!endStarted) {
         endStarted = true;
 
         introVideoPlayer("./game/vid/shatterednightsendanimation.mp4", () => {
-            Scene.value = "Menu";
+            Scene.value = "Credits";
+            player.moonPices = 0;
         });
+    }
+}
+
+function creditScene() {
+    DrawMenuScreen();
+    if (!creditsStarted) {
+        creditsStarted = true;
+        startCredits();
     }
 }
 
@@ -142,6 +157,7 @@ function gameLoop() {
     else if (Scene.value === "Intro") IntroScene();
     else if (Scene.value === "Game") GameScene();
     else if (Scene.value === "End") endScene(); 
+    else if (Scene.value === "Credits") creditScene();
 
     requestAnimationFrame(gameLoop);
 }
