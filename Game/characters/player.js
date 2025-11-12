@@ -464,7 +464,7 @@ document.addEventListener("keydown", e => {
     }
 
     // Input för stefan guessing game
-        // If minigame = startat och if input är mellan knapp 1-5
+        // If minigame = startat och if input är mellan knapp 1-3
     if (player.stefanMinigame && ["1","2","3"].includes(e.key)) {
         //Gör om strängen till ett nummer 
         player.numberInput = parseInt(e.key);

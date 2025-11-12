@@ -18,6 +18,9 @@ class Button {
         };
 
         window.addEventListener("click", (event) => {
+            // Only process clicks if we're on the menu scene
+            if (Scene.value !== "Menu") return;
+            
             const rect = Canvas.getBoundingClientRect();
             const mouseX = event.clientX - rect.left;
             const mouseY = event.clientY - rect.top;
@@ -54,7 +57,7 @@ export class playbutton extends Button {
     onClick() {
         document.documentElement.requestFullscreen()
             .then(() => {
-                Scene.value = "Game";
+                Scene.value = "Intro";
             })
     }
 }

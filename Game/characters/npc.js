@@ -170,7 +170,7 @@ export class Npc extends Character {
             if (player.stefanNumber === guessedNumber) {
                 player.CorrectGuesses += 1;
                 this.sentence = "You were correct";
-                if (player.CorrectGuesses >= 2) {
+                if (player.CorrectGuesses >= 1) {
                     // MoonPice 1 gång
                     if (this.quest && !this.quest.completed) {
                         this.quest.completed = true;

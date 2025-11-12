@@ -17,6 +17,10 @@ import { drawInventoryBox } from "./Ui/inventory.js";
 
 import { Pillars } from "./ui/pillars.js";
 
+import { Player } from "./characters/player.js";
+
+import { introVideoPlayer } from "./video.js"
+
 
 export function canvasResize() {
     Canvas.width = window.innerWidth;
@@ -32,8 +36,8 @@ export function canvasResize() {
 
 canvasResize();
 
-export let player;
 let mouseDown = false;
+let player = CharacterList.find(c => c instanceof Player);
 
 function MenuScene() {
     DrawMenuScreen();
@@ -43,9 +47,27 @@ function MenuScene() {
     });
 }
 
+let introStarted = false;
+
+function IntroScene() {
+    if (!introStarted) {
+        introStarted = true;
+
+        introVideoPlayer("./game/vid/shatterednightanimation.mp4", () => {
+            Scene.value = "Game";
+        });
+    }
+}
+
 function GameScene() {
     player = CharacterList[0];
     CameraMan.follow(player);
+
+    // Check if player has all 4 moon pieces to trigger end scene
+    if (player.moonPices >= 4) {
+        Scene.value = "End";
+        return;
+    }
 
     // Timer/growthchecker för morot
     for (const falt of CarrotFields) {
@@ -101,10 +123,25 @@ function GameScene() {
     }
 }
 
+
+let endStarted = false;
+
+function endScene() {
+    if (!endStarted) {
+        endStarted = true;
+
+        introVideoPlayer("./game/vid/shatterednightsendanimation.mp4", () => {
+            Scene.value = "Menu";
+        });
+    }
+}
+
 function gameLoop() {
     ctx.clearRect(0, 0, Canvas.width, Canvas.height);
     if (Scene.value === "Menu") MenuScene();
+    else if (Scene.value === "Intro") IntroScene();
     else if (Scene.value === "Game") GameScene();
+    else if (Scene.value === "End") endScene(); 
 
     requestAnimationFrame(gameLoop);
 }
