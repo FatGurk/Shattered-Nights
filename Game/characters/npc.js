@@ -97,17 +97,33 @@ export class Npc extends Character {
             }
 
             if (hasRequired) {
-                this.quest.completed = true;
-                console.log(`Quest completed: ${this.quest.questTitle}`);
+                // Only process completion once per quest
+                if (!this.quest.completed) {
+                    this.quest.completed = true;
+                    console.log(`Quest completed: ${this.quest.questTitle}`);
 
-                if (this.quest.reward) {
-                    player.moonPices += 1;
-                    sounds.aquieredMoonPice.play();
-                    console.log(player.moonPices);
+                    if (this.quest.reward) {
+                        // If requirement was a function (e.g., GW's 3 flowers), consume the resources
+                        if (typeof this.itemrequired === "function") {
+                            // Common case: require 3 flowers stored on player.countBlomma
+                            if (typeof player.countBlomma === "number" && player.countBlomma > 0) {
+                                const consume = Math.min(3, player.countBlomma);
+                                player.countBlomma -= consume;
+                                console.log(`Consumed ${consume} flowers, remaining: ${player.countBlomma}`);
+                            }
+                        }
+
+                        player.moonPices += 1;
+                        sounds.aquieredMoonPice.play();
+                        console.log(player.moonPices);
+                    }
+
+                    const index = activeQuest.indexOf(this.quest);
+                    if (index > -1) activeQuest.splice(index, 1);
+                } else {
+                    // Quest already completed; nothing to give
+                    console.log(`Quest already completed: ${this.quest.questTitle}`);
                 }
-
-                const index = activeQuest.indexOf(this.quest);
-                if (index > -1) activeQuest.splice(index, 1);
             }
         }
 
@@ -154,13 +170,32 @@ export class Npc extends Character {
             if (player.stefanNumber === guessedNumber) {
                 player.CorrectGuesses += 1;
                 this.sentence = "You were correct";
-                if (player.CorrectGuesses >= 2) {
-                    player.moonPices += 1;
-                    console.log(player.moonPices)
-                    sounds.aquieredMoonPice.play();
+                if (player.CorrectGuesses >= 1) {
+                    // MoonPice 1 gång
+                    if (this.quest && !this.quest.completed) {
+                        this.quest.completed = true;
+                        player.moonPices += 1;
+                        console.log(player.moonPices)
+                        sounds.aquieredMoonPice.play();
+
+                        // Tabort quest från activeQuest
+                        const index = activeQuest.indexOf(this.quest);
+                        if (index > -1) activeQuest.splice(index, 1);
+
+                        this.sentence = "Impossible!!! Only one person has done this before \nand that's the Mad Scientist!!! \nWell, a promise is a promise, here you go.";
+                    } else if (!this._rewardGiven) {
+                        player.moonPices += 1;
+                        console.log(player.moonPices)
+                        sounds.aquieredMoonPice.play();
+                        this._rewardGiven = true;
+                        this.sentence = "Impossible!!! Only one person has done this before \nand that's the Mad Scientist!!! \nWell, a promise is a promise, here you go.";
+                    } else {
+                        // Already rewarded
+                        this.sentence = "You've already received my reward.";
+                    }
+
                     player.CorrectGuesses = 0;
                     player.stefanMinigame = false;
-                    this.sentence = "Impossible!!! Only one person has done this before \nand that's the Mad Scientist!!! \nWell, a promise is a promise, here you go.";
                 } else {
                     // Nytt nummer
                     player.stefanNumber = Math.floor(Math.random() * 3) + 1;
