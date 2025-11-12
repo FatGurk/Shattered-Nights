@@ -24,10 +24,10 @@ export const questList = [
 
 export const CharacterList = [
     new Player(5 * TILE_SIZE, 3 * TILE_SIZE, "Simon", {
-        upstill: "./game/pictures/characters/player/pojkeutanspade/pojkupp.png",
-        downstill: "./game/pictures/characters/player/pojkeutanspade/pojkener.png",
-        leftstill: "./game/pictures/characters/player/pojkeutanspade/pojkevanster.png",
-        rightstill: "./game/pictures/characters/player/pojkeutanspade/pojkehoger.png",
+        up: "./game/pictures/characters/player/pojkeutanspade/pojkupp.png",
+        down: "./game/pictures/characters/player/pojkeutanspade/pojkener.png",
+        left: "./game/pictures/characters/player/pojkeutanspade/pojkevanster.png",
+        right: "./game/pictures/characters/player/pojkeutanspade/pojkehoger.png",
     }),
     new Npc(3000,1800, "Mad scientist GW", "./game/pictures/characters/gw.png", "Who sent you here and do you have anything for me?", "Ohh are those flowers for me? \nThank you! \nHere, take this as a thank you for saving me." , questList[2], "MoonPice", (player) => player.countBlomma >= 3),
     new Npc (9 * TILE_SIZE, 0.5 * TILE_SIZE, "Sten Med Spade","./game/pictures/characters/stenspade.png", "I was going to get some flowers for my friend Gw, \nbut then the moon exploded and all flowers died. \nI hate this stupid sun, ugh here take this stupid showel, \nI dont have a need for it anylonger.", null , questList[2], "Spade"),

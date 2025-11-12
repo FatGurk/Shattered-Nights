@@ -89,9 +89,9 @@ export const InteractableSprites = {
     VitBlomma:   new Tile("VitBlomma", "./game/pictures/interact/vitblomma.png", false),
 
     // puzzel2
-    redcolorless: new Tile("redcolorlessbase", "./game/pictures/puzzle/nocolor/31f.png", true),
-    bluecolorless: new Tile("bluecolorlessbase", "./game/pictures/puzzle/nocolor/32f.png", true),
-    yellowcolorless: new Tile("yellowcolorlessbase", "./game/pictures/puzzle/nocolor/33f.png", true),
+    //redcolorless: new Tile("redcolorlessbase", "./game/pictures/puzzle/nocolor/31f.png", true),
+    //bluecolorless: new Tile("bluecolorlessbase", "./game/pictures/puzzle/nocolor/32f.png", true),
+    //yellowcolorless: new Tile("yellowcolorlessbase", "./game/pictures/puzzle/nocolor/33f.png", true),
     colorless1: new Tile("colorless1", "./game/pictures/puzzle/nocolor/2f.png", false),
     colorless2: new Tile("colorless2", "./game/pictures/puzzle/nocolor/1f.png", false),
 
