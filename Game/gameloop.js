@@ -1,21 +1,18 @@
 // Scene
 import { Scene } from "./menutogame/menubuttons.js";
 // World
-import { CarrotFields, drawMap, MorotFaltMed, PlaceStandardHouse, Map1, PlacePlot } from "./map/map.js";
+import { CarrotFields, drawMap, MorotFaltMed,  Map1, PlacePlot } from "./map/map.js";
 // Skit från ObjectLists
 import { CharacterList, MenuButtonList, CameraMan } from "./objectlists.js";
 // Title screen
 import { DrawMenuScreen } from "./menutogame/screen.js";
 
 import { Canvas, ctx } from "./canvasctx.js";
-// mini game
-import { minigame1 } from "./ui/connectalla.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
 // Inventory box
 import { drawInventoryBox } from "./ui/inventory.js";
 
-import { Pillars } from "./ui/pillars.js";
 
 import { Player } from "./characters/player.js";
 
@@ -37,7 +34,6 @@ export function canvasResize() {
 
 canvasResize();
 
-let mouseDown = false;
 let player = CharacterList.find(c => c instanceof Player);
 
 function MenuScene() {
@@ -166,7 +162,6 @@ gameLoop();
 
 window.addEventListener("resize", canvasResize);
 
-// Update mouse event listeners to work with player's active minigame
 Canvas.addEventListener("mousedown", (e)=>{
     if (player && player.minigameOpen && player.activeMinigame) {
         const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);

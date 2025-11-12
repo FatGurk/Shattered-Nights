@@ -12,7 +12,9 @@ export class PillarManager {
 
         this.pillars.forEach(pillar => {
             PlaceStandardHouse(Map1, pillar.row, pillar.col, Pillar);
-            pillar.minigame.onComplete = () => this.completePillar(pillar);
+            pillar.minigame.onComplete = () => {
+                this.completePillar(pillar);
+            };
         });
     }
 
@@ -27,7 +29,9 @@ export class PillarManager {
             }
         });
 
-        console.log(`Pillar ${pillar.id} completed and minigame closed.`);
+        if (this.pillars.every(p => p.cleared)) {
+            console.log("All pillars completed!");
+        }
     }
 
     checkNearby(player) {

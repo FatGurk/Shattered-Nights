@@ -1,4 +1,4 @@
-import { playbutton, Creditsbutton } from "./menutogame/menubuttons.js";
+import { playbutton } from "./menutogame/menubuttons.js";
 import { Player } from "./characters/player.js";
 import { Npc } from "./characters/npc.js";
 import { TILE_SIZE } from "./map/map.js";
