@@ -20,7 +20,7 @@ import { Pillars } from "./ui/pillars.js";
 import { Player } from "./characters/player.js";
 
 import { introVideoPlayer } from "./video.js"
-import { drawCredits, startCredits } from "./ui/credits.js";
+import { drawCredits, DrawCreditsScreen, startCredits } from "./ui/credits.js";
 
 
 export function canvasResize() {
@@ -169,7 +169,7 @@ function endScene() {
 
 function creditScene() {
     //menu bagrund
-    DrawMenuScreen();
+    DrawCreditsScreen();
     if (!creditsStarted) {
         creditsStarted = true;
         startCredits();
@@ -177,8 +177,6 @@ function creditScene() {
     // Draw credits över menuscreen 
     drawCredits();
     
-    // If credits are finished, stop the music
-    // (This is checked in the drawCredits function when it sets Scene back to Menu)
 }
 
 function gameLoop() {

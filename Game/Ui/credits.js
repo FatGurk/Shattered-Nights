@@ -23,6 +23,14 @@ const credits = [
 let yPosition = window.innerHeight;
 const yspeed = 1;
 
+const Title = new Image();
+Title.src = "./game/pictures/menu/bakgrundcredit.png";
+
+export function DrawCreditsScreen() {
+    ctx.drawImage(Title, 0, 0, Canvas.width, Canvas.height);
+}
+
+
 export function drawCredits() {
     ctx.fillStyle = "white";
     ctx.font = "200px , 'Copperplate Gothic', sans-serif";
