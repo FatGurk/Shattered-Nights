@@ -180,21 +180,13 @@ for (let row = 2; row < 33; row++) {
 }
 
 // Gw inlåst
-export let walltiles = []
-
 if (Puzzle === false) {
     for (let row = 17; row < 22; row++) {
         for (let col = MAP_WIDTH-5; col < MAP_WIDTH-4; col++) {
             Map1[row][col].behind = SpriteList.wall;
-            walltiles.push({row, col});
         }
     }
-}
-
-if (Puzzle === true) {
-    for (const { row, col } of walltiles) {
-        Map1[row][col].behind = Null;
-    }
+    console.log(Puzzle)
 }
 
 // Hus
