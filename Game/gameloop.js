@@ -1,18 +1,21 @@
 // Scene
 import { Scene } from "./menutogame/menubuttons.js";
 // World
-import { CarrotFields, drawMap, MorotFaltMed,  Map1, PlacePlot } from "./map/map.js";
+import { CarrotFields, drawMap, MorotFaltMed, PlaceStandardHouse, Map1, PlacePlot } from "./map/map.js";
 // Skit från ObjectLists
 import { CharacterList, MenuButtonList, CameraMan } from "./objectlists.js";
 // Title screen
 import { DrawMenuScreen } from "./menutogame/screen.js";
 
 import { Canvas, ctx } from "./canvasctx.js";
+// mini game
+import { minigame1 } from "./ui/connectalla.js";
 // Quest box
 import { activeQuest } from "./ui/quest.js";
 // Inventory box
 import { drawInventoryBox } from "./ui/inventory.js";
 
+import { Pillars } from "./ui/pillars.js";
 
 import { Player } from "./characters/player.js";
 
@@ -34,12 +37,23 @@ export function canvasResize() {
 
 canvasResize();
 
+let mouseDown = false;
 let player = CharacterList.find(c => c instanceof Player);
+
+// Background music for game scene
+let gameMusic = null;
+let gameMusicStarted = false;
 
 function MenuScene() {
     introStarted = false;
     endStarted = false;
     creditsStarted = false;
+    
+    // Stop game music when returning to menu
+    if (gameMusic) {
+        gameMusic.pause();
+        gameMusicStarted = false;
+    }
 
     DrawMenuScreen();
 
@@ -64,9 +78,22 @@ function GameScene() {
     player = CharacterList[0];
     CameraMan.follow(player);
 
-    // Check moonPices end scene
+    // Background music
+    if (!gameMusicStarted) {
+        gameMusicStarted = true;
+        gameMusic = new Audio("./game/sound/villageambient.mp3");
+        gameMusic.loop = true;
+        gameMusic.volume = 0.1;
+        gameMusic.play();
+    }
+
+    // moonPices end scene
     if (player.moonPices >= 4) {
         Scene.value = "End";
+        if (gameMusic) {
+            gameMusic.pause();
+            gameMusicStarted = false;
+        }
         return;
     }
 
@@ -76,7 +103,7 @@ function GameScene() {
         falt.growthTimer += 1/60;
         if (falt.growthTimer >= 0 && !falt.fullyGrown) {
             PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[1])
-            falt.fullyGrown = false;
+            falt.fullyGrown = true;
         }
         if (falt.growthTimer >= 30 && !falt.fullyGrown) {
             PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[2])
@@ -135,16 +162,23 @@ function endScene() {
         introVideoPlayer("./game/vid/shatterednightsendanimation.mp4", () => {
             Scene.value = "Credits";
             player.moonPices = 0;
-        });
+            
+        }, "./game/sound/endCreditsCutScene.mp3");
     }
 }
 
 function creditScene() {
+    //menu bagrund
     DrawMenuScreen();
     if (!creditsStarted) {
         creditsStarted = true;
         startCredits();
     }
+    // Draw credits över menuscreen 
+    drawCredits();
+    
+    // If credits are finished, stop the music
+    // (This is checked in the drawCredits function when it sets Scene back to Menu)
 }
 
 function gameLoop() {
@@ -162,6 +196,7 @@ gameLoop();
 
 window.addEventListener("resize", canvasResize);
 
+// Update mouse event listeners to work with player's active minigame
 Canvas.addEventListener("mousedown", (e)=>{
     if (player && player.minigameOpen && player.activeMinigame) {
         const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);
