@@ -6,7 +6,7 @@ export class PillarManager {
     constructor() {
         this.pillars = [
             { id: 1, row: 5, col: 5, cleared: false, minigame: minigame1 },
-            { id: 2, row: 10, col: 28, cleared: false, minigame: minigame2 },
+            { id: 2, row: 15, col: 36, cleared: false, minigame: minigame2 },
             { id: 3, row: 28, col: 8, cleared: false, minigame: minigame3 }
         ];
 
