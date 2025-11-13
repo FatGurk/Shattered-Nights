@@ -36,8 +36,9 @@ export class Player extends Character {
         this.stefanMinigame = false;
         this.numberInput = null;
         this.animationFrame = 0;
-        this.animationSpeed = 0.15
+        this.animationSpeed = 0.075
         this.moving = false;
+        this.preventFrameIndex = 0;
         this.framesNoShowel = {
             up: [this.pojk.up1, this.pojk.up2],
             down: [this.pojk.down1, this.pojk.down2],
@@ -51,6 +52,11 @@ export class Player extends Character {
             left: this.pojk.left,
             right: this.pojk.right
         };
+        // Ljud nivå
+        try {
+            sounds.footstep.volume = 0.1;
+        } catch (e) {
+        }
     }
 
     moveHitbox() {
@@ -157,7 +163,7 @@ export class Player extends Character {
 
                     if (rectOverlap(this.intHitbox(), tileRectangle)) {
                         console.log("Player interacts with tile:", tile.type);
-                        if (inventory.equippedItem1 === "Showel") {
+                        if (inventory.equippedItem1 === "Shovel") {
                             console.log("You dug the dirt!");
                             this.moonPices += 1;
                             // Spela upp ljudet
@@ -201,7 +207,7 @@ export class Player extends Character {
 
                     if (rectOverlap(this.intHitbox(), tileRectangle)) {
                         console.log("Player interacts with tile:", tile.type);
-                        if (inventory.equippedItem1 === "Showel") {
+                        if (inventory.equippedItem1 === "Shovel") {
                             console.log("You dug up blomma!");
                             this.countBlomma += 1;
                             sounds.planting.play();
@@ -228,7 +234,7 @@ export class Player extends Character {
 
             if (rectOverlap(this.intHitbox(), tileRectangle)) {
                 // Plantera
-                if (!falt.planted && inventory.equippedItem1 === "Showel") {
+                if (!falt.planted && inventory.equippedItem1 === "Shovel") {
                     falt.planted = true;
                     falt.growthTimer = 0;
                     sounds.planting.play();
@@ -237,7 +243,7 @@ export class Player extends Character {
                     PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0])
                 }
                 // Harvesta
-                if (falt.planted && falt.fullyGrown && inventory.equippedItem1 === "Showel") {
+                if (falt.planted && falt.fullyGrown && inventory.equippedItem1 === "Shovel") {
                     falt.planted = false;
                     falt.growthTimer = 0;
                     falt.fullyGrown = false;
@@ -262,6 +268,7 @@ export class Player extends Character {
             }
         }
 
+        // Open mini game hitbox
         for (let row = 0; row < MAP_HEIGHT; row++) {
             for (let col = 0; col < MAP_WIDTH; col++) {
                 const tile = Map1[row][col].behind;
@@ -285,6 +292,7 @@ export class Player extends Character {
         }
     }
 
+    //om player och object overlapar
         function rectOverlap(a, b) {
             return (
                 a.x < b.x + b.width &&
@@ -299,7 +307,7 @@ export class Player extends Character {
         if (this.minigameOpen) 
             return;
     
-        const speed = 20;
+        const speed = 5;
         let dx = 0
         let dy = 0
 
@@ -350,11 +358,26 @@ export class Player extends Character {
         if (this.moving) {
             this.animationFrame += this.animationSpeed;
             const framesArray = this.framesNoShowel[this.facing];
-            if (this.animFrame >= framesArray.length) {
+            if (this.animationFrame >= framesArray.length) {
                 this.animationFrame = 0;
+            }
+
+            // Matcha ljud för footsteps och animation
+            const frameIndex = Math.floor(this.animationFrame) % framesArray.length;
+            if (frameIndex !== this.preventFrameIndex) {
+                // Play sound när footstep 1
+                if (frameIndex === 1) {
+                    try {
+                        sounds.footstep.currentTime = 0;
+                        sounds.footstep.play();
+                    } catch (e) {
+                    }
+                }
+                this.preventFrameIndex = frameIndex;
             }
         } else {
             this.animationFrame = 0;
+            this.preventFrameIndex = 0;
         }
 
         function rectOverlap(a, b) {
