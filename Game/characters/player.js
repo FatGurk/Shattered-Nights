@@ -308,7 +308,7 @@ export class Player extends Character {
         if (this.minigameOpen) 
             return;
     
-        const speed = 20;
+        const speed = 5;
         let dx = 0
         let dy = 0
 

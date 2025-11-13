@@ -69,8 +69,8 @@ export class Npc extends Character {
             if (!player.stefanMinigame) {
                 player.stefanMinigame = true;
                 player.CorrectGuesses = 0;
-                player.stefanNumber = Math.floor(Math.random() * 3) + 1;
-                this.sentence = "I fished up something of interest in the sea. \nGuess the number I'm thinking of (1-3). \nGuess right three times in a row to win.";
+                player.stefanNumber = Math.floor(Math.random() * 3) + 2;
+                this.sentence = "I fished up something of interest in the sea. \nGuess the number I'm thinking of (1-3). \nGuess right two times in a row to win.";
                 return;
             } else {
                 // Om spelare int när man redan spelar
