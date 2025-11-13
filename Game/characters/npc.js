@@ -55,7 +55,7 @@ export class Npc extends Character {
             x: this.x - 70,
             y: this.y - 100, 
             width: 338,
-            height: 486
+            height: 386
         }
     }
 

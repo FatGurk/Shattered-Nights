@@ -166,7 +166,7 @@ for (let row = 0; row < MAP_HEIGHT; row++) {
 }
 
 // Kullersten vägar
-for (let row = 18; row < 22; row++) {
+for (let row = 18; row < 21; row++) {
     for (let col = 2; col < 38; col++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
     }
@@ -183,7 +183,12 @@ for (let row = 2; row < 5; row++) {
 }
 // Kullersten väg
 for (let row = 2; row < 33; row++) {
-    for (let col = 18; col < 22; col++) {
+    for (let col = 19; col < 22; col++) {
+        Map1[row][col].ground = SpriteList.Kullersten1;
+    }
+}
+for (let row = 12; row < 14; row++) {
+    for (let col = 14; col < 19; col++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
     }
 }
@@ -249,6 +254,7 @@ if (Puzzle === false) {
     }
 // Hus
 PlaceStandardHouse(Map1, 7, 13, Houses.StandardHouse)
+PlaceStandardHouse(Map1, 13, 2, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 13, 25, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 21, 13, Houses.StandardHouse)
 PlaceStandardHouse(Map1, 26, 34, Houses.StandardHouse)
