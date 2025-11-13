@@ -14,10 +14,10 @@ export class Tile {
 export const SpriteList = {
 
     // Ground Tiles
-    DottGras1: new Tile("gras1", "./game/pictures/tiles/dottgras.png", false),
-    gras1: new Tile("gras1", "./game/pictures/tiles/gras.png", false),
-    Kullersten1: new Tile("Kullersten1", "./game/pictures/tiles/kullersten1.png", false),
-    Water1: new Tile("Water1", "./game/pictures/tiles/water.png", true),
+    DottGras1: new Tile("gras1", "./game/pictures/tiles/gras/dottgras.png", false),
+    gras1: new Tile("gras1", "./game/pictures/tiles/gras/gras.png", false),
+    Kullersten1: new Tile("Kullersten1", "./game/pictures/tiles/kullersten/uppner.png", false),
+    Water1: new Tile("Water1", "./game/pictures/tiles/vatten/vattenstrandtrans.png", true),
 
     wall: new Tile("wall", "./game/pictures/wall/midwall.png", true),
 
