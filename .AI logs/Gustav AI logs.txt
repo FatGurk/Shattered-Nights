@@ -2,7 +2,8 @@ Scaling pixle art och grid
 https://chatgpt.com/share/690a3f54-732c-8001-95df-2a709daf7c1a
 
 GameLoop och camera:
-https://chatgpt.com/share/690a3c24-28a4-8001-8e0d-489ce29054cf
+https://chatgpt.com/share/690a3c24-28a4-8001-8e0d-489ce29054cf Denna finns inte bc idk
+
 Denna är super lång bara säger
 https://chatgpt.com/share/69143e84-2fa0-8001-82c2-847909cd6206
 
@@ -12,3 +13,4 @@ https://chatgpt.com/share/69143e84-2fa0-8001-82c2-847909cd6206
 GitHub errors fixes:
 https://chatgpt.com/share/6915dad7-9e78-8001-9f8f-e02e4a6a9bf1
 https://chatgpt.com/share/6915db9d-0d04-8001-808a-664b98265266
+

@@ -16,6 +16,8 @@ const credits = [
     "wobesound",
     "leohpaz",
     "Clavier-Music",
+    "freesound_community",
+    "RomanSenykMusic",
     "",
     "Finder of Music",
     "Kevin Nygaard",
