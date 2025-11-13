@@ -19,6 +19,8 @@ export const SpriteList = {
     Kullersten1: new Tile("Kullersten1", "./game/pictures/tiles/kullersten1.png", false),
     Water1: new Tile("Water1", "./game/pictures/tiles/water.png", true),
 
+    wall: new Tile("wall", "./game/pictures/wall/midwall.png", true),
+
     //House Tiles
     StandardHouse1: new Tile("StandardHouse1", "./game/pictures/House/standard1.png", false),
     StandardHouse2: new Tile("StandardHouse2", "./game/pictures/House/standard2.png", false),
@@ -137,7 +139,29 @@ export const Pillarcleared = [
 export const MAP_WIDTH = 40;
 export const MAP_HEIGHT = 40;
 export const TILE_SIZE = 128;
+export const Puzzle = false;
 
+export function Walls(map) {
+    const gwPixelX = 38 * TILE_SIZE;
+    const gwPixelY = 18 * TILE_SIZE;
+    const gwRow = Math.floor(gwPixelY / TILE_SIZE);
+    const gwCol = Math.floor(gwPixelX / TILE_SIZE);
+    if (Puzzle === false ){
+        const wallPositions = [
+            [gwRow - 2, gwCol - 2], [gwRow - 2, gwCol - 1], [gwRow - 2, gwCol], [gwRow - 2, gwCol + 1], [gwRow - 2, gwCol + 2],
+            [gwRow - 1, gwCol - 2], [gwRow - 1, gwCol + 2],
+            [gwRow, gwCol - 2], [gwRow, gwCol + 2],
+            [gwRow + 2, gwCol - 2], [gwRow + 1, gwCol - 2], [gwRow + 1, gwCol + 2],
+            [gwRow + 3, gwCol - 2], [gwRow + 3, gwCol - 1], [gwRow + 3, gwCol], [gwRow + 3, gwCol + 1], [gwRow + 3, gwCol + 2]
+        ];
+        wallPositions.forEach(([row, col]) => {
+            if (row >= 0 && row < MAP_HEIGHT && col >= 0 && col < MAP_WIDTH) {
+            map[row][col].infront = SpriteList.wall;
+        }
+        
+        });
+    }
+}
 
 const Map1 = [];
 

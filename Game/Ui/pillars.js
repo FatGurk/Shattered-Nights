@@ -1,4 +1,4 @@
-import { PlaceStandardHouse, Map1, Pillar, Pillarcleared } from "../map/map.js";
+import { PlaceStandardHouse, Map1, Pillar, Pillarcleared, Walls, Puzzle} from "../map/map.js";
 import { minigame1, minigame2, minigame3 } from "./connectalla.js";
 import { CharacterList } from "../objectlists.js";
 
@@ -16,6 +16,8 @@ export class PillarManager {
                 this.completePillar(pillar);
             };
         });
+
+        Walls(Map1);
     }
 
     completePillar(pillar) {
@@ -31,8 +33,9 @@ export class PillarManager {
 
         if (this.pillars.every(p => p.cleared)) {
             console.log("All pillars completed!");
+            Puzzle === true;
+            }
         }
-    }
 
     checkNearby(player) {
         for (const pillar of this.pillars) {
