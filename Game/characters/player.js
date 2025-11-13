@@ -2,6 +2,7 @@ import { Character } from "./superclass.js";
 import { CharacterList } from "../objectlists.js";
 import { MAP_HEIGHT, MAP_WIDTH, TILE_SIZE, Map1, InteractableSprites, CarrotFields, MorotFaltMed, PlacePlot, triggerFirstStage} from "../map/map.js";
 import { sounds } from "../sounds.js";
+import { markKeyPressed } from "../ui/tutorial.js";
 import { Pillars } from "../ui/pillars.js";
 
 const keys = {};
@@ -469,6 +470,10 @@ export class Player extends Character {
 document.addEventListener("keydown", e => {
     keys[e.key] = true;
     const player = CharacterList.find(c => c instanceof Player);
+
+    if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","a","s","d","W","A","S","D"].includes(e.key)) {
+        try { markKeyPressed(e.key); } catch (err) { }
+    }
 
     // E för interact
     if (e.key === "e" || e.key === "E") {

@@ -21,6 +21,7 @@ import { Player } from "./characters/player.js";
 
 import { introVideoPlayer } from "./video.js"
 import { drawCredits, DrawCreditsScreen, startCredits } from "./ui/credits.js";
+import { drawTutorial, showTutorial } from "./ui/tutorial.js";
 
 
 export function canvasResize() {
@@ -144,6 +145,10 @@ function GameScene() {
     }
     //Visa inventory
     drawInventoryBox();
+
+    if (showTutorial) {
+        drawTutorial();
+    }
 
     // Pussel minigame
     if (player.minigameOpen && player.activeMinigame) {
