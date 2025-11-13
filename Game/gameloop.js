@@ -104,7 +104,7 @@ function GameScene() {
         falt.growthTimer += 1/60;
         if (falt.growthTimer >= 0 && !falt.fullyGrown) {
             PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[1])
-            falt.fullyGrown = true;
+            falt.fullyGrown = false;
         }
         if (falt.growthTimer >= 30 && !falt.fullyGrown) {
             PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[2])
