@@ -20,6 +20,9 @@ export const SpriteList = {
     Water1: new Tile("Water1", "./game/pictures/tiles/vatten/vattenstrandtrans.png", true),
 
     wall: new Tile("wall", "./game/pictures/wall/midwall.png", true),
+    sidewall: new Tile("sidewall", "./game/pictures/wall/sidewall.png", true),
+    wallturndown: new Tile("wallturndown", "./game/pictures/wall/wallturndown.png", true),
+    wallturnup: new Tile("wallturnup", "./game/pictures/wall/wallturnup.png", true),
 
     //House Tiles
     StandardHouse1: new Tile("StandardHouse1", "./game/pictures/House/standard1.png", false),
@@ -47,6 +50,12 @@ export const SpriteList = {
     StandardHouse23: new Tile("StandardHouse23", "./game/pictures/House/standard23.png", false),
     StandardHouse24: new Tile("StandardHouse24", "./game/pictures/House/standard24.png", false),
     StandardHouse25: new Tile("StandardHouse25", "./game/pictures/House/standard25.png", false),
+
+    // Strand Tiles
+    strand1: new Tile("strand1", "./game/pictures/tiles/strandsand/tunnstrand.png", false),
+    dottgrasstrand: new Tile("grasstrand", "./game/pictures/tiles/strandsand/dottgrasstrandtrans.png", false),
+    grasstrand: new Tile("grasstrand", "./game/pictures/tiles/strandsand/grasstrandtrans.png", false),
+
 }
 
 export const Houses = {
@@ -181,12 +190,31 @@ for (let row = 2; row < 33; row++) {
 
 // Gw inlåst
 if (Puzzle === false) {
-    for (let row = 17; row < 22; row++) {
+    for (let row = 18; row < 21; row++) {
         for (let col = MAP_WIDTH-5; col < MAP_WIDTH-4; col++) {
             Map1[row][col].behind = SpriteList.wall;
         }
     }
-    console.log(Puzzle)
+    for (let row = 17; row < 18; row++) {
+        for (let col = MAP_WIDTH-4; col < MAP_WIDTH; col++) {
+            Map1[row][col].behind = SpriteList.sidewall;
+        }
+    }
+    for (let row = 21; row < 22; row++) {
+        for (let col = MAP_WIDTH-4; col < MAP_WIDTH; col++) {
+            Map1[row][col].behind = SpriteList.sidewall;
+        }
+    }
+    for (let row = 21; row < 22; row++) {
+        for (let col = MAP_WIDTH-5; col < MAP_WIDTH-4; col++) {
+            Map1[row][col].behind = SpriteList.wallturndown;
+        }
+    }
+    for (let row = 17; row < 18; row++) {
+        for (let col = MAP_WIDTH-5; col < MAP_WIDTH-4; col++) {
+            Map1[row][col].behind = SpriteList.wallturnup;
+        }
+    }
 }
 
 // Hus
@@ -234,10 +262,20 @@ for (const falt of CarrotFields) {
 // Strand
 //=============
 
-for (let row = 37; row < 40; row++) {
-    for (let col = 0; col < 40; col++) {
+for (let row = 38; row < 39; row++) {
+    for (let col = 0; col < 45; col++) {
+        Map1[row][col].ground = SpriteList.strand1;
+    }
+}
+for (let row = 39; row < 40; row++) {
+    for (let col = 0; col < 45; col++) {
         Map1[row][col].ground = SpriteList.Water1;
     } 
+}
+for (let row = 37; row < 38; row++) {
+    for (let col = 0; col < 45; col++) {
+        Map1[row][col].ground = SpriteList.dottgrasstrand;
+    }
 }
 
 // Quest interactable thingys
@@ -279,6 +317,15 @@ export function triggerFirstStage(callback) {
             // Ändra MorotFällt
             for (const falt of CarrotFields) {
                 PlacePlot(Map1, falt.startRow, falt.startCol, MorotFaltMed[0]);
+            }
+
+            //ändra strand
+            for (let row = 37; row < 38; row++) {
+                for (let col = 0; col < 45; col++) {
+                    if (Map1[row][col].ground === SpriteList.dottgrasstrand) {
+                        Map1[row][col].ground = SpriteList.grasstrand;
+                    }
+                }
             }
 
             // Blommorna
