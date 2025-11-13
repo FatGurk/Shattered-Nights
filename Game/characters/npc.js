@@ -69,7 +69,7 @@ export class Npc extends Character {
             if (!player.stefanMinigame) {
                 player.stefanMinigame = true;
                 player.CorrectGuesses = 0;
-                player.stefanNumber = Math.floor(Math.random() * 3) + 2;
+                player.stefanNumber = Math.floor(Math.random() * 3) + 1;
                 this.sentence = "I fished up something of interest in the sea. \nGuess the number I'm thinking of (1-3). \nGuess right two times in a row to win.";
                 return;
             } else {
@@ -167,7 +167,7 @@ export class Npc extends Character {
             if (player.stefanNumber === guessedNumber) {
                 player.CorrectGuesses += 1;
                 this.sentence = "You were correct";
-                if (player.CorrectGuesses >= 1) {
+                if (player.CorrectGuesses >= 2) {
                     // MoonPice 1 gång
                     if (this.quest && !this.quest.completed) {
                         this.quest.completed = true;
