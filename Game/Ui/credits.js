@@ -15,6 +15,7 @@ const credits = [
     "Alexander Nakarada",
     "wobesound",
     "leohpaz",
+    "Clavier-Music",
     "",
     "Finder of Music",
     "Kevin Nygaard",

@@ -71,7 +71,7 @@ function IntroScene() {
 
         introVideoPlayer("./game/vid/shatterednightanimation.mp4", () => {
             Scene.value = "Game";
-        });
+        }, "./game/sound/startscene.mp3"); 
     }
 }
 
@@ -199,7 +199,6 @@ gameLoop();
 
 window.addEventListener("resize", canvasResize);
 
-// Update mouse event listeners to work with player's active minigame
 Canvas.addEventListener("mousedown", (e)=>{
     if (player && player.minigameOpen && player.activeMinigame) {
         const cell = player.activeMinigame.getCell(e.offsetX, e.offsetY);

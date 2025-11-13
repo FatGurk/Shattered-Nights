@@ -18,7 +18,6 @@ class Button {
         };
 
         window.addEventListener("click", (event) => {
-            // Only process clicks if we're on the menu scene
             if (Scene.value !== "Menu") return;
             
             const rect = Canvas.getBoundingClientRect();
@@ -43,9 +42,9 @@ class Button {
         if (!this.width || !this.height) return;
 
         const x = this.centerX - this.width / 2;
-        const y = this.centerY - this.height / 2;
+        const y = this.centerY - this.height / 4;
 
-        ctx.drawImage(this.img, x, y, this.width, this.height);
+        ctx.drawImage(this.img, x+32, y, this.width-70, this.height-70);
     }
 }
 
@@ -57,25 +56,7 @@ export class playbutton extends Button {
     onClick() {
         document.documentElement.requestFullscreen()
             .then(() => {
-                Scene.value = "Game";
+                Scene.value = "Intro";
             })
-    }
-}
-
-export class Creditsbutton extends Button {
-    constructor(x, y, imgSrc) {
-        super(x, y, imgSrc);
-    }
-    onClick() {
-        Scene.value = "Credits";
-    }
-}
-
-export class Settingsbutton extends Button {
-    constructor(x, y, imgSrc) {
-        super(x, y, imgSrc);
-    }
-    onClick() {
-        Scene.value = "Settings";
     }
 }
