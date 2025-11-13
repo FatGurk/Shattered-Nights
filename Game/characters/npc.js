@@ -103,9 +103,7 @@ export class Npc extends Character {
                     console.log(`Quest completed: ${this.quest.questTitle}`);
 
                     if (this.quest.reward) {
-                        // If requirement was a function (e.g., GW's 3 flowers), consume the resources
                         if (typeof this.itemrequired === "function") {
-                            // Common case: require 3 flowers stored on player.countBlomma
                             if (typeof player.countBlomma === "number" && player.countBlomma > 0) {
                                 const consume = Math.min(3, player.countBlomma);
                                 player.countBlomma -= consume;
@@ -121,7 +119,6 @@ export class Npc extends Character {
                     const index = activeQuest.indexOf(this.quest);
                     if (index > -1) activeQuest.splice(index, 1);
                 } else {
-                    // Quest already completed; nothing to give
                     console.log(`Quest already completed: ${this.quest.questTitle}`);
                 }
             }
