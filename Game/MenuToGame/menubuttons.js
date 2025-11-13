@@ -57,7 +57,7 @@ export class playbutton extends Button {
     onClick() {
         document.documentElement.requestFullscreen()
             .then(() => {
-                Scene.value = "Intro";
+                Scene.value = "Game";
             })
     }
 }

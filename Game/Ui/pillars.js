@@ -1,4 +1,4 @@
-import { PlaceStandardHouse, Map1, Pillar, Pillarcleared, Walls, Puzzle} from "../map/map.js";
+import { PlaceStandardHouse, Map1, Pillar, Pillarcleared, Puzzle} from "../map/map.js";
 import { minigame1, minigame2, minigame3 } from "./connectalla.js";
 import { CharacterList } from "../objectlists.js";
 
@@ -17,7 +17,6 @@ export class PillarManager {
             };
         });
 
-        Walls(Map1);
     }
 
     completePillar(pillar) {

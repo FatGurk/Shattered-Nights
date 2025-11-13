@@ -136,32 +136,11 @@ export const Pillarcleared = [
     [InteractableSprites.botclear]
 ]
 
-export const MAP_WIDTH = 40;
+export const MAP_WIDTH = 45;
 export const MAP_HEIGHT = 40;
 export const TILE_SIZE = 128;
 export const Puzzle = false;
 
-export function Walls(map) {
-    const gwPixelX = 38 * TILE_SIZE;
-    const gwPixelY = 18 * TILE_SIZE;
-    const gwRow = Math.floor(gwPixelY / TILE_SIZE);
-    const gwCol = Math.floor(gwPixelX / TILE_SIZE);
-    if (Puzzle === false ){
-        const wallPositions = [
-            [gwRow - 2, gwCol - 2], [gwRow - 2, gwCol - 1], [gwRow - 2, gwCol], [gwRow - 2, gwCol + 1], [gwRow - 2, gwCol + 2],
-            [gwRow - 1, gwCol - 2], [gwRow - 1, gwCol + 2],
-            [gwRow, gwCol - 2], [gwRow, gwCol + 2],
-            [gwRow + 2, gwCol - 2], [gwRow + 1, gwCol - 2], [gwRow + 1, gwCol + 2],
-            [gwRow + 3, gwCol - 2], [gwRow + 3, gwCol - 1], [gwRow + 3, gwCol], [gwRow + 3, gwCol + 1], [gwRow + 3, gwCol + 2]
-        ];
-        wallPositions.forEach(([row, col]) => {
-            if (row >= 0 && row < MAP_HEIGHT && col >= 0 && col < MAP_WIDTH) {
-            map[row][col].infront = SpriteList.wall;
-        }
-        
-        });
-    }
-}
 
 const Map1 = [];
 
@@ -197,6 +176,23 @@ for (let row = 2; row < 5; row++) {
 for (let row = 2; row < 33; row++) {
     for (let col = 18; col < 22; col++) {
         Map1[row][col].ground = SpriteList.Kullersten1;
+    }
+}
+
+// Gw inlåst
+for (let row = 16; row < 23; row++) {
+    for (let col = 39; col < 40; col++) {
+        Map1[row][col].behind = SpriteList.wall;
+    }
+}
+for (let row = 16; row < 17; row++) {
+    for (let col = 40; col < 45; col++) {
+        Map1[row][col].behind = SpriteList.wall;
+    }
+}
+for (let row = 22; row < 23; row++) {
+    for (let col = 40; col < 45; col++) {
+        Map1[row][col].behind = SpriteList.wall;
     }
 }
 
