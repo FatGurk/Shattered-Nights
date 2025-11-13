@@ -230,7 +230,10 @@ for (const falt of CarrotFields) {
     PlacePlot(Map1, falt.startRow, falt.startCol, DottMorotFaltUtan);
 }
 
-// Water
+//=============
+// Strand
+//=============
+
 for (let row = 37; row < 40; row++) {
     for (let col = 0; col < 40; col++) {
         Map1[row][col].ground = SpriteList.Water1;
