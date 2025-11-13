@@ -180,19 +180,20 @@ for (let row = 2; row < 33; row++) {
 }
 
 // Gw inlåst
-for (let row = 16; row < 23; row++) {
-    for (let col = 39; col < 40; col++) {
-        Map1[row][col].behind = SpriteList.wall;
+export let walltiles = []
+
+if (Puzzle === false) {
+    for (let row = 17; row < 22; row++) {
+        for (let col = MAP_WIDTH-5; col < MAP_WIDTH-4; col++) {
+            Map1[row][col].behind = SpriteList.wall;
+            walltiles.push({row, col});
+        }
     }
 }
-for (let row = 16; row < 17; row++) {
-    for (let col = 40; col < 45; col++) {
-        Map1[row][col].behind = SpriteList.wall;
-    }
-}
-for (let row = 22; row < 23; row++) {
-    for (let col = 40; col < 45; col++) {
-        Map1[row][col].behind = SpriteList.wall;
+
+if (Puzzle === true) {
+    for (const { row, col } of walltiles) {
+        Map1[row][col].behind = Null;
     }
 }
 
@@ -202,7 +203,7 @@ for (let row = 22; row < 23; row++) {
         for (let row = 0; row < House.length; row++) {
             for (let col = 0; col < House[row].length; col++) {
                 const tile = House[row][col];
-                if (!tile) continue; // skip empty tiles
+                if (!tile) continue;
                 
                 // Ritar tile baserat på lager
                 if (row < 2) {
