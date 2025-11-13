@@ -20,16 +20,15 @@ export function introVideoPlayer(videoSrc, onEndCallback, musicSrc = null) {
         currentCutsceneMusic = new Audio(musicSrc);
         currentCutsceneMusic.loop = false;
         currentCutsceneMusic.volume = 0.5;
-        currentCutsceneMusic.play().catch(err => console.warn("Music play prevented:", err));
+        currentCutsceneMusic.play()
     }
 
     // video play
-    video.play().catch(err => console.warn("Video play prevented:", err));
+    video.play()
 
     //Video bort
     video.addEventListener("ended", () => {
         video.remove();
-        // Don't pause music - let it continue or be managed by next scene
         if (typeof onEndCallback === "function") {
             onEndCallback();
         }
@@ -55,16 +54,15 @@ export function endVideoPlayer(videoSrc, onEndCallback, musicSrc = null) {
         currentCutsceneMusic = new Audio(musicSrc);
         currentCutsceneMusic.loop = false;
         currentCutsceneMusic.volume = 0.5;
-        currentCutsceneMusic.play().catch(err => console.warn("Music play prevented:", err));
+        currentCutsceneMusic.play();
     }
 
     // video play
-    video.play().catch(err => console.warn("Video play prevented:", err));
+    video.play()
 
     //Video bort
     video.addEventListener("ended", () => {
         video.remove();
-        // Don't pause music - let it continue to credits
         if (typeof onEndCallback === "function") {
             onEndCallback();
         }

@@ -22,6 +22,7 @@ import { Player } from "./characters/player.js";
 import { introVideoPlayer } from "./video.js"
 import { drawCredits, DrawCreditsScreen, startCredits } from "./ui/credits.js";
 import { drawTutorial, showTutorial } from "./ui/tutorial.js";
+import { currentCutsceneMusic } from "./video.js";
 
 
 export function canvasResize() {
@@ -78,6 +79,11 @@ function IntroScene() {
 function GameScene() {
     player = CharacterList[0];
     CameraMan.follow(player);
+
+    // Stop intro music if still playing
+    if (currentCutsceneMusic) {
+        currentCutsceneMusic.pause();
+    }
 
     // Background music
     if (!gameMusicStarted) {
